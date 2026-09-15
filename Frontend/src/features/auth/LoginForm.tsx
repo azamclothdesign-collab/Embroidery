@@ -2,7 +2,6 @@
 
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { TextButton } from "@/components/TextButton";
 import { authCopy } from "@/constants/authCopy";
@@ -10,6 +9,8 @@ import {
   accountForgotHref,
   accountRegisterHref,
 } from "@/constants/siteNavigation";
+import { useIsClient } from "@/hooks/useIsClient";
+import { readFormString } from "@/lib/form/readFormString";
 import { notifyCartUpdated } from "@/lib/session/cartSession";
 import { notifyCustomerAuthUpdated } from "@/lib/session/customerAuth";
 import { notifyWishlistUpdated } from "@/lib/session/wishlistSession";
@@ -24,30 +25,40 @@ type LoginFormProps = {
 type SubmitState = "idle" | "submitting" | "error";
 
 export function LoginForm({ locale, nextPath }: LoginFormProps) {
-  const router = useRouter();
+  const isReady = useIsClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
 
-  const parsed = loginFormSchema.safeParse({ email, password });
   const emailInvalid =
     attempted && !loginFormSchema.shape.email.safeParse(email).success;
   const passwordInvalid = attempted && password.trim().length === 0;
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const nextEmail = readFormString(form, "email");
+    const nextPassword = readFormString(form, "password");
+    setEmail(nextEmail);
+    setPassword(nextPassword);
     setAttempted(true);
 
-    if (!parsed.success) {
+    const submitted = loginFormSchema.safeParse({
+      email: nextEmail,
+      password: nextPassword,
+    });
+
+    if (!submitted.success) {
       return;
     }
 
     setSubmitState("submitting");
 
     void loginCustomerAction({
-      email: parsed.data.email,
-      password: parsed.data.password,
+      email: submitted.data.email,
+      password: submitted.data.password,
+      nextPath,
     }).then((result) => {
       if (!result.ok) {
         setSubmitState("error");
@@ -57,16 +68,22 @@ export function LoginForm({ locale, nextPath }: LoginFormProps) {
       notifyCustomerAuthUpdated();
       notifyCartUpdated();
       notifyWishlistUpdated();
-      router.push(nextPath);
     });
   };
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={onSubmit} noValidate>
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={onSubmit}
+      noValidate
+      data-ready={isReady ? "true" : "false"}
+    >
       <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
         {authCopy.email}
         <input
+          id="customer-login-email"
           type="email"
+          name="email"
           autoComplete="email"
           className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
           value={email}
@@ -88,7 +105,9 @@ export function LoginForm({ locale, nextPath }: LoginFormProps) {
       <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
         {authCopy.password}
         <input
+          id="customer-login-password"
           type="password"
+          name="password"
           autoComplete="current-password"
           className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
           value={password}
@@ -125,7 +144,7 @@ export function LoginForm({ locale, nextPath }: LoginFormProps) {
       <TextButton
         type="submit"
         className="w-full"
-        disabled={submitState === "submitting"}
+        disabled={submitState === "submitting" || !isReady}
       >
         {submitState === "submitting"
           ? authCopy.loginSubmitting

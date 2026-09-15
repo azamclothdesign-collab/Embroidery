@@ -5,25 +5,39 @@ import {
   loginAdmin,
   logoutAdmin,
 } from "@/lib/api/adminAuthApi";
-import { ApiClientError } from "@/lib/api/apiClient";
 import {
   clearAdminSessionCookie,
   setAdminSessionCookie,
 } from "@/server/session/cookies";
 import { type AdminSessionView } from "@/types/api/auth";
 
+function isUnauthorized(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) {
+    return false;
+  }
+
+  const record = error as { status?: unknown; code?: unknown };
+  return record.status === 401 || record.code === "unauthenticated";
+}
+
 export async function loginAdminAction(input: {
   email: string;
   password: string;
-}): Promise<
-  { ok: true; session: AdminSessionView } | { ok: false; error: string }
-> {
+}): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
-    const result = await loginAdmin(input);
+    const result = await loginAdmin({
+      email: input.email,
+      password: input.password,
+    });
+
+    if (typeof result.sessionToken !== "string" || result.sessionToken.length === 0) {
+      return { ok: false, error: "failed" };
+    }
+
     await setAdminSessionCookie(result.sessionToken);
-    return { ok: true, session: result.session };
+    return { ok: true };
   } catch (error) {
-    if (error instanceof ApiClientError && error.status === 401) {
+    if (isUnauthorized(error)) {
       return { ok: false, error: "invalid" };
     }
 

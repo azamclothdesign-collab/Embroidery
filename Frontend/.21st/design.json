@@ -42,7 +42,7 @@
   "decisions": [
     {
       "id": "homepage-cinematic-hero",
-      "choice": "Premium digital craft marketplace homepage: warm paper #F8F7F3, ink #111111, accent #D8A83E, Nourd, transparent-to-blur GSAP header, full-viewport embroidery poster/video hero with specified copy."
+      "choice": "Premium digital craft marketplace homepage: warm paper #F8F7F3, ink #111111, accent #D8A83E, Nourd, sticky paper header. Compact text-only hero (no poster/video): heading, one-line tagline, dual CTAs, subtle gold radial glow, tight vertical rhythm like a SaaS landing."
     },
     {
       "id": "product-card-hover",
@@ -98,19 +98,19 @@
     },
     {
       "id": "gsap-animation-system",
-      "choice": "GSAP owns cinematic scroll: hero text reveal, video scale, and scrubbed hero transition; category and product clip reveals with stagger; From Screen stitch counters; How It Works pin; collection horizontal enter plus drag; trust marquee loop; subtle parallax on From Screen and Final CTA. Impact stats stay qualitative (no invented counts)—the number counter is From Screen. Reduced motion: static poster, opacity fades, no pin or parallax. Framer owns component interaction only: menu, search, cart, FAQ, wishlist pulse, product hover fade, button press, inner page enter. Never both libraries on the same element. No toasts until a real event exists."
+      "choice": "GSAP owns cinematic scroll: compact hero copy fade only (no media scale or scrub); category and product clip reveals with stagger; From Screen stitch counters; How It Works pin; collection horizontal enter plus drag; trust marquee loop; subtle parallax on From Screen and Final CTA. Impact stats stay qualitative (no invented counts)—the number counter is From Screen. Reduced motion: opacity fades, no pin or parallax. Framer owns component interaction only: menu, search, cart, FAQ, wishlist pulse, product hover fade, button press, inner page enter. Never both libraries on the same element. No toasts until a real event exists."
     },
     {
       "id": "homepage-story-arc",
-      "choice": "Final homepage architecture: Header, cinematic hero, trust marquee, featured categories, best sellers, screen to stitch, problem to solution, pinned How It Works, machine compatibility, community gallery, testimonials, trust statistics, featured collection, Learn & Create, FAQ, final CTA, footer. Narrative: Inspiration → Designs → Product Confidence → Machine Compatibility → Community Proof → Purchase → Instant Download."
+      "choice": "Final homepage architecture: Header, compact text hero, trust marquee, featured categories, best sellers, screen to stitch, problem to solution, pinned How It Works, machine compatibility, community gallery, testimonials, trust statistics, featured collection, Learn & Create, FAQ, final CTA, footer. Narrative: Inspiration → Designs → Product Confidence → Machine Compatibility → Community Proof → Purchase → Instant Download."
     },
     {
       "id": "mobile-layout",
-      "choice": "Mobile is composed, not stacked desktop: 100svh hero with copy in the lower-middle and a full-width Explore Designs CTA; header is Logo and Menu only with Search Wishlist Cart inside the menu; best-seller grid is two columns with name and price (rating and formats from md up). No invented second SKU."
+      "choice": "Mobile is composed, not stacked desktop: compact paper hero (heading, one-line tagline, stacked CTAs) instead of 100svh media; header is Logo and Menu only with Search Wishlist Cart inside the menu; best-seller grid is two columns with name and price (rating and formats from md up). No invented second SKU."
     },
     {
       "id": "hero-video-performance",
-      "choice": "Hero media is poster-first: WebM then MP4, desktop files never selected below 768px, mobile files only when present, and no video element when prefers-reduced-motion. Reduced motion gets opacity fades only — no pin, no parallax, no media scale. Desktop and mobile loops must stay under the hero video byte budgets."
+      "choice": "Homepage hero is poster-free compact copy. Remaining cinematic media (From Screen, Final CTA) stay poster-first: WebM then MP4, desktop files never selected below 768px, mobile files only when present, and no video element when prefers-reduced-motion. Reduced motion gets opacity fades only — no pin, no parallax, no media scale."
     },
     {
       "id": "shop-discovery-page",

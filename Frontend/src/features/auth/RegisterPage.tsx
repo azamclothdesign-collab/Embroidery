@@ -33,7 +33,7 @@ export function RegisterPage({ locale }: RegisterPageProps) {
     }
   }, [isReady, nextPath, router, session]);
 
-  if (!isReady || session !== null) {
+  if (session !== null) {
     return null;
   }
 

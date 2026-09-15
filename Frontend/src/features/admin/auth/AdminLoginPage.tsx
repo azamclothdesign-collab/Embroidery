@@ -10,7 +10,6 @@ import {
   useAdminSession,
   useAdminSessionReady,
 } from "@/hooks/useAdminSession";
-import { useIsClient } from "@/hooks/useIsClient";
 
 type AdminLoginPageProps = {
   locale: string;
@@ -21,7 +20,6 @@ export function AdminLoginPage({ locale }: AdminLoginPageProps) {
   const searchParams = useSearchParams();
   const session = useAdminSession();
   const isReady = useAdminSessionReady();
-  const isClient = useIsClient();
   const nextParam = searchParams.get("next");
   const nextPath =
     nextParam !== null && nextParam.startsWith(`/${locale}`)
@@ -34,7 +32,7 @@ export function AdminLoginPage({ locale }: AdminLoginPageProps) {
     }
   }, [isReady, nextPath, router, session]);
 
-  if (!isClient || !isReady || session !== null) {
+  if (session !== null) {
     return null;
   }
 

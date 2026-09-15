@@ -1,3 +1,5 @@
+import { unstable_noStore as noStore } from "next/cache";
+
 import { maxJsonBytes } from "@/constants/httpLimits";
 import { createSignedRequestHeaders } from "@/lib/api/hmacSigner";
 import { writeLog } from "@/lib/structuredLogger";
@@ -72,6 +74,10 @@ export async function requestApiJson<TData>(
 export async function requestApiJsonWithContext<TData>(
   options: RequestApiJsonOptions,
 ): Promise<TData> {
+  if (options.method !== "GET" || options.path.includes("/auth")) {
+    noStore();
+  }
+
   const serializedBody =
     options.body === undefined ? "" : JSON.stringify(options.body);
   const url = new URL(options.path, env.API_BASE_URL);
@@ -131,8 +137,14 @@ export async function requestApiJsonWithContext<TData>(
   }
 
   if (isApiFailureEnvelope(parsed)) {
+    const mappedStatus =
+      parsed.error.code === "unauthenticated"
+        ? 401
+        : parsed.error.code === "conflict"
+          ? 409
+          : response.status;
     throw new ApiClientError(
-      response.status,
+      mappedStatus,
       parsed.error.code,
       parsed.error.message,
     );

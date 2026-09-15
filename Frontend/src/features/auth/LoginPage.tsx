@@ -33,7 +33,7 @@ export function LoginPage({ locale }: LoginPageProps) {
     }
   }, [isReady, nextPath, router, session]);
 
-  if (!isReady || session !== null) {
+  if (session !== null) {
     return null;
   }
 

@@ -7,6 +7,8 @@ import { TextButton } from "@/components/TextButton";
 import { TextLink } from "@/components/TextLink";
 import { authCopy } from "@/constants/authCopy";
 import { accountLoginHref } from "@/constants/siteNavigation";
+import { useIsClient } from "@/hooks/useIsClient";
+import { readFormString } from "@/lib/form/readFormString";
 import {
   forgotRequestSchema,
   forgotResetSchema,
@@ -23,6 +25,7 @@ type Step = "request" | "reset" | "success";
 type SubmitState = "idle" | "submitting" | "error";
 
 export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
+  const isReady = useIsClient();
   const [step, setStep] = useState<Step>("request");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,8 +35,11 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
 
   const onRequest = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const nextEmail = readFormString(form, "email");
+    setEmail(nextEmail);
     setAttempted(true);
-    const parsed = forgotRequestSchema.safeParse({ email });
+    const parsed = forgotRequestSchema.safeParse({ email: nextEmail });
 
     if (!parsed.success) {
       return;
@@ -56,11 +62,16 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
 
   const onReset = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const nextPassword = readFormString(form, "password");
+    const nextConfirmPassword = readFormString(form, "confirmPassword");
+    setPassword(nextPassword);
+    setConfirmPassword(nextConfirmPassword);
     setAttempted(true);
     const parsed = forgotResetSchema.safeParse({
       email,
-      password,
-      confirmPassword,
+      password: nextPassword,
+      confirmPassword: nextConfirmPassword,
     });
 
     if (!parsed.success) {
@@ -122,7 +133,12 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
         : undefined);
 
     return (
-      <form className="flex flex-col gap-5" onSubmit={onReset} noValidate>
+      <form
+        className="flex flex-col gap-5"
+        onSubmit={onReset}
+        noValidate
+        data-ready={isReady ? "true" : "false"}
+      >
         <h2 className="text-h3 font-medium tracking-tight text-ink">
           {authCopy.forgotResetHeading}
         </h2>
@@ -131,6 +147,7 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
           {authCopy.password}
           <input
             type="password"
+            name="password"
             autoComplete="new-password"
             className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
             value={password}
@@ -166,6 +183,7 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
           {authCopy.confirmPassword}
           <input
             type="password"
+            name="confirmPassword"
             autoComplete="new-password"
             className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
             value={confirmPassword}
@@ -184,7 +202,7 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
             {authCopy.forgotMissing}
           </p>
         ) : null}
-        <TextButton type="submit" className="w-full" disabled={submitState === "submitting"}>
+        <TextButton type="submit" className="w-full" disabled={submitState === "submitting" || !isReady}>
           {submitState === "submitting"
             ? authCopy.forgotResetSubmitting
             : authCopy.forgotResetSubmit}
@@ -200,11 +218,17 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
   }
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={onRequest} noValidate>
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={onRequest}
+      noValidate
+      data-ready={isReady ? "true" : "false"}
+    >
       <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
         {authCopy.email}
         <input
           type="email"
+          name="email"
           autoComplete="email"
           className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
           value={email}
@@ -226,7 +250,7 @@ export function ForgotPasswordForm({ locale }: ForgotPasswordFormProps) {
           {authCopy.forgotMissing}
         </p>
       ) : null}
-      <TextButton type="submit" className="w-full" disabled={submitState === "submitting"}>
+      <TextButton type="submit" className="w-full" disabled={submitState === "submitting" || !isReady}>
         {submitState === "submitting" ? authCopy.loginSubmitting : authCopy.forgotContinue}
       </TextButton>
       <Link

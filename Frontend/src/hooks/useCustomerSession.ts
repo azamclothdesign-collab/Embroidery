@@ -50,11 +50,22 @@ async function refreshCustomerSession(): Promise<void> {
 }
 
 function ensureRefresh(): void {
-  if (fetchPromise === null) {
-    fetchPromise = refreshCustomerSession().finally(() => {
-      fetchPromise = null;
-    });
+  if (fetchPromise !== null) {
+    return;
   }
+
+  if (snapshot.isReady && snapshot.session === null) {
+    snapshot = {
+      session: null,
+      isReady: false,
+      version: snapshot.version + 1,
+    };
+    emit();
+  }
+
+  fetchPromise = refreshCustomerSession().finally(() => {
+    fetchPromise = null;
+  });
 }
 
 function subscribe(onStoreChange: () => void): () => void {
@@ -62,6 +73,12 @@ function subscribe(onStoreChange: () => void): () => void {
   ensureRefresh();
 
   const onAuthUpdate = () => {
+    snapshot = {
+      session: snapshot.session,
+      isReady: false,
+      version: snapshot.version + 1,
+    };
+    emit();
     void refreshCustomerSession();
   };
 

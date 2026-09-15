@@ -45,6 +45,13 @@ function readHeader(
     return value;
   }
 
+  if (Array.isArray(value)) {
+    const first = value[0];
+    if (typeof first === "string" && first.length > 0) {
+      return first;
+    }
+  }
+
   return null;
 }
 

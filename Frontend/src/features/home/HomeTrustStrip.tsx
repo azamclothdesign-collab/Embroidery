@@ -5,7 +5,7 @@ export function HomeTrustStrip() {
     <section
       id="after-hero"
       aria-label="Trust"
-      className="bg-ink py-8"
+      className="bg-ink py-4"
     >
       <HomeTrustMarquee />
     </section>

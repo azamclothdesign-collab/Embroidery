@@ -8,7 +8,6 @@ import {
   useAdminSession,
   useAdminSessionReady,
 } from "@/hooks/useAdminSession";
-import { useIsClient } from "@/hooks/useIsClient";
 
 type AdminAuthGuardProps = {
   locale: string;
@@ -20,21 +19,16 @@ export function AdminAuthGuard({ locale, children }: AdminAuthGuardProps) {
   const pathname = usePathname();
   const session = useAdminSession();
   const isReady = useAdminSessionReady();
-  const isClient = useIsClient();
 
   useEffect(() => {
-    if (isClient && isReady && session === null) {
+    if (isReady && session === null) {
       const loginPath = `/${locale}${adminLoginHref}`;
       if (pathname !== loginPath) {
         const nextParam = encodeURIComponent(pathname);
         router.replace(`${loginPath}?next=${nextParam}`);
       }
     }
-  }, [isClient, isReady, session, router, pathname, locale]);
-
-  if (!isClient || !isReady || session === null) {
-    return null;
-  }
+  }, [isReady, session, router, pathname, locale]);
 
   return <>{children}</>;
 }

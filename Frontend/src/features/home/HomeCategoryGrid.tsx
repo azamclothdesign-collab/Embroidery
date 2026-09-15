@@ -62,7 +62,7 @@ export function HomeCategoryGrid({ locale, tiles }: HomeCategoryGridProps) {
   return (
     <div
       ref={scopeRef}
-      className="mt-12 grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto snap-x snap-mandatory pb-6 no-scrollbar"
+      className="mt-8 grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto snap-x snap-mandatory pb-6 no-scrollbar"
     >
       {tiles.map((tile) => (
         <HomeFeaturedCategoryTile

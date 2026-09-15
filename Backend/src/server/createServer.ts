@@ -146,8 +146,11 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     }
 
     await resolved.module.handle(context);
-  } catch {
-    writeLog("error", "unhandled_request_error", { correlationId });
+  } catch (error) {
+    writeLog("error", "unhandled_request_error", {
+      correlationId,
+      queryName: error instanceof Error ? error.message : path,
+    });
     sendErrorEnvelope(res, 500, "internal_error", "Internal server error");
   } finally {
     writeLog("info", "request_completed", {

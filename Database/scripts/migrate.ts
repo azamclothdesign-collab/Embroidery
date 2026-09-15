@@ -87,7 +87,8 @@ async function isMigrationApplied(
 
 async function run(): Promise<void> {
   const databaseUrl =
-    process.env.DATABASE_MIGRATION_URL ?? process.env.DATABASE_URL;
+    process.env.DATABASE_MIGRATION_URL?.trim() ||
+    process.env.DATABASE_URL?.trim();
 
   if (databaseUrl === undefined || databaseUrl === "") {
     throw new Error("DATABASE_URL or DATABASE_MIGRATION_URL is required");

@@ -15,6 +15,7 @@ export const authCopy = {
   registerSubmit: "Create Account",
   registerSubmitting: "Creating account…",
   registerExists: "An account with that email already exists on this device.",
+  registerFailed: "We couldn’t create your account. Try again.",
   registerHasAccount: "Already have an account?",
   signInLink: "Sign in",
   forgotEyebrow: "Account",

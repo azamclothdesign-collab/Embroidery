@@ -27,7 +27,7 @@ export function ForgotPasswordPage({ locale }: ForgotPasswordPageProps) {
     }
   }, [isReady, locale, router, session]);
 
-  if (!isReady || session !== null) {
+  if (session !== null) {
     return null;
   }
 

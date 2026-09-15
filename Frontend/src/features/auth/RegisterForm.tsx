@@ -2,12 +2,13 @@
 
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { TextButton } from "@/components/TextButton";
 import { authCopy } from "@/constants/authCopy";
 import { accountLoginHref } from "@/constants/siteNavigation";
+import { useIsClient } from "@/hooks/useIsClient";
 import { readAccountPreferences, writeAccountPreferences } from "@/lib/accountPreferences";
+import { readFormString } from "@/lib/form/readFormString";
 import { notifyCartUpdated } from "@/lib/session/cartSession";
 import { notifyCustomerAuthUpdated } from "@/lib/session/customerAuth";
 import { notifyWishlistUpdated } from "@/lib/session/wishlistSession";
@@ -23,10 +24,10 @@ type RegisterFormProps = {
   nextPath: string;
 };
 
-type SubmitState = "idle" | "submitting" | "error-exists";
+type SubmitState = "idle" | "submitting" | "error-exists" | "error-failed";
 
 export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
-  const router = useRouter();
+  const isReady = useIsClient();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,38 +55,53 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const nextValues = {
+      firstName: readFormString(form, "firstName"),
+      lastName: readFormString(form, "lastName"),
+      email: readFormString(form, "email"),
+      password: readFormString(form, "password"),
+      confirmPassword: readFormString(form, "confirmPassword"),
+    };
+    setFirstName(nextValues.firstName);
+    setLastName(nextValues.lastName);
+    setEmail(nextValues.email);
+    setPassword(nextValues.password);
+    setConfirmPassword(nextValues.confirmPassword);
     setAttempted(true);
 
-    if (!parsed.success) {
+    const submitted = registerFormSchema.safeParse(nextValues);
+
+    if (!submitted.success) {
       return;
     }
 
     setSubmitState("submitting");
 
     void registerCustomerAction({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      firstName: parsed.data.firstName,
-      lastName: parsed.data.lastName,
-      confirmPassword: parsed.data.confirmPassword,
+      email: submitted.data.email,
+      password: submitted.data.password,
+      firstName: submitted.data.firstName,
+      lastName: submitted.data.lastName,
+      confirmPassword: submitted.data.confirmPassword,
+      nextPath,
     }).then((result) => {
       if (!result.ok) {
-        setSubmitState("error-exists");
+        setSubmitState(result.error === "exists" ? "error-exists" : "error-failed");
         return;
       }
 
       const prefs = readAccountPreferences();
       writeAccountPreferences({
         ...prefs,
-        firstName: parsed.data.firstName,
-        lastName: parsed.data.lastName,
-        displayName: parsed.data.firstName,
+        firstName: submitted.data.firstName,
+        lastName: submitted.data.lastName,
+        displayName: submitted.data.firstName,
       });
 
       notifyCustomerAuthUpdated();
       notifyCartUpdated();
       notifyWishlistUpdated();
-      router.push(nextPath);
     });
   };
 
@@ -93,11 +109,18 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
   const strengthLabel = passwordStrengthLabel(password);
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={onSubmit} noValidate>
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={onSubmit}
+      noValidate
+      data-ready={isReady ? "true" : "false"}
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
           {authCopy.firstName}
           <input
+            id="register-first-name"
+            name="firstName"
             autoComplete="given-name"
             className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
             value={firstName}
@@ -114,6 +137,8 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
         <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
           {authCopy.lastName}
           <input
+            id="register-last-name"
+            name="lastName"
             autoComplete="family-name"
             className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
             value={lastName}
@@ -132,13 +157,15 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
       <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
         {authCopy.email}
         <input
+          id="register-email"
           type="email"
+          name="email"
           autoComplete="email"
           className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
-            if (submitState === "error-exists") {
+            if (submitState === "error-exists" || submitState === "error-failed") {
               setSubmitState("idle");
             }
           }}
@@ -150,17 +177,21 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
         ) : null}
       </label>
 
-      <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
-        {authCopy.password}
-        <input
-          type="password"
-          autoComplete="new-password"
-          className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
-        />
+      <div className="flex flex-col gap-2">
+        <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
+          {authCopy.password}
+          <input
+            id="register-password"
+            type="password"
+            name="password"
+            autoComplete="new-password"
+            className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          />
+        </label>
         <span className="normal-case tracking-normal text-ink-soft">
           {authCopy.passwordHint}
         </span>
@@ -187,12 +218,14 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
             {authCopy.passwordTooShort}
           </span>
         ) : null}
-      </label>
+      </div>
 
       <label className="flex flex-col gap-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
         {authCopy.confirmPassword}
         <input
+          id="register-confirm-password"
           type="password"
+          name="confirmPassword"
           autoComplete="new-password"
           className="min-h-12 border border-line bg-paper px-4 text-body normal-case tracking-normal text-ink"
           value={confirmPassword}
@@ -213,10 +246,16 @@ export function RegisterForm({ locale, nextPath }: RegisterFormProps) {
         </p>
       ) : null}
 
+      {submitState === "error-failed" ? (
+        <p className="text-body leading-7 text-ink" role="alert">
+          {authCopy.registerFailed}
+        </p>
+      ) : null}
+
       <TextButton
         type="submit"
         className="w-full"
-        disabled={submitState === "submitting"}
+        disabled={submitState === "submitting" || !isReady}
       >
         {submitState === "submitting"
           ? authCopy.registerSubmitting
