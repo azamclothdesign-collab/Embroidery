@@ -1,0 +1,526 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - generic [ref=e5]:
+      - link "Embroidery" [ref=e6] [cursor=pointer]:
+        - /url: /en
+      - navigation "Primary" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Designs" [ref=e10] [cursor=pointer]:
+              - /url: /en/designs
+          - listitem [ref=e11]:
+            - link "Categories" [ref=e12] [cursor=pointer]:
+              - /url: /en/categories
+          - listitem [ref=e13]:
+            - link "How It Works" [ref=e14] [cursor=pointer]:
+              - /url: /en/how-it-works
+          - listitem [ref=e15]:
+            - link "About" [ref=e16] [cursor=pointer]:
+              - /url: /en/about
+          - listitem [ref=e17]:
+            - link "Guides" [ref=e18] [cursor=pointer]:
+              - /url: /en/guides
+      - generic [ref=e19]:
+        - button "Search designs" [ref=e20]
+        - link "Wishlist" [ref=e24] [cursor=pointer]:
+          - /url: /en/wishlist
+        - button "Cart" [ref=e28]
+        - link "Shop Designs" [ref=e33] [cursor=pointer]:
+          - /url: /en/designs
+    - region [ref=e34]:
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Digital embroidery designs
+        - heading "Designs Made to Be Stitched." [level=1] [ref=e39]
+        - paragraph [ref=e40]: Professionally digitized embroidery designs in the formats you need — ready to download, stitch, and bring to life.
+        - generic [ref=e41]:
+          - link "Explore Designs" [ref=e42] [cursor=pointer]:
+            - /url: /en/designs
+          - link "How It Works" [ref=e44] [cursor=pointer]:
+            - /url: /en/how-it-works
+        - link "Scroll" [ref=e45] [cursor=pointer]:
+          - /url: "#after-hero"
+    - region "Trust" [ref=e46]:
+      - generic [ref=e47]:
+        - generic [ref=e49]:
+          - list [ref=e50]:
+            - listitem [ref=e51]:
+              - generic [ref=e52]: Professionally digitized
+              - generic [ref=e53]: •
+            - listitem [ref=e54]:
+              - generic [ref=e55]: Multiple machine formats
+              - generic [ref=e56]: •
+            - listitem [ref=e57]:
+              - generic [ref=e58]: Instant digital download
+              - generic [ref=e59]: •
+            - listitem [ref=e60]:
+              - generic [ref=e61]: Embroidery guides
+              - generic [ref=e62]: •
+            - listitem [ref=e63]:
+              - generic [ref=e64]: Secure checkout
+              - generic [ref=e65]: •
+          - list [ref=e67]:
+            - listitem [ref=e68]:
+              - generic [ref=e69]: Professionally digitized
+              - generic [ref=e70]: •
+            - listitem [ref=e71]:
+              - generic [ref=e72]: Multiple machine formats
+              - generic [ref=e73]: •
+            - listitem [ref=e74]:
+              - generic [ref=e75]: Instant digital download
+              - generic [ref=e76]: •
+            - listitem [ref=e77]:
+              - generic [ref=e78]: Embroidery guides
+              - generic [ref=e79]: •
+            - listitem [ref=e80]:
+              - generic [ref=e81]: Secure checkout
+              - generic [ref=e82]: •
+        - button "Pause" [ref=e83]
+    - region [ref=e84]:
+      - generic [ref=e85]:
+        - paragraph [ref=e86]: Explore the collection
+        - heading "Find Something Worth Stitching." [level=2] [ref=e87]
+        - paragraph [ref=e88]: Explore thoughtfully digitized designs organized around the projects, occasions, and ideas you love.
+        - generic [ref=e89]:
+          - link [ref=e90] [cursor=pointer]:
+            - /url: /en/designs?q=floral
+            - img "Close-up of floral embroidery on cream linen" [ref=e91]
+            - heading "Floral" [level=3] [ref=e94]
+          - link [ref=e98] [cursor=pointer]:
+            - /url: /en/designs?q=monograms
+            - img "Embroidered monogram on ivory cotton" [ref=e99]
+            - heading "Monograms" [level=3] [ref=e102]
+          - link [ref=e106] [cursor=pointer]:
+            - /url: /en/designs?q=animals
+            - img "Animal embroidery stitched on cream fabric" [ref=e107]
+            - heading "Animals" [level=3] [ref=e110]
+          - link [ref=e114] [cursor=pointer]:
+            - /url: /en/designs?q=seasonal
+            - img "Seasonal botanical embroidery on linen" [ref=e115]
+            - heading "Seasonal" [level=3] [ref=e118]
+    - region [ref=e122]:
+      - generic [ref=e123]:
+        - paragraph [ref=e124]: Customer favorites
+        - heading "The Designs Everyone's Stitching" [level=2] [ref=e125]
+        - paragraph [ref=e126]: Start with the designs loved by embroidery creators.
+        - list [ref=e127]:
+          - listitem [ref=e128]:
+            - article [ref=e129]:
+              - generic [ref=e130]:
+                - link "View Floral Butterfly design" [ref=e131] [cursor=pointer]:
+                  - /url: /en/designs?q=Floral%20Butterfly
+                  - img "Floral butterfly embroidery design on cream linen" [ref=e132]
+                - generic:
+                  - generic: View
+                  - generic: Design
+                - link "Save Floral Butterfly to wishlist" [ref=e134]:
+                  - /url: /en/wishlist
+                - link "Quick Add" [ref=e139]:
+                  - /url: /en/cart
+              - generic [ref=e140]:
+                - heading [level=3] [ref=e141]:
+                  - link "Floral Butterfly" [ref=e142] [cursor=pointer]:
+                    - /url: /en/designs?q=Floral%20Butterfly
+                - paragraph [ref=e144]:
+                  - generic [ref=e145]: ★★★★★
+                  - generic [ref=e146]: Rated 4.9 out of 5
+                  - generic [ref=e147]: "4.9"
+                - paragraph [ref=e148]: PES · DST · JEF
+                - paragraph [ref=e149]: $4.99
+    - region [ref=e150]:
+      - generic [ref=e151]:
+        - img "Close-up of embroidery thread stitched into cream linen" [ref=e153]
+        - generic [ref=e155]:
+          - heading "From Digital File to Real Thread." [level=2] [ref=e156]
+          - paragraph [ref=e157]: Every design starts digitally — but its purpose is physical.
+          - paragraph [ref=e158]: Our designs are created to translate cleanly from screen to fabric, giving you the information and file formats needed to start stitching with confidence.
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - term [ref=e161]: Stitches
+              - definition [ref=e162]:
+                - generic [ref=e163]: 18,452
+                - text: 18,452
+            - generic [ref=e164]:
+              - term [ref=e165]: Thread Colors
+              - definition [ref=e166]:
+                - generic [ref=e167]: "7"
+                - text: "7"
+            - generic [ref=e168]:
+              - term [ref=e169]: Design Width
+              - definition [ref=e170]:
+                - generic [ref=e171]: 4.1"
+                - text: 4.1"
+            - generic [ref=e172]:
+              - term [ref=e173]: Design Height
+              - definition [ref=e174]:
+                - generic [ref=e175]: 3.8"
+                - text: 3.8"
+    - region [ref=e176]:
+      - generic [ref=e177]:
+        - paragraph [ref=e178]: Embroidery without the guesswork
+        - heading "Everything You Need Before the First Stitch." [level=2] [ref=e179]
+        - list [ref=e180]:
+          - listitem [ref=e181]:
+            - paragraph [ref=e182]: "01"
+            - heading "Wrong File Format" [level=3] [ref=e183]
+            - paragraph [ref=e184]: Not sure whether you need PES, DST, JEF, EXP or another format?
+          - listitem [ref=e185]:
+            - paragraph [ref=e186]: "02"
+            - heading "Not Enough Design Information" [level=3] [ref=e187]
+            - paragraph [ref=e188]: Stitch count, dimensions, colors and compatibility shouldn't be hidden.
+          - listitem [ref=e189]:
+            - paragraph [ref=e190]: "03"
+            - heading "Unclear Downloads" [level=3] [ref=e191]
+            - paragraph [ref=e192]: Digital products should be available immediately and organized properly.
+      - list [ref=e194]:
+        - listitem [ref=e195]:
+          - generic [ref=e199]: Multiple formats
+        - listitem [ref=e200]:
+          - generic [ref=e204]: Clear specifications
+        - listitem [ref=e205]:
+          - generic [ref=e209]: Instant downloads
+        - listitem [ref=e210]:
+          - generic [ref=e214]: Detailed guides
+        - listitem [ref=e215]:
+          - generic [ref=e219]: Secure purchase
+    - region [ref=e221]:
+      - generic [ref=e222]:
+        - paragraph [ref=e223]: How it works
+        - heading "Four Steps From Idea to Embroidery." [level=2] [ref=e224]
+        - list [ref=e225]:
+          - listitem [ref=e226]:
+            - generic [ref=e227]: 01 Discover
+          - listitem [ref=e228]:
+            - generic [ref=e231]: 02 Choose
+          - listitem [ref=e232]:
+            - generic [ref=e235]: 03 Purchase
+          - listitem [ref=e236]:
+            - generic [ref=e239]: 04 Download
+      - list [ref=e241]:
+        - listitem [ref=e242]:
+          - img "Collection of embroidered designs laid out on cream linen" [ref=e244]
+          - generic [ref=e245]:
+            - paragraph [ref=e246]: "01"
+            - heading "Discover" [level=3] [ref=e247]
+            - paragraph [ref=e248]: Browse thousands of embroidery designs.
+        - listitem [ref=e249]:
+          - img "Embroidery on linen beside thread and a measuring tape" [ref=e251]
+          - generic [ref=e252]:
+            - paragraph [ref=e253]: "02"
+            - heading "Choose" [level=3] [ref=e254]
+            - paragraph [ref=e255]: Check formats, dimensions, stitch count and compatibility.
+        - listitem [ref=e256]:
+          - img "Sealed design envelope with ribbon and embroidered linen" [ref=e258]
+          - generic [ref=e259]:
+            - paragraph [ref=e260]: "03"
+            - heading "Purchase" [level=3] [ref=e261]
+            - paragraph [ref=e262]: Add your design to cart and checkout securely.
+        - listitem [ref=e263]:
+          - img "Printed embroidery guide beside a finished stitched design" [ref=e265]
+          - generic [ref=e266]:
+            - paragraph [ref=e267]: "04"
+            - heading "Download" [level=3] [ref=e268]
+            - paragraph [ref=e269]: Get your embroidery files and guide instantly.
+    - region [ref=e270]:
+      - generic [ref=e271]:
+        - paragraph [ref=e272]: Made for your machine
+        - heading "Not Sure Which Format You Need?" [level=2] [ref=e273]
+        - paragraph [ref=e274]: Find the embroidery format compatible with your machine before you buy.
+        - generic [ref=e275]:
+          - text: Select your machine
+          - combobox "Select your machine" [ref=e277]:
+            - option "Brother" [selected]
+            - option "Janome"
+            - option "Tajima"
+            - option "Bernina"
+          - paragraph [ref=e278]:
+            - generic [ref=e279]: Compatible format
+            - generic [ref=e280]: PES
+          - link "Find My Format" [ref=e281] [cursor=pointer]:
+            - /url: /en/designs?q=PES
+    - region [ref=e282]:
+      - generic [ref=e283]:
+        - paragraph [ref=e284]: Made by our community
+        - heading "See What Happens When Designs Come to Life." [level=2] [ref=e285]
+        - list [ref=e286]:
+          - listitem [ref=e287]:
+            - figure [ref=e288]:
+              - generic [ref=e289]:
+                - img "Floral butterfly embroidery stitched on a cream linen shirt" [ref=e290]
+                - generic [ref=e292]:
+                  - paragraph [ref=e293]: "@threadandbloom"
+                  - paragraph [ref=e294]: "Design: Floral Butterfly"
+          - listitem [ref=e295]:
+            - figure [ref=e296]:
+              - generic [ref=e297]:
+                - img "Floral butterfly embroidery stitched on a cream linen hat" [ref=e298]
+                - generic [ref=e300]:
+                  - paragraph [ref=e301]: "@goldenneedle"
+                  - paragraph [ref=e302]: "Design: Floral Butterfly"
+          - listitem [ref=e303]:
+            - figure [ref=e304]:
+              - generic [ref=e305]:
+                - img "Floral butterfly embroidery stitched on a cream chore jacket" [ref=e306]
+                - generic [ref=e308]:
+                  - paragraph [ref=e309]: "@hoopandhome"
+                  - paragraph [ref=e310]: "Design: Floral Butterfly"
+          - listitem [ref=e311]:
+            - figure [ref=e312]:
+              - generic [ref=e313]:
+                - img "Floral butterfly embroidery stitched on a cream canvas tote" [ref=e314]
+                - generic [ref=e316]:
+                  - paragraph [ref=e317]: "@linenpost"
+                  - paragraph [ref=e318]: "Design: Floral Butterfly"
+          - listitem [ref=e319]:
+            - figure [ref=e320]:
+              - generic [ref=e321]:
+                - img "Floral butterfly embroidery stitched on an ivory baby onesie" [ref=e322]
+                - generic [ref=e324]:
+                  - paragraph [ref=e325]: "@tinyhoops"
+                  - paragraph [ref=e326]: "Design: Floral Butterfly"
+          - listitem [ref=e327]:
+            - figure [ref=e328]:
+              - generic [ref=e329]:
+                - img "Floral butterfly embroidery stitched on a cream linen pillow" [ref=e330]
+                - generic [ref=e332]:
+                  - paragraph [ref=e333]: "@heirloomroom"
+                  - paragraph [ref=e334]: "Design: Floral Butterfly"
+          - listitem [ref=e335]:
+            - figure [ref=e336]:
+              - generic [ref=e337]:
+                - img "Floral butterfly design stitched on cream linen" [ref=e338]
+                - generic [ref=e340]:
+                  - paragraph [ref=e341]: "@studioflora"
+                  - paragraph [ref=e342]: "Design: Floral Butterfly"
+    - region [ref=e343]:
+      - generic [ref=e344]:
+        - heading "Testimonials" [level=2] [ref=e345]
+        - list [ref=e346]:
+          - listitem [ref=e347]:
+            - blockquote [ref=e348]:
+              - paragraph [ref=e349]: “The file stitched beautifully from the very first run.”
+              - paragraph [ref=e350]: I loved that every format and the color guide were included. It made the whole process incredibly easy.
+              - generic [ref=e351]:
+                - generic [ref=e352]: Sarah M.
+                - paragraph [ref=e353]: Verified Customer
+          - listitem [ref=e354]:
+            - blockquote [ref=e355]:
+              - paragraph [ref=e356]: “I opened the file on my machine and it ran without a single adjustment.”
+              - paragraph [ref=e357]: PES, DST, and JEF were all there, so I could stitch without converting anything first.
+              - generic [ref=e358]:
+                - generic [ref=e359]: Priya N.
+                - paragraph [ref=e360]: Verified Customer
+          - listitem [ref=e361]:
+            - blockquote [ref=e362]:
+              - paragraph [ref=e363]: “I knew the stitch count and size before I hooped the fabric.”
+              - paragraph [ref=e364]: The download was instant and clearly organized, so I could start the same day.
+              - generic [ref=e365]:
+                - generic [ref=e366]: Daniel K.
+                - paragraph [ref=e367]: Verified Customer
+    - region [ref=e368]:
+      - generic [ref=e369]:
+        - heading "Trust statistics" [level=2] [ref=e370]
+        - generic [ref=e371]:
+          - generic [ref=e372]:
+            - term [ref=e373]: Digitized
+            - definition [ref=e374]: Professionally
+          - generic [ref=e375]:
+            - term [ref=e376]: File formats
+            - definition [ref=e377]: Multiple
+          - generic [ref=e378]:
+            - term [ref=e379]: Downloads
+            - definition [ref=e380]: Instant
+          - generic [ref=e381]:
+            - term [ref=e382]: Real projects
+            - definition [ref=e383]: Designed for
+    - region [ref=e384]:
+      - generic [ref=e385]:
+        - heading "Made for Every Kind of Project." [level=2] [ref=e386]
+        - generic [ref=e387]:
+          - tablist "Made for Every Kind of Project." [ref=e388]:
+            - tab "All" [selected] [ref=e389]
+            - tab "Apparel" [ref=e390]
+            - tab "Home" [ref=e391]
+            - tab "Gifts" [ref=e392]
+            - tab "Baby" [ref=e393]
+            - tab "Seasonal" [ref=e394]
+            - tab "Monograms" [ref=e395]
+          - tabpanel "All" [ref=e396]:
+            - list [ref=e398]:
+              - listitem [ref=e399]:
+                - article [ref=e400]:
+                  - generic [ref=e401]:
+                    - link "View Floral Butterfly design" [ref=e402] [cursor=pointer]:
+                      - /url: /en/designs?q=Floral%20Butterfly
+                      - img "Floral butterfly embroidery design on cream linen" [ref=e403]
+                    - generic:
+                      - generic: View
+                      - generic: Design
+                    - link "Save Floral Butterfly to wishlist" [ref=e405]:
+                      - /url: /en/wishlist
+                    - link "Quick Add" [ref=e410]:
+                      - /url: /en/cart
+                  - generic [ref=e411]:
+                    - heading [level=3] [ref=e412]:
+                      - link "Floral Butterfly" [ref=e413] [cursor=pointer]:
+                        - /url: /en/designs?q=Floral%20Butterfly
+                    - paragraph [ref=e415]:
+                      - generic [ref=e416]: ★★★★★
+                      - generic [ref=e417]: Rated 4.9 out of 5
+                      - generic [ref=e418]: "4.9"
+                    - paragraph [ref=e419]: PES · DST · JEF
+                    - paragraph [ref=e420]: $4.99
+    - region [ref=e421]:
+      - generic [ref=e422]:
+        - paragraph [ref=e423]: Learn & create
+        - heading "Better Designs Start With Better Knowledge." [level=2] [ref=e424]
+        - list [ref=e425]:
+          - listitem [ref=e426]:
+            - paragraph [ref=e427]: "01"
+            - heading "How to Choose the Right Embroidery File Format" [level=3] [ref=e428]
+          - listitem [ref=e429]:
+            - paragraph [ref=e430]: "02"
+            - heading "Understanding Stitch Counts & Design Size" [level=3] [ref=e431]
+          - listitem [ref=e432]:
+            - paragraph [ref=e433]: "03"
+            - heading "How to Prepare Fabric for Machine Embroidery" [level=3] [ref=e434]
+          - listitem [ref=e435]:
+            - paragraph [ref=e436]: "04"
+            - heading "Embroidery Machine Beginner's Guide" [level=3] [ref=e437]
+        - link "Explore Guides" [ref=e438] [cursor=pointer]:
+          - /url: /en/guides
+    - region [ref=e439]:
+      - generic [ref=e440]:
+        - heading "Questions Before You Stitch?" [level=2] [ref=e441]
+        - list [ref=e443]:
+          - listitem [ref=e444]:
+            - heading [level=3] [ref=e445]:
+              - button "What file formats do you provide?" [ref=e446]
+            - paragraph [ref=e451]: Designs include PES, DST, JEF, and EXP so you can match Brother, Janome, Tajima, and Bernina machines.
+          - listitem [ref=e452]:
+            - heading [level=3] [ref=e453]:
+              - button "How do I know which format works with my machine?" [ref=e454]
+            - paragraph [ref=e459]: Use Find My Format on this page. Brother uses PES, Janome uses JEF, Tajima uses DST, and Bernina uses EXP.
+          - listitem [ref=e460]:
+            - heading [level=3] [ref=e461]:
+              - button "When do I receive my files?" [ref=e462]
+            - paragraph [ref=e467]: Your embroidery files and guide are available to download instantly after purchase.
+          - listitem [ref=e468]:
+            - heading [level=3] [ref=e469]:
+              - button "Can I download my files again?" [ref=e470]
+            - paragraph [ref=e475]: Your files are delivered instantly after checkout. Save that download so you can stitch the design again.
+          - listitem [ref=e476]:
+            - heading [level=3] [ref=e477]:
+              - button "What is included with each design?" [ref=e478]
+            - paragraph [ref=e483]: Each design includes multiple formats, a color guide, stitch count, and finished dimensions.
+          - listitem [ref=e484]:
+            - heading [level=3] [ref=e485]:
+              - button "Can I use your designs commercially?" [ref=e486]
+            - paragraph [ref=e491]: These files are sold as embroidery designs for you to stitch on your own projects.
+          - listitem [ref=e492]:
+            - heading [level=3] [ref=e493]:
+              - button "Can I resize an embroidery design?" [ref=e494]
+            - paragraph [ref=e499]: Each design lists stitch count and finished size. Use those measurements to hoop your fabric and stitch at the listed size.
+          - listitem [ref=e500]:
+            - heading [level=3] [ref=e501]:
+              - button "Do you offer refunds on digital products?" [ref=e502]
+            - paragraph [ref=e507]: Checkout is secure, and your files are delivered instantly after purchase.
+    - region [ref=e508]:
+      - img "Close-up of embroidery thread stitched into cream linen" [ref=e510]
+      - generic [ref=e512]:
+        - paragraph [ref=e513]: Your next project starts here
+        - heading "Find a Design Worth Stitching." [level=2] [ref=e514]
+        - paragraph [ref=e515]: Explore professionally digitized embroidery designs, choose the format you need, and start creating today.
+        - generic [ref=e516]:
+          - link "Explore Designs" [ref=e517] [cursor=pointer]:
+            - /url: /en/designs
+          - link "Browse Best Sellers" [ref=e518] [cursor=pointer]:
+            - /url: "#best-sellers"
+  - contentinfo [ref=e519]:
+    - generic [ref=e520]:
+      - generic [ref=e521]:
+        - generic [ref=e522]:
+          - paragraph [ref=e523]: Embroidery
+          - paragraph [ref=e524]: Beautiful embroidery designs, ready for your next creation.
+        - navigation "Shop" [ref=e525]:
+          - paragraph [ref=e526]: Shop
+          - list [ref=e527]:
+            - listitem [ref=e528]:
+              - link "Designs" [ref=e529] [cursor=pointer]:
+                - /url: /en/designs
+            - listitem [ref=e530]:
+              - link "Categories" [ref=e531] [cursor=pointer]:
+                - /url: /en/categories
+            - listitem [ref=e532]:
+              - link "Best Sellers" [ref=e533] [cursor=pointer]:
+                - /url: /en#best-sellers
+            - listitem [ref=e534]:
+              - link "New Arrivals" [ref=e535] [cursor=pointer]:
+                - /url: /en/new-arrivals
+        - navigation "Learn" [ref=e536]:
+          - paragraph [ref=e537]: Learn
+          - list [ref=e538]:
+            - listitem [ref=e539]:
+              - link "Guides" [ref=e540] [cursor=pointer]:
+                - /url: /en/guides
+            - listitem [ref=e541]:
+              - link "Machine Formats" [ref=e542] [cursor=pointer]:
+                - /url: /en#machine-compatibility
+            - listitem [ref=e543]:
+              - link "FAQ" [ref=e544] [cursor=pointer]:
+                - /url: /en#faq
+            - listitem [ref=e545]:
+              - link "How It Works" [ref=e546] [cursor=pointer]:
+                - /url: /en/how-it-works
+        - navigation "Company" [ref=e547]:
+          - paragraph [ref=e548]: Company
+          - list [ref=e549]:
+            - listitem [ref=e550]:
+              - link "About" [ref=e551] [cursor=pointer]:
+                - /url: /en/about
+            - listitem [ref=e552]:
+              - link "Contact" [ref=e553] [cursor=pointer]:
+                - /url: /en/contact
+            - listitem [ref=e554]:
+              - link "Licensing" [ref=e555] [cursor=pointer]:
+                - /url: /en/licensing
+            - listitem [ref=e556]:
+              - link "Refund Policy" [ref=e557] [cursor=pointer]:
+                - /url: /en/refund-policy
+        - navigation "Support" [ref=e558]:
+          - paragraph [ref=e559]: Support
+          - list [ref=e560]:
+            - listitem [ref=e561]:
+              - link "Help Center" [ref=e562] [cursor=pointer]:
+                - /url: /en/help-center
+            - listitem [ref=e563]:
+              - link "My Downloads" [ref=e564] [cursor=pointer]:
+                - /url: /en/downloads
+            - listitem [ref=e565]:
+              - link "My Account" [ref=e566] [cursor=pointer]:
+                - /url: /en/account
+      - generic [ref=e567]:
+        - paragraph [ref=e568]: Newsletter
+        - paragraph [ref=e569]: Get new designs and creative inspiration.
+        - generic [ref=e570]:
+          - generic [ref=e571]: Email Address
+          - textbox "Email Address" [ref=e572]
+          - button "Subscribe" [ref=e573]
+    - generic [ref=e575]:
+      - paragraph [ref=e576]: © 2026 Embroidery
+      - navigation "Legal" [ref=e577]:
+        - list [ref=e578]:
+          - listitem [ref=e579]:
+            - link "Privacy" [ref=e580] [cursor=pointer]:
+              - /url: /en/privacy
+          - listitem [ref=e581]:
+            - link "Terms" [ref=e582] [cursor=pointer]:
+              - /url: /en/terms
+          - listitem [ref=e583]:
+            - link "Refund Policy" [ref=e584] [cursor=pointer]:
+              - /url: /en/refund-policy
+          - listitem [ref=e585]:
+            - link "Licensing" [ref=e586] [cursor=pointer]:
+              - /url: /en/licensing
+  - alert [ref=e587]

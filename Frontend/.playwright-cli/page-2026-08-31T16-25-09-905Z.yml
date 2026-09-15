@@ -1,0 +1,18 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - generic [ref=e5]:
+      - link "Embroidery" [ref=e6] [cursor=pointer]:
+        - /url: /en
+      - paragraph [ref=e7]:
+        - generic [ref=e11]: Secure Checkout
+    - generic [ref=e12]:
+      - heading "Your cart is empty" [level=1] [ref=e13]
+      - paragraph [ref=e14]: Add a design before completing checkout.
+      - generic [ref=e15]:
+        - link "Return to Cart" [ref=e16] [cursor=pointer]:
+          - /url: /en/cart
+        - link "Explore Designs" [ref=e17] [cursor=pointer]:
+          - /url: /en/designs
+  - alert [ref=e18]

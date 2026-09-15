@@ -1,0 +1,211 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - generic [ref=e5]:
+      - link "Embroidery" [ref=e6] [cursor=pointer]:
+        - /url: /en
+      - navigation "Primary" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Designs" [ref=e10] [cursor=pointer]:
+              - /url: /en/designs
+          - listitem [ref=e11]:
+            - link "Categories" [ref=e12] [cursor=pointer]:
+              - /url: /en/categories
+          - listitem [ref=e13]:
+            - link "How It Works" [ref=e14] [cursor=pointer]:
+              - /url: /en/how-it-works
+          - listitem [ref=e15]:
+            - link "About" [ref=e16] [cursor=pointer]:
+              - /url: /en/about
+          - listitem [ref=e17]:
+            - link "Guides" [ref=e18] [cursor=pointer]:
+              - /url: /en/guides
+      - generic [ref=e19]:
+        - button "Search designs" [ref=e20]
+        - link "Wishlist" [ref=e24] [cursor=pointer]:
+          - /url: /en/wishlist
+        - button "Cart" [ref=e28]
+        - link "Shop Designs" [ref=e33] [cursor=pointer]:
+          - /url: /en/designs
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - img "Close-up of embroidery thread stitched into cream linen" [ref=e38]
+        - generic [ref=e40]:
+          - paragraph [ref=e41]: The embroidery collection
+          - heading "Find Your Next Design." [level=1] [ref=e42]
+          - paragraph [ref=e43]: Explore professionally digitized embroidery designs for apparel, gifts, home projects, seasonal creations, and everything in between.
+          - generic [ref=e46]:
+            - generic [ref=e47]: Search embroidery designs
+            - combobox "Search embroidery designs" [ref=e52]
+      - navigation "Design categories" [ref=e53]:
+        - list [ref=e54]:
+          - listitem [ref=e55]:
+            - button "All Designs" [pressed] [ref=e56]
+          - listitem [ref=e57]:
+            - button "Floral" [ref=e58]
+          - listitem [ref=e59]:
+            - button "Animals" [ref=e60]
+          - listitem [ref=e61]:
+            - button "Monograms" [ref=e62]
+          - listitem [ref=e63]:
+            - button "Baby & Kids" [ref=e64]
+          - listitem [ref=e65]:
+            - button "Wedding" [ref=e66]
+          - listitem [ref=e67]:
+            - button "Seasonal" [ref=e68]
+          - listitem [ref=e69]:
+            - button "Quotes" [ref=e70]
+          - listitem [ref=e71]:
+            - button "Patches" [ref=e72]
+      - generic [ref=e73]:
+        - paragraph [ref=e74]: 1 Design
+        - generic [ref=e75]:
+          - button "Filters" [ref=e76]
+          - generic [ref=e77]:
+            - generic [ref=e78]: Sort by
+            - combobox "Sort by" [ref=e79]:
+              - option "Popular" [selected]
+              - option "Newest"
+              - option "Best Rated"
+              - 'option "Price: Low → High"'
+              - 'option "Price: High → Low"'
+              - option "Most Downloaded"
+      - list [ref=e80]:
+        - listitem [ref=e81]:
+          - article [ref=e82]:
+            - generic [ref=e83]:
+              - paragraph [ref=e84]: Best Seller
+              - button "Save Floral Butterfly to wishlist" [ref=e85]
+              - link "View Floral Butterfly design" [ref=e89] [cursor=pointer]:
+                - /url: /en/designs/floral-butterfly-embroidery
+                - img "Floral butterfly embroidery design on cream linen" [ref=e91]
+              - generic [ref=e92]:
+                - link "View Design" [ref=e93] [cursor=pointer]:
+                  - /url: /en/designs/floral-butterfly-embroidery
+                - button "Quick Add" [ref=e94]
+            - generic [ref=e95]:
+              - heading [level=2] [ref=e96]:
+                - link "Floral Butterfly" [ref=e97] [cursor=pointer]:
+                  - /url: /en/designs/floral-butterfly-embroidery
+              - paragraph [ref=e98]:
+                - generic [ref=e99]: ★★★★★
+                - generic [ref=e100]: Rated 4.9 out of 5
+                - generic [ref=e101]: "4.9"
+              - paragraph [ref=e102]: PES · DST · JEF
+              - paragraph [ref=e103]: $4.99
+      - paragraph [ref=e105]: Showing 1 of 1 design
+      - generic [ref=e107]:
+        - paragraph [ref=e108]: Not sure which format you need?
+        - heading "Find the right embroidery format for your machine" [level=2] [ref=e109]
+        - paragraph [ref=e110]: Choose your embroidery machine and we'll help you find the right file format.
+        - link "Find My Format" [ref=e112] [cursor=pointer]:
+          - /url: /en/machine-compatibility
+      - region [ref=e113]:
+        - heading "Every Design Comes With the Details That Matter." [level=2] [ref=e114]
+        - list [ref=e115]:
+          - listitem [ref=e116]:
+            - heading "Multiple Formats" [level=3] [ref=e117]
+            - paragraph [ref=e118]: Get the compatible embroidery formats included with your purchase.
+          - listitem [ref=e119]:
+            - heading "Design Specifications" [level=3] [ref=e120]
+            - paragraph [ref=e121]: Know the size, stitch count, colors, and other important details before you buy.
+          - listitem [ref=e122]:
+            - heading "Instant Download" [level=3] [ref=e123]
+            - paragraph [ref=e124]: Purchase securely and access your digital files immediately.
+      - generic [ref=e126]:
+        - heading "New Designs. Fresh Inspiration." [level=2] [ref=e127]
+        - paragraph [ref=e128]: Get new embroidery designs, creative inspiration, and special offers delivered to your inbox.
+        - generic [ref=e129]:
+          - generic [ref=e130]: Email address
+          - textbox "Email address" [ref=e131]:
+            - /placeholder: Your email address
+          - button "Subscribe" [ref=e132]
+  - contentinfo [ref=e133]:
+    - generic [ref=e134]:
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - paragraph [ref=e137]: Embroidery
+          - paragraph [ref=e138]: Beautiful embroidery designs, ready for your next creation.
+        - navigation "Shop" [ref=e139]:
+          - paragraph [ref=e140]: Shop
+          - list [ref=e141]:
+            - listitem [ref=e142]:
+              - link "Designs" [ref=e143] [cursor=pointer]:
+                - /url: /en/designs
+            - listitem [ref=e144]:
+              - link "Categories" [ref=e145] [cursor=pointer]:
+                - /url: /en/categories
+            - listitem [ref=e146]:
+              - link "Best Sellers" [ref=e147] [cursor=pointer]:
+                - /url: /en#best-sellers
+            - listitem [ref=e148]:
+              - link "New Arrivals" [ref=e149] [cursor=pointer]:
+                - /url: /en/new-arrivals
+        - navigation "Learn" [ref=e150]:
+          - paragraph [ref=e151]: Learn
+          - list [ref=e152]:
+            - listitem [ref=e153]:
+              - link "Guides" [ref=e154] [cursor=pointer]:
+                - /url: /en/guides
+            - listitem [ref=e155]:
+              - link "Machine Formats" [ref=e156] [cursor=pointer]:
+                - /url: /en#machine-compatibility
+            - listitem [ref=e157]:
+              - link "FAQ" [ref=e158] [cursor=pointer]:
+                - /url: /en#faq
+            - listitem [ref=e159]:
+              - link "How It Works" [ref=e160] [cursor=pointer]:
+                - /url: /en/how-it-works
+        - navigation "Company" [ref=e161]:
+          - paragraph [ref=e162]: Company
+          - list [ref=e163]:
+            - listitem [ref=e164]:
+              - link "About" [ref=e165] [cursor=pointer]:
+                - /url: /en/about
+            - listitem [ref=e166]:
+              - link "Contact" [ref=e167] [cursor=pointer]:
+                - /url: /en/contact
+            - listitem [ref=e168]:
+              - link "Licensing" [ref=e169] [cursor=pointer]:
+                - /url: /en/licensing
+            - listitem [ref=e170]:
+              - link "Refund Policy" [ref=e171] [cursor=pointer]:
+                - /url: /en/refund-policy
+        - navigation "Support" [ref=e172]:
+          - paragraph [ref=e173]: Support
+          - list [ref=e174]:
+            - listitem [ref=e175]:
+              - link "Help Center" [ref=e176] [cursor=pointer]:
+                - /url: /en/help-center
+            - listitem [ref=e177]:
+              - link "My Downloads" [ref=e178] [cursor=pointer]:
+                - /url: /en/downloads
+            - listitem [ref=e179]:
+              - link "My Account" [ref=e180] [cursor=pointer]:
+                - /url: /en/account
+      - generic [ref=e181]:
+        - paragraph [ref=e182]: Newsletter
+        - paragraph [ref=e183]: Get new designs and creative inspiration.
+        - generic [ref=e184]:
+          - generic [ref=e185]: Email Address
+          - textbox "Email Address" [ref=e186]
+          - button "Subscribe" [ref=e187]
+    - generic [ref=e189]:
+      - paragraph [ref=e190]: © 2026 Embroidery
+      - navigation "Legal" [ref=e191]:
+        - list [ref=e192]:
+          - listitem [ref=e193]:
+            - link "Privacy" [ref=e194] [cursor=pointer]:
+              - /url: /en/privacy
+          - listitem [ref=e195]:
+            - link "Terms" [ref=e196] [cursor=pointer]:
+              - /url: /en/terms
+          - listitem [ref=e197]:
+            - link "Refund Policy" [ref=e198] [cursor=pointer]:
+              - /url: /en/refund-policy
+          - listitem [ref=e199]:
+            - link "Licensing" [ref=e200] [cursor=pointer]:
+              - /url: /en/licensing
+  - alert [ref=e201]

@@ -1,0 +1,1 @@
+Place licensed Nourd woff2 files here: nourdRegular.woff2, nourdMedium.woff2, nourdSemiBold.woff2, nourdBold.woff2. After the files are present, switch src/lib/nourdFont.ts to next/font/local with those paths.

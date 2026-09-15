@@ -1,0 +1,203 @@
+{
+  "version": 1,
+  "project": {
+    "name": "embroidery-frontend",
+    "productType": null,
+    "stack": [
+      "nextjs",
+      "react",
+      "tailwind-v4"
+    ]
+  },
+  "sources": {
+    "tokens": [],
+    "components": [],
+    "assets": [
+      "public/assets"
+    ],
+    "instructions": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ]
+  },
+  "design": {
+    "colorMode": "unknown",
+    "colors": {},
+    "typography": {},
+    "spacing": {},
+    "radius": {},
+    "shadows": {},
+    "motion": {},
+    "density": "unknown"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": [],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [],
+    "avoid": []
+  },
+  "decisions": [
+    {
+      "id": "homepage-cinematic-hero",
+      "choice": "Premium digital craft marketplace homepage: warm paper #F8F7F3, ink #111111, accent #D8A83E, Nourd, transparent-to-blur GSAP header, full-viewport embroidery poster/video hero with specified copy."
+    },
+    {
+      "id": "product-card-hover",
+      "choice": "Best-seller media hover: digital preview to optional stitched-result crossfade; desktop-only paper circle VIEW DESIGN cursor with GSAP lag; native cursor on wishlist and quick add; no custom cursor on touch."
+    },
+    {
+      "id": "from-screen-to-stitch",
+      "choice": "Full-bleed homepage split: left embroidery photograph with optional video overlay, right specified copy plus GSAP ScrollTrigger count-up metrics. Reduced motion shows final figures immediately."
+    },
+    {
+      "id": "problem-solution",
+      "choice": "Editorial problem-to-solution: three numbered issues on surface, then a full-bleed ink bar with five checked promises. Specified copy only."
+    },
+    {
+      "id": "how-it-works-horizontal",
+      "choice": "Pinned How It Works GSAP experience: full-viewport horizontal panels with image plus copy, sequence 01 Discover through 04 Download, then unpin into vertical scroll. Stacked on touch and reduced motion."
+    },
+    {
+      "id": "machine-compatibility",
+      "choice": "Dark conversion block: native machine select for Brother PES, Janome JEF, Tajima DST, Bernina EXP; live format readout; Find My Format to designs search."
+    },
+    {
+      "id": "stitched-community",
+      "choice": "Instagram-style CSS-column masonry of finished Floral Butterfly stitches on shirt, hat, jacket, bag, baby clothes, home decor, and hoop; username plus design caption on each tile. No testimonial quotes."
+    },
+    {
+      "id": "testimonials-large-type",
+      "choice": "Three large-type editorial quotes on surface, no avatars or cards. Sarah M. copy as specified; two supporting quotes restating formats, specs, and instant download only."
+    },
+    {
+      "id": "impact-new-business",
+      "choice": "Higherlife-style impact band on ink using qualitative promises only: Professionally digitized, Multiple file formats, Instant downloads, Designed for real projects. No invented download, creator, or catalog counts."
+    },
+    {
+      "id": "featured-collection-drag",
+      "choice": "Editorial collection on paper: text tabs All through Monograms, GSAP Draggable plus Inertia carousel, Floral Butterfly in All only until more SKUs are named."
+    },
+    {
+      "id": "guides-editorial",
+      "choice": "Surface authority block: numbered text cards for the four specified guide titles, no invented excerpts or article routes. Explore Guides goes to the existing Guides page."
+    },
+    {
+      "id": "faq-accordion",
+      "choice": "Clean single-column FAQ accordion with Framer Motion height and chevron rotation. Answers restate specified formats, machine map, instant download, and listing specs only."
+    },
+    {
+      "id": "final-cta",
+      "choice": "Full-bleed closing band using the existing stitch photograph, centered copy, Explore Designs to the shop, Browse Best Sellers to the homepage best-sellers block. Optional finalCta.mp4 when present."
+    },
+    {
+      "id": "premium-footer",
+      "choice": "Full ink footer: Embroidery wordmark and tagline, Shop Learn Company Support columns, native newsletter field, legal row. New destinations are title shells only; Best Sellers, Machine Formats, and FAQ hash to homepage sections."
+    },
+    {
+      "id": "gsap-animation-system",
+      "choice": "GSAP owns cinematic scroll: hero text reveal, video scale, and scrubbed hero transition; category and product clip reveals with stagger; From Screen stitch counters; How It Works pin; collection horizontal enter plus drag; trust marquee loop; subtle parallax on From Screen and Final CTA. Impact stats stay qualitative (no invented counts)—the number counter is From Screen. Reduced motion: static poster, opacity fades, no pin or parallax. Framer owns component interaction only: menu, search, cart, FAQ, wishlist pulse, product hover fade, button press, inner page enter. Never both libraries on the same element. No toasts until a real event exists."
+    },
+    {
+      "id": "homepage-story-arc",
+      "choice": "Final homepage architecture: Header, cinematic hero, trust marquee, featured categories, best sellers, screen to stitch, problem to solution, pinned How It Works, machine compatibility, community gallery, testimonials, trust statistics, featured collection, Learn & Create, FAQ, final CTA, footer. Narrative: Inspiration → Designs → Product Confidence → Machine Compatibility → Community Proof → Purchase → Instant Download."
+    },
+    {
+      "id": "mobile-layout",
+      "choice": "Mobile is composed, not stacked desktop: 100svh hero with copy in the lower-middle and a full-width Explore Designs CTA; header is Logo and Menu only with Search Wishlist Cart inside the menu; best-seller grid is two columns with name and price (rating and formats from md up). No invented second SKU."
+    },
+    {
+      "id": "hero-video-performance",
+      "choice": "Hero media is poster-first: WebM then MP4, desktop files never selected below 768px, mobile files only when present, and no video element when prefers-reduced-motion. Reduced motion gets opacity fades only — no pin, no parallax, no media scale. Desktop and mobile loops must stay under the hero video byte budgets."
+    },
+    {
+      "id": "shop-discovery-page",
+      "choice": "Shop at /designs is discovery, not homepage storytelling: compact editorial photo hero, live search against the named catalog only, category chips, drawer filters, CSS product grid (not masonry), Load More, format banner to a Machine Compatibility title shell, compact quality and newsletter. One named SKU (Floral Butterfly). Honest counts. No invented catalog, prices, or typeahead products. GSAP for scroll reveals; Framer for search, filters, wishlist, quick add, and cart bounce."
+    },
+    {
+      "id": "product-detail-conversion",
+      "choice": "PDP at /designs/floral-butterfly-embroidery is a premium digital product presentation: gallery of real assets only (preview, stitched, stitch detail, garment), digital/stitched crossfade, actual PES DST JEF formats, named Floral Butterfly specs, Emily R. review without invented review counts, community project photos, no invented related SKUs. Session cart plus mini drawer, toast, and sticky purchase bar. GSAP for scroll/story; Framer for gallery, lightbox, cart, accordion, and CTA."
+    },
+    {
+      "id": "cart-confirmation-page",
+      "choice": "Cart at /cart is a calm digital-product confirmation: progress Cart→Checkout→Download, compact line items from session cart enriched by named catalog, order summary with digital notice, promo UI that never invents valid codes, remove with undo toast, save-for-later account prompt, branded empty state, explore CTAs instead of invented upsell SKUs, trust strip, mobile sticky checkout. GSAP for page entrance only; Framer for remove, coupon, toast, sticky CTA, checkout loading."
+    },
+    {
+      "id": "checkout-focused-transaction",
+      "choice": "Checkout at /checkout uses a dedicated layout without marketing nav or footer: logo plus Secure Checkout, progress Cart→Checkout→Download, email validation, branded payment provider placeholder (no card PAN fields until a provider is named), order summary from session cart, promo UI without invented codes, terms checkbox, Pay $X Securely with processing overlay then /order/success/[orderId]. Amounts are display-only until Backend payment sessions exist. No invented SKUs or payment brands."
+    },
+    {
+      "id": "order-success-download-center",
+      "choice": "Order success at /order/success/[orderId] is a premium post-purchase download center: session-verified order access (URL alone never unlocks files), calm confirmation hero, per-line download cards with PES DST JEF only for Floral Butterfly, guide preview modal, next-steps, machine help, order details without invented payment last4 or download limits, soft account CTA, explore CTAs instead of invented related SKUs. Download buttons show preparing/downloading/complete states; signed file delivery waits for Backend. GSAP for card/next-step reveals; Framer for checkmark, download states, guide modal, toasts."
+    },
+    {
+      "id": "machine-compatibility-page",
+      "choice": "Machine Compatibility at /machine-compatibility is an editorial SEO/help page: hero Machine Finder with search plus popular brands, large recommended-format result with disclaimer, PES/DST/JEF/EXP explainer, brand directory with searchable table and mobile accordions, only brief-named models (Brother PE/SE, Janome MC550E, Bernina 790) plus brand-level recommendations for other listed brands, no thin brand SEO subroutes yet, related designs filtered by selected format against the named catalog only, Framer for finder result and FAQ, GSAP for hero/format/brand reveals, CSS for format-card hover."
+    },
+    {
+      "id": "how-it-works-page",
+      "choice": "How It Works at /how-it-works explains Choose→Check→Purchase→Download→Stitch in under 30 seconds: benefit-led hero with GSAP digital-to-physical journey, five detailed steps using Floral Butterfly facts only, what-you-receive, compact shared MachineFinderTool, quality without overclaims, beginner section with Browse Designs (no invented beginner category), FAQ with Refund Policy link instead of invented refund language, licensing notice, dual CTAs to Designs and Machine Compatibility. GSAP for hero timeline, journey line scrub, step/format reveals; Framer for finder result and FAQ."
+    },
+    {
+      "id": "about-editorial-trust",
+      "choice": "About at /about is a premium editorial trust page: story-behind-the-stitch hero, philosophy and placeholder brand story without invented founding facts/team/metrics, principles, digitization approach without technical guarantees, not-just-a-file statement, craft placeholder instead of invented team cards, customer-journey UX philosophy, support CTA, qualitative proof plus existing Sarah M. testimonial, existing community UGC grid, short FAQ, commerce CTAs. GSAP for hero/image clip/principles/chains; Framer for community hover and FAQ."
+    },
+    {
+      "id": "contact-support-hub",
+      "choice": "Contact at /contact is a support hub first: quick-help cards, Zod-validated topic form with optional order number and UI-only submit states, no invented support email/hours/response time/social, download and machine help bands, categorized FAQ, privacy notice, Help Center shell with real route links. GSAP for hero/quick cards/form split; Framer for form status and FAQ."
+    },
+    {
+      "id": "category-collection-landing",
+      "choice": "Category landings at /designs/{category} share the designs/[slug] segment with PDP resolution (category id first, then pdpSlug, else 404). Editorial story → intro/highlights → editor picks → filtered catalog (category locked, hideCategory drawer, ?format= sync) → project inspiration → customer favorites → machine/beginner CTAs → SEO → related categories → final CTA. Same structure per shop chip category; imagery/copy vary. Honest catalog only (Floral Butterfly in floral; empty states elsewhere). No invented design counts, purchase counts, or style filters. GSAP for hero clip and scroll reveals; Framer via existing shop drawer/cards."
+    },
+    {
+      "id": "wishlist-saved-designs",
+      "choice": "Wishlist at /wishlist is a personal saved-design shelf: localStorage wishlist (device-local; merges into account-keyed shelf on sign-in/register on this browser), soft sync notice that adapts for signed-in vs guest, shop-card language with Add to Cart / View Design / Remove, remove with Framer exit plus Undo toast, sort by recently saved or price, empty state with Explore Designs and named best-seller popular strip only, machine CTA, Keep Exploring category tiles, no invented SKUs/recommendations/multi-select/machine badges. Heart on shop/PDP saves locally then optional account prompt. GSAP for page entrance; Framer for heart, remove, toast, add-to-cart."
+    },
+    {
+      "id": "customer-account-system",
+      "choice": "Account system: shared AccountShell sidebar (Overview/Orders/Downloads/Saved/Settings + working Sign Out), /account overview, /account/settings (local prefs + in-place password change on this device; email/2FA/multi-session pending Backend), /account/orders + /orders/[orderId] from device order history, /account/downloads library with UI-only download states, /downloads redirects to account downloads. Header Account/Sign In by session. GSAP page entrance; Framer menus/modals/download buttons."
+    },
+    {
+      "id": "legal-policy-pages",
+      "choice": "Legal pages 22–26 share LegalPage shell (TOC, pending-policy banner, related policy chips, contact CTA): /licensing, /refund-policy, /privacy, /terms, /cookie-policy. Content restates only confirmed product facts (digital files, stitch-your-own-projects license line, refund-terms pointer, device storage) and marks remaining clauses pending client-approved legal text—no invented statutes, commercial rights, or analytics vendors. Cookie page states no analytics/marketing cookies in current frontend. Footer legal row includes Cookies."
+    },
+    {
+      "id": "customer-auth-pages",
+      "choice": "Customer auth: /account/login, /account/register, /account/forgot-password with Zod forms; device-local accounts (SHA-256 salted password hashes) and session until Backend auth. AccountGuard requires sign-in for Overview/Orders/Downloads/Settings; Sign Out clears session; wishlist saves locally and merges into account-keyed storage on login/register; checkout Sign in goes to login. Honest device-storage note on auth pages."
+    },
+    {
+      "id": "customer-hub-pages",
+      "choice": "Customer hubs replace title shells: /categories is a real category grid to /designs/{id}; /guides lists topic cards that deep-link to How It Works / Machine Compatibility (no invented article CMS); /new-arrivals shows the named catalog slice only (Floral Butterfly) with honest empty/catalog copy. Help Center My Orders points to /account/orders (gate uses ?next=)."
+    },
+    {
+      "id": "admin-five-nav-shell",
+      "choice": "Admin UI at /[locale]/admin with five-item sidebar only (Overview, Products, Orders, Dynamic Site, Security). Shell: dark ink sidebar, accent-gold active pill, Embroidery mark, pill search, Create Design CTA. Overview is a dashboard bento (ink primary KPI + three surface KPIs, wide chart frame, file-health aside, catalog top design, empty orders, attention list) with honest dashes/pending copy and no chart library or invented metrics. Tokens: paper/surface/ink/accent/line + Nourd."
+    }
+  ],
+  "evidence": [
+    {
+      "fact": "project.instructions",
+      "source": "AGENTS.md"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "CLAUDE.md"
+    },
+    {
+      "fact": "project.stack:nextjs",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:tailwind-v4",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-08-29T19:19:42.478Z"
+}

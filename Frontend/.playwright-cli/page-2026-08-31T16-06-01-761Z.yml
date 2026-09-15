@@ -1,0 +1,136 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e3]:
+    - generic [ref=e5]:
+      - link "Embroidery" [ref=e6] [cursor=pointer]:
+        - /url: /en
+      - navigation "Primary" [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Designs" [ref=e10] [cursor=pointer]:
+              - /url: /en/designs
+          - listitem [ref=e11]:
+            - link "Categories" [ref=e12] [cursor=pointer]:
+              - /url: /en/categories
+          - listitem [ref=e13]:
+            - link "How It Works" [ref=e14] [cursor=pointer]:
+              - /url: /en/how-it-works
+          - listitem [ref=e15]:
+            - link "About" [ref=e16] [cursor=pointer]:
+              - /url: /en/about
+          - listitem [ref=e17]:
+            - link "Guides" [ref=e18] [cursor=pointer]:
+              - /url: /en/guides
+      - generic [ref=e19]:
+        - paragraph [ref=e20]: Secure Checkout
+        - button "Search designs" [ref=e21]
+        - link "Wishlist" [ref=e25] [cursor=pointer]:
+          - /url: /en/wishlist
+        - button "Cart" [ref=e29]
+        - link "Shop Designs" [ref=e34] [cursor=pointer]:
+          - /url: /en/designs
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - img "Close-up of embroidery thread stitched into cream linen" [ref=e39]
+        - generic [ref=e40]:
+          - paragraph [ref=e41]: Nothing here yet
+          - heading "Your Next Project Starts With a Design." [level=1] [ref=e42]
+      - region "Secure Checkout" [ref=e43]:
+        - list [ref=e44]:
+          - listitem [ref=e45]:
+            - heading "Instant Download" [level=2] [ref=e46]
+            - paragraph [ref=e47]: Access your files immediately after payment.
+          - listitem [ref=e48]:
+            - heading "Multiple Formats" [level=2] [ref=e49]
+            - paragraph [ref=e50]: Get the formats included with your design.
+          - listitem [ref=e51]:
+            - heading "Help When You Need It" [level=2] [ref=e52]
+            - paragraph [ref=e53]: Guides and support for your embroidery project.
+  - contentinfo [ref=e54]:
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - paragraph [ref=e58]: Embroidery
+          - paragraph [ref=e59]: Beautiful embroidery designs, ready for your next creation.
+        - navigation "Shop" [ref=e60]:
+          - paragraph [ref=e61]: Shop
+          - list [ref=e62]:
+            - listitem [ref=e63]:
+              - link "Designs" [ref=e64] [cursor=pointer]:
+                - /url: /en/designs
+            - listitem [ref=e65]:
+              - link "Categories" [ref=e66] [cursor=pointer]:
+                - /url: /en/categories
+            - listitem [ref=e67]:
+              - link "Best Sellers" [ref=e68] [cursor=pointer]:
+                - /url: /en#best-sellers
+            - listitem [ref=e69]:
+              - link "New Arrivals" [ref=e70] [cursor=pointer]:
+                - /url: /en/new-arrivals
+        - navigation "Learn" [ref=e71]:
+          - paragraph [ref=e72]: Learn
+          - list [ref=e73]:
+            - listitem [ref=e74]:
+              - link "Guides" [ref=e75] [cursor=pointer]:
+                - /url: /en/guides
+            - listitem [ref=e76]:
+              - link "Machine Formats" [ref=e77] [cursor=pointer]:
+                - /url: /en#machine-compatibility
+            - listitem [ref=e78]:
+              - link "FAQ" [ref=e79] [cursor=pointer]:
+                - /url: /en#faq
+            - listitem [ref=e80]:
+              - link "How It Works" [ref=e81] [cursor=pointer]:
+                - /url: /en/how-it-works
+        - navigation "Company" [ref=e82]:
+          - paragraph [ref=e83]: Company
+          - list [ref=e84]:
+            - listitem [ref=e85]:
+              - link "About" [ref=e86] [cursor=pointer]:
+                - /url: /en/about
+            - listitem [ref=e87]:
+              - link "Contact" [ref=e88] [cursor=pointer]:
+                - /url: /en/contact
+            - listitem [ref=e89]:
+              - link "Licensing" [ref=e90] [cursor=pointer]:
+                - /url: /en/licensing
+            - listitem [ref=e91]:
+              - link "Refund Policy" [ref=e92] [cursor=pointer]:
+                - /url: /en/refund-policy
+        - navigation "Support" [ref=e93]:
+          - paragraph [ref=e94]: Support
+          - list [ref=e95]:
+            - listitem [ref=e96]:
+              - link "Help Center" [ref=e97] [cursor=pointer]:
+                - /url: /en/help-center
+            - listitem [ref=e98]:
+              - link "My Downloads" [ref=e99] [cursor=pointer]:
+                - /url: /en/downloads
+            - listitem [ref=e100]:
+              - link "My Account" [ref=e101] [cursor=pointer]:
+                - /url: /en/account
+      - generic [ref=e102]:
+        - paragraph [ref=e103]: Newsletter
+        - paragraph [ref=e104]: Get new designs and creative inspiration.
+        - generic [ref=e105]:
+          - generic [ref=e106]: Email Address
+          - textbox "Email Address" [ref=e107]
+          - button "Subscribe" [ref=e108]
+    - generic [ref=e110]:
+      - paragraph [ref=e111]: © 2026 Embroidery
+      - navigation "Legal" [ref=e112]:
+        - list [ref=e113]:
+          - listitem [ref=e114]:
+            - link "Privacy" [ref=e115] [cursor=pointer]:
+              - /url: /en/privacy
+          - listitem [ref=e116]:
+            - link "Terms" [ref=e117] [cursor=pointer]:
+              - /url: /en/terms
+          - listitem [ref=e118]:
+            - link "Refund Policy" [ref=e119] [cursor=pointer]:
+              - /url: /en/refund-policy
+          - listitem [ref=e120]:
+            - link "Licensing" [ref=e121] [cursor=pointer]:
+              - /url: /en/licensing
+  - alert [ref=e122]
