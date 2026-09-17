@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Production bootstrap for embdesigns.com on Hostinger Ubuntu VPS.
+# Production bootstrap for embdesigens.com on Hostinger Ubuntu VPS.
 # Run as root from a fresh clone, or:
 #   curl -fsSL https://raw.githubusercontent.com/azamclothdesign-collab/Embroidery/main/deploy/setup-vps.sh | bash
 
 set -euo pipefail
 
-DOMAIN="embdesigns.com"
+DOMAIN="embdesigens.com"
 APP_DIR="/var/www/embroidery"
 REPO_URL="https://github.com/azamclothdesign-collab/Embroidery.git"
 NODE_MAJOR="24"
@@ -122,7 +122,9 @@ npm run build
 
 cp "${APP_DIR}/deploy/nginx/${DOMAIN}.conf" /etc/nginx/sites-available/${DOMAIN}
 ln -sfn /etc/nginx/sites-available/${DOMAIN} /etc/nginx/sites-enabled/${DOMAIN}
-rm -f /etc/nginx/sites-enabled/default
+rm -f /etc/nginx/sites-enabled/default \
+  /etc/nginx/sites-enabled/embdesigns.com \
+  /etc/nginx/sites-enabled/embdesignz.cloud
 nginx -t
 systemctl reload nginx
 
@@ -145,4 +147,4 @@ EOF
 
 echo "Setup complete."
 echo "Credentials: ${CRED_FILE}"
-echo "Point Spaceship A record @ to this VPS IPv4, then wait a few minutes and rerun certbot if HTTPS was skipped."
+echo "Point Spaceship A records @ and www for ${DOMAIN} to this VPS IPv4, then wait a few minutes and rerun certbot if HTTPS was skipped."
