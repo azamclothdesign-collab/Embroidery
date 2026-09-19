@@ -25,9 +25,6 @@ export function OrderDownloadsSection({
       <p className="mt-4 max-w-2xl text-body leading-8 text-ink-soft">
         {orderSuccessCopy.downloadsBody}
       </p>
-      <p className="mt-4 max-w-2xl text-meta leading-6 text-ink-soft">
-        {orderSuccessCopy.accountAccessNote}
-      </p>
       <div className="mt-10 flex flex-col gap-6">
         {order.lines.map((line) => (
           <OrderDownloadCard

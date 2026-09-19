@@ -19,8 +19,6 @@ export const orderSuccessCopy = {
   tryAgain: "Try Again",
   downloadPendingNote:
     "Your purchase includes one ZIP with all embroidery files for this design.",
-  accountAccessNote:
-    "You can return to these downloads anytime from My Account.",
   availableFormats: "Available Formats",
   singleZipLabel: "Single embroidery package (ZIP)",
   guideHeading: "Your Embroidery Guide",
