@@ -11,8 +11,11 @@ export function HomeFeaturedCategories({
   tiles,
 }: HomeFeaturedCategoriesProps) {
   return (
-    <section className="bg-paper px-6 pt-10 pb-16 md:pt-12 md:pb-20" aria-labelledby="featured-categories-heading">
-      <div className="mx-auto max-w-7xl">
+    <section
+      className="bg-paper px-6 pt-10 pb-16 md:pt-12 md:pb-20"
+      aria-labelledby="featured-categories-heading"
+    >
+      <div className="mx-auto w-full max-w-[85rem]">
         <h2
           id="featured-categories-heading"
           className="text-center text-title-sm font-medium tracking-tight text-ink uppercase md:text-title-lg"

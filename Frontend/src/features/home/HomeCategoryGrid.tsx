@@ -23,7 +23,7 @@ type HomeCategoryGridProps = {
 };
 
 export function HomeCategoryGrid({ locale, tiles }: HomeCategoryGridProps) {
-  const scopeRef = useRef<HTMLDivElement>(null);
+  const scopeRef = useRef<HTMLUListElement>(null);
 
   useGSAP(
     () => {
@@ -60,21 +60,22 @@ export function HomeCategoryGrid({ locale, tiles }: HomeCategoryGridProps) {
   );
 
   return (
-    <div
+    <ul
       ref={scopeRef}
-      className="mt-8 grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto snap-x snap-mandatory pb-6 no-scrollbar"
+      className="mt-10 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       {tiles.map((tile) => (
-        <HomeFeaturedCategoryTile
-          key={tile.id}
-          category={{
-            name: tile.label,
-            imageSrc: tile.imageSrc ?? "/assets/categoryPlaceholder.webp",
-            imageAlt: tile.imageAlt ?? `Embroidery design for ${tile.label}`,
-          }}
-          href={shopCategoryHref(locale, tile.id)}
-        />
+        <li key={tile.id}>
+          <HomeFeaturedCategoryTile
+            category={{
+              name: tile.label,
+              imageSrc: tile.imageSrc ?? "/assets/categoryPlaceholder.webp",
+              imageAlt: tile.imageAlt ?? `Embroidery design for ${tile.label}`,
+            }}
+            href={shopCategoryHref(locale, tile.id)}
+          />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
