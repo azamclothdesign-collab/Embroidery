@@ -12,7 +12,7 @@ const handle: ApiHandler = async (context) => {
     const products = await getProducts();
     const visibleOnly =
       context.adminUserId === undefined
-        ? products.filter((product) => product.isVisible !== false)
+        ? products.filter((product) => product.isVisible === true)
         : products;
     context.sendJson(200, { products: visibleOnly });
   } catch (error) {

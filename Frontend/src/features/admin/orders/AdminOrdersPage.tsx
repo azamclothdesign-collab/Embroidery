@@ -101,6 +101,8 @@ export function AdminOrdersPage({ locale, orders }: AdminOrdersPageProps) {
       (order) =>
         order.id.toLowerCase().includes(q) ||
         order.email.toLowerCase().includes(q) ||
+        (order.contactName?.toLowerCase().includes(q) ?? false) ||
+        (order.phone?.toLowerCase().includes(q) ?? false) ||
         order.lines.some(
           (line) =>
             line.displayName.toLowerCase().includes(q) ||
@@ -248,7 +250,12 @@ export function AdminOrdersPage({ locale, orders }: AdminOrdersPageProps) {
                         {order.id}
                       </Link>
                     </td>
-                    <td className="px-4 py-4 text-ink-soft">{order.email}</td>
+                    <td className="px-4 py-4 text-ink-soft">
+                      {order.contactName ? (
+                        <span className="block text-ink">{order.contactName}</span>
+                      ) : null}
+                      {order.email}
+                    </td>
                     <td className="px-4 py-4">
                       <OrderDesignPreview lines={order.lines} />
                     </td>
@@ -286,9 +293,17 @@ export function AdminOrdersPage({ locale, orders }: AdminOrdersPageProps) {
                 >
                   <OrderDesignPreview lines={order.lines} />
                   <p className="mt-3 font-medium text-ink">{order.id}</p>
+                  {order.contactName ? (
+                    <p className="mt-1 text-[0.8125rem] text-ink">{order.contactName}</p>
+                  ) : null}
                   <p className="mt-1 text-[0.8125rem] text-ink-soft">
                     {order.email}
                   </p>
+                  {order.phone ? (
+                    <p className="mt-1 text-[0.8125rem] text-ink-soft">
+                      {order.phone}
+                    </p>
+                  ) : null}
                   <p className="mt-1 text-[0.8125rem] text-ink-soft">
                     {formatMoney(order.totalCents)} · {formatDate(order.createdAt)}
                   </p>

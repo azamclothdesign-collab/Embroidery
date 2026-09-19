@@ -102,7 +102,21 @@ export function AdminOrderDetailPage({
           <h2 className="text-lg font-semibold tracking-tight">
             {adminCopy.orderDetailCustomer}
           </h2>
-          <p className="mt-4 text-[0.9375rem] text-ink">{order.email}</p>
+          {order.contactName ? (
+            <p className="mt-4 text-[0.9375rem] text-ink">{order.contactName}</p>
+          ) : null}
+          <p
+            className={
+              order.contactName
+                ? "mt-2 text-[0.9375rem] text-ink-soft"
+                : "mt-4 text-[0.9375rem] text-ink"
+            }
+          >
+            {order.email}
+          </p>
+          {order.phone ? (
+            <p className="mt-2 text-[0.9375rem] text-ink-soft">{order.phone}</p>
+          ) : null}
         </section>
 
         <section className="rounded-2xl border border-line bg-surface p-5">

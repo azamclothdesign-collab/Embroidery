@@ -19,7 +19,7 @@ export function AdminSettingsPage({
   const [isPending, startTransition] = useTransition();
   const [storeName, setStoreName] = useState(initialSettings.brandName);
   const [storeEmail, setStoreEmail] = useState(
-    initialSettings.contactEmail || "hello@example.com",
+    initialSettings.contactEmail || "azamclothdesign@gmail.com",
   );
   const [currency, setCurrency] = useState("USD");
   const [stripeKey, setStripeKey] = useState("pk_test_...");

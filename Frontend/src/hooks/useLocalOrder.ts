@@ -29,6 +29,8 @@ function orderRecordToLocalOrder(order: OrderRecord): LocalOrder {
   return {
     id: order.id,
     email: order.email,
+    contactName: order.contactName,
+    phone: order.phone,
     createdAt: order.createdAt,
     totalCents: order.totalCents,
     discountCents: order.discountCents,

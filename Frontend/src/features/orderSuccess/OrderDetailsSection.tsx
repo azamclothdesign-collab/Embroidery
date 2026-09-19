@@ -37,10 +37,22 @@ export function OrderDetailsSection({ order }: OrderDetailsSectionProps) {
           <dt className="text-ink-soft">{orderSuccessCopy.status}</dt>
           <dd className="text-ink">{orderSuccessCopy.statusPaid}</dd>
         </div>
+        {order.contactName ? (
+          <div className="flex flex-wrap justify-between gap-2 border-b border-line pb-4">
+            <dt className="text-ink-soft">{orderSuccessCopy.contactName}</dt>
+            <dd className="text-ink">{order.contactName}</dd>
+          </div>
+        ) : null}
         <div className="flex flex-wrap justify-between gap-2 border-b border-line pb-4">
           <dt className="text-ink-soft">{orderSuccessCopy.email}</dt>
           <dd className="text-ink">{order.email}</dd>
         </div>
+        {order.phone ? (
+          <div className="flex flex-wrap justify-between gap-2 border-b border-line pb-4">
+            <dt className="text-ink-soft">{orderSuccessCopy.phone}</dt>
+            <dd className="text-ink">{order.phone}</dd>
+          </div>
+        ) : null}
         <div className="flex flex-wrap justify-between gap-2 pb-2">
           <dt className="text-ink-soft">{orderSuccessCopy.total}</dt>
           <dd className="text-ink">{formatShopPrice(order.totalCents)}</dd>

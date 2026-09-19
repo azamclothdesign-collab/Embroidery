@@ -49,6 +49,8 @@ export async function fetchOrderById(orderId: string): Promise<OrderRecord> {
 
 export async function createOrder(input: {
   email: string;
+  contactName: string;
+  phone: string;
   totalCents: number;
   discountCents: number;
   lines: readonly CartLine[];

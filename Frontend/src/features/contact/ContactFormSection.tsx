@@ -1,5 +1,9 @@
 import { TextLink } from "@/components/TextLink";
 import {
+  businessContact,
+  businessWhatsAppHref,
+} from "@/constants/businessContact";
+import {
   contactDownloadScenarios,
   contactPageCopy,
   contactSupportFlow,
@@ -20,14 +24,15 @@ type ContactFormSectionProps = {
 
 export function ContactFormSection({
   locale,
-  contactEmail = "",
-  contactPhone = "",
+  contactEmail = businessContact.email,
+  contactPhone = businessContact.phone,
   contactAddress = "",
 }: ContactFormSectionProps) {
-  const hasContact =
-    contactEmail.length > 0 ||
-    contactPhone.length > 0 ||
-    contactAddress.length > 0;
+  const email =
+    contactEmail.trim().length > 0 ? contactEmail.trim() : businessContact.email;
+  const phone =
+    contactPhone.trim().length > 0 ? contactPhone.trim() : businessContact.phone;
+  const address = contactAddress.trim();
 
   return (
     <section
@@ -42,37 +47,49 @@ export function ContactFormSection({
             <h2 className="text-title-sm font-medium tracking-tight text-ink">
               {contactPageCopy.preferEmailHeading}
             </h2>
-            {hasContact ? (
-              <ul className="mt-4 flex list-none flex-col gap-2 p-0 text-body leading-8 text-ink-soft">
-                {contactEmail.length > 0 ? (
-                  <li>
-                    <a
-                      href={`mailto:${contactEmail}`}
-                      className="text-ink underline-offset-4 hover:underline"
-                    >
-                      {contactEmail}
-                    </a>
-                  </li>
-                ) : null}
-                {contactPhone.length > 0 ? (
-                  <li>
-                    <a
-                      href={`tel:${contactPhone.replace(/\s+/g, "")}`}
-                      className="text-ink underline-offset-4 hover:underline"
-                    >
-                      {contactPhone}
-                    </a>
-                  </li>
-                ) : null}
-                {contactAddress.length > 0 ? (
-                  <li className="whitespace-pre-line">{contactAddress}</li>
-                ) : null}
-              </ul>
-            ) : (
-              <p className="mt-4 text-body leading-8 text-ink-soft">
-                {contactPageCopy.preferEmailBody}
-              </p>
-            )}
+            <ul className="mt-4 flex list-none flex-col gap-2 p-0 text-body leading-8 text-ink-soft">
+              <li>
+                <a
+                  href={`mailto:${email}`}
+                  className="text-ink underline-offset-4 hover:underline"
+                >
+                  {email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${phone.replace(/\s+/g, "")}`}
+                  className="text-ink underline-offset-4 hover:underline"
+                >
+                  {phone}
+                </a>
+              </li>
+              {address.length > 0 ? (
+                <li className="whitespace-pre-line">{address}</li>
+              ) : null}
+            </ul>
+            <p className="mt-4 text-body leading-8 text-ink-soft">
+              {contactPageCopy.preferEmailBody}
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-title-sm font-medium tracking-tight text-ink">
+              {contactPageCopy.whatsappLabel}
+            </h2>
+            <p className="mt-4 text-body leading-8 text-ink-soft">
+              {contactPageCopy.whatsappBody}
+            </p>
+            <a
+              href={businessWhatsAppHref(
+                "Hi — I need help with an embroidery order.",
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex min-h-11 items-center text-body text-ink underline-offset-4 hover:underline"
+            >
+              {businessContact.phoneDisplay}
+            </a>
           </div>
 
           <div>

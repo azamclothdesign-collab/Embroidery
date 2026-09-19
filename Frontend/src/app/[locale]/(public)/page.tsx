@@ -3,7 +3,6 @@ import { type Metadata } from "next";
 import { HomeBestSellers } from "@/features/home/HomeBestSellers";
 import { HomeFaq } from "@/features/home/HomeFaq";
 import { HomeFeaturedCategories } from "@/features/home/HomeFeaturedCategories";
-import { HomeFeaturedCollection } from "@/features/home/HomeFeaturedCollection";
 import { HomeFinalCta } from "@/features/home/HomeFinalCta";
 import { HomeFromScreenToStitch } from "@/features/home/HomeFromScreenToStitch";
 import { HomeGuides } from "@/features/home/HomeGuides";
@@ -13,8 +12,6 @@ import { HomeImpact } from "@/features/home/HomeImpact";
 import { HomeProblemSolution } from "@/features/home/HomeProblemSolution";
 import { HomeSiteHeader } from "@/features/home/HomeSiteHeader";
 import { HomeStitchedCommunity } from "@/features/home/HomeStitchedCommunity";
-import { HomeTestimonials } from "@/features/home/HomeTestimonials";
-import { HomeTrustStrip } from "@/features/home/HomeTrustStrip";
 import { fetchCategories } from "@/lib/api/categoriesApi";
 import { fetchProducts } from "@/lib/api/productsApi";
 import { buildCategoryStorefrontTiles } from "@/lib/catalog/buildCategoryStorefrontTiles";
@@ -39,16 +36,13 @@ export default async function PublicHomePage({ params }: PublicHomePageProps) {
     <>
       <HomeSiteHeader />
       <HomeHero locale={locale} />
-      <HomeTrustStrip />
       <HomeFeaturedCategories locale={locale} tiles={categoryTiles} />
       <HomeBestSellers locale={locale} products={products} />
       <HomeFromScreenToStitch />
       <HomeProblemSolution />
       <HomeHowItWorks />
       <HomeStitchedCommunity />
-      <HomeTestimonials />
       <HomeImpact />
-      <HomeFeaturedCollection locale={locale} products={products} />
       <HomeGuides locale={locale} />
       <HomeFaq />
       <HomeFinalCta locale={locale} />

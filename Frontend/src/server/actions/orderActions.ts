@@ -12,6 +12,8 @@ import { type OrderRecord } from "@/types/api/order";
 
 export async function createOrderAction(input: {
   email: string;
+  contactName: string;
+  phone: string;
   totalCents: number;
   discountCents: number;
   lines: readonly CartLine[];

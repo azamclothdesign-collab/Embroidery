@@ -33,16 +33,19 @@ export type ProductMutationInput = {
   isVisible?: boolean | undefined;
 };
 
+/** Public storefront catalog — never forwards admin session cookies. */
 export async function fetchProducts(): Promise<ShopProduct[]> {
   const data = await requestApiJsonWithContext<ProductsListResponse>({
     method: "GET",
     path: apiRoutes.products.list,
     cacheStrategy: { next: { revalidate: 60 } },
+    context: {},
   });
 
-  return data.products;
+  return data.products.filter((product) => product.isVisible !== false);
 }
 
+/** Admin catalog — includes unpublished products when an admin session exists. */
 export async function fetchProductsFresh(): Promise<ShopProduct[]> {
   const data = await requestApiJsonWithContext<ProductsListResponse>({
     method: "GET",
@@ -55,11 +58,25 @@ export async function fetchProductsFresh(): Promise<ShopProduct[]> {
 
 export const getShopProducts = fetchProducts;
 
+/** Product details — admin session allows Preview of unpublished; shoppers still get 404. */
 export async function fetchProductBySlug(slug: string): Promise<ShopProduct> {
   const data = await requestApiJsonWithContext<ProductDetailsResponse>({
     method: "GET",
     path: apiRoutes.products.details(slug),
     cacheStrategy: { next: { revalidate: 60 } },
+  });
+
+  return data.product;
+}
+
+/** Admin editor — can load unpublished products with an admin session. */
+export async function fetchProductBySlugFresh(
+  slug: string,
+): Promise<ShopProduct> {
+  const data = await requestApiJsonWithContext<ProductDetailsResponse>({
+    method: "GET",
+    path: apiRoutes.products.details(slug),
+    cacheStrategy: { cache: "no-store" },
   });
 
   return data.product;

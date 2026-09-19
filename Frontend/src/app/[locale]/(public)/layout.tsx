@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkipLink } from "@/components/SkipLink";
+import { WhatsAppFloatingButton } from "@/components/WhatsAppFloatingButton";
 
 type PublicLayoutProps = {
   children: ReactNode;
@@ -21,6 +22,7 @@ export default async function PublicLayout({
         {children}
       </main>
       <SiteFooter locale={locale} />
+      <WhatsAppFloatingButton />
     </>
   );
 }

@@ -19,6 +19,8 @@ const handle: ApiHandler = async (context) => {
     const order = await createOrder({
       customerId: context.customerId,
       email: parsed.data.email,
+      contactName: parsed.data.contactName,
+      phone: parsed.data.phone,
       totalCents: parsed.data.totalCents,
       discountCents: parsed.data.discountCents,
       lines: parsed.data.lines,

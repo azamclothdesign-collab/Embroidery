@@ -1,9 +1,6 @@
 import { aboutPageCopy } from "@/constants/aboutPageCopy";
-import { testimonials } from "@/constants/testimonials";
 
 export function AboutProof() {
-  const testimonial = testimonials[0];
-
   return (
     <section
       className="aboutReveal border-y border-line bg-surface"
@@ -19,19 +16,6 @@ export function AboutProof() {
         <p className="mt-4 max-w-xl text-body leading-8 text-ink-soft">
           {aboutPageCopy.proofBody}
         </p>
-        {testimonial !== undefined ? (
-          <blockquote className="mt-12 max-w-3xl border-l border-accent pl-6">
-            <p className="text-title-sm font-medium tracking-tight text-ink md:text-title-md">
-              “{testimonial.quote}”
-            </p>
-            <p className="mt-4 text-body leading-8 text-ink-soft">
-              {testimonial.support}
-            </p>
-            <footer className="mt-6 text-meta uppercase tracking-[0.14em] text-ink">
-              — {testimonial.name}
-            </footer>
-          </blockquote>
-        ) : null}
       </div>
     </section>
   );

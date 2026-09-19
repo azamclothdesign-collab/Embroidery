@@ -9,7 +9,10 @@ export function CartHero() {
       <h1 className="cartHeroCopy mt-4 text-title-sm font-medium tracking-tight text-ink md:text-title-md lg:text-title-lg">
         {cartCopy.heading}
       </h1>
-      <p className="cartHeroCopy mt-4 max-w-xl text-body leading-8 text-ink-soft">
+      <p className="cartHeroCopy mt-3 text-meta uppercase tracking-[0.16em] text-ink">
+        {cartCopy.promiseHeading}
+      </p>
+      <p className="cartHeroCopy mt-3 max-w-xl text-body leading-8 text-ink-soft">
         {cartCopy.body}
       </p>
       <ol className="cartHeroCopy mt-10 flex flex-wrap items-center gap-3 text-meta uppercase tracking-[0.16em] text-ink-soft">

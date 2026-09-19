@@ -41,7 +41,6 @@ function AdminCategoryDialogForm({
   const [label, setLabel] = useState(
     mode === "create" ? "" : initialCategoryLabel,
   );
-  const [sortOrder, setSortOrder] = useState(initialSortOrder);
   const [isVisible, setIsVisible] = useState(initialIsVisible);
   const [imageSrc, setImageSrc] = useState(initialImageSrc);
   const [imageAlt, setImageAlt] = useState(initialImageAlt);
@@ -74,7 +73,7 @@ function AdminCategoryDialogForm({
       const payload = {
         id: trimmedId,
         label: trimmedLabel,
-        sortOrder,
+        sortOrder: initialSortOrder,
         isVisible,
         imageSrc: trimmedImageSrc,
         imageAlt: trimmedImageAlt,
@@ -134,15 +133,6 @@ function AdminCategoryDialogForm({
           onChange={setImageSrc}
           onAltChange={setImageAlt}
         />
-        <label className="flex flex-col gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-admin-ink-soft">
-          Sort order
-          <input
-            type="number"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(Number(e.target.value) || 0)}
-            className="min-h-11 border border-admin-line bg-admin-input px-3 text-body normal-case tracking-normal text-admin-ink"
-          />
-        </label>
         <label className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-admin-ink-soft">
           <input
             type="checkbox"

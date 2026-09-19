@@ -67,6 +67,27 @@ function nextCopySlug(base: string, existing: ReadonlySet<string>): string {
   return candidate;
 }
 
+function nextCopyName(base: string, existing: ReadonlySet<string>): string {
+  const taken = new Set(
+    [...existing].map((name) => name.trim().toLowerCase()),
+  );
+  let candidate = `${base} Copy`;
+  let index = 2;
+
+  while (taken.has(candidate.trim().toLowerCase())) {
+    candidate = `${base} Copy ${index}`;
+    index += 1;
+  }
+
+  return candidate;
+}
+
+function productStatusLabel(product: ShopProduct): string {
+  return isProductVisible(product)
+    ? adminCopy.productsStatusPublished
+    : adminCopy.productsStatusUnpublished;
+}
+
 export function AdminProductsPage({
   locale,
   products,
@@ -88,9 +109,13 @@ export function AdminProductsPage({
     () => new Set(products.map((product) => product.slug)),
     [products],
   );
+  const existingNames = useMemo(
+    () => new Set(products.map((product) => product.name)),
+    [products],
+  );
 
-  const publishedCount = products.length;
-  const draftsCount = 0;
+  const publishedCount = products.filter(isProductVisible).length;
+  const draftsCount = products.length - publishedCount;
   const fileIssueCount = 0;
 
   const filtered = useMemo(() => {
@@ -112,7 +137,7 @@ export function AdminProductsPage({
         return false;
       }
 
-      if (statusFilter === "draft") {
+      if (statusFilter === "draft" && visible) {
         return false;
       }
 
@@ -183,6 +208,7 @@ export function AdminProductsPage({
 
     const product = confirmProduct;
     const slug = nextCopySlug(product.slug, existingSlugs);
+    const name = nextCopyName(product.name, existingNames);
     closeConfirm();
 
     startTransition(async () => {
@@ -190,7 +216,7 @@ export function AdminProductsPage({
         toMutationInput(product, {
           slug,
           pdpSlug: slug,
-          name: `${product.name} Copy`,
+          name,
           isVisible: false,
         }),
       );
@@ -451,7 +477,7 @@ export function AdminProductsPage({
                         : adminCopy.emDash}
                     </td>
                     <td className="px-4 py-4">
-                      {adminCopy.productsStatusPublished}
+                      {productStatusLabel(product)}
                     </td>
                     <td className="relative px-4 py-4">
                       <button
@@ -507,7 +533,7 @@ export function AdminProductsPage({
                       {product.packagePath !== undefined
                         ? "ZIP ready"
                         : "ZIP missing"}{" "}
-                      · {adminCopy.productsStatusPublished}
+                      · {productStatusLabel(product)}
                     </p>
                   </div>
                   <div className="relative shrink-0">

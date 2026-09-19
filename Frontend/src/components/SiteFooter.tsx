@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { FooterNewsletterForm } from "@/components/FooterNewsletterForm";
+import { businessContact } from "@/constants/businessContact";
 import {
   footerCopy,
   footerHref,
@@ -15,16 +16,16 @@ type SiteFooterProps = {
 };
 
 export async function SiteFooter({ locale = defaultLocale }: SiteFooterProps) {
-  let contactEmail = "";
-  let contactPhone = "";
+  let contactEmail = businessContact.email;
+  let contactPhone = businessContact.phone;
   let contactAddress = "";
   let brandName: string = footerCopy.brand;
   let tagline: string = footerCopy.tagline;
 
   try {
     const global = await fetchSiteGlobal();
-    contactEmail = global.contactEmail.trim();
-    contactPhone = global.contactPhone.trim();
+    contactEmail = global.contactEmail.trim() || businessContact.email;
+    contactPhone = global.contactPhone.trim() || businessContact.phone;
     contactAddress = global.contactAddress.trim();
     brandName =
       global.brandName.trim().length > 0 ? global.brandName.trim() : brandName;
@@ -33,11 +34,6 @@ export async function SiteFooter({ locale = defaultLocale }: SiteFooterProps) {
   } catch {
     // Keep footer constants when CMS is unavailable.
   }
-
-  const hasContact =
-    contactEmail.length > 0 ||
-    contactPhone.length > 0 ||
-    contactAddress.length > 0;
 
   return (
     <footer className="bg-ink text-paper">
@@ -50,33 +46,27 @@ export async function SiteFooter({ locale = defaultLocale }: SiteFooterProps) {
             <p className="mt-6 max-w-sm text-body leading-8 text-paper/80">
               {tagline}
             </p>
-            {hasContact ? (
-              <ul className="mt-6 flex list-none flex-col gap-2 p-0 text-body text-paper/80">
-                {contactEmail.length > 0 ? (
-                  <li>
-                    <a
-                      href={`mailto:${contactEmail}`}
-                      className="underline-offset-4 hover:underline"
-                    >
-                      {contactEmail}
-                    </a>
-                  </li>
-                ) : null}
-                {contactPhone.length > 0 ? (
-                  <li>
-                    <a
-                      href={`tel:${contactPhone.replace(/\s+/g, "")}`}
-                      className="underline-offset-4 hover:underline"
-                    >
-                      {contactPhone}
-                    </a>
-                  </li>
-                ) : null}
-                {contactAddress.length > 0 ? (
-                  <li className="whitespace-pre-line">{contactAddress}</li>
-                ) : null}
-              </ul>
-            ) : null}
+            <ul className="mt-6 flex list-none flex-col gap-2 p-0 text-body text-paper/80">
+              <li>
+                <a
+                  href={`mailto:${contactEmail}`}
+                  className="underline-offset-4 hover:underline"
+                >
+                  {contactEmail}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${contactPhone.replace(/\s+/g, "")}`}
+                  className="underline-offset-4 hover:underline"
+                >
+                  {contactPhone}
+                </a>
+              </li>
+              {contactAddress.length > 0 ? (
+                <li className="whitespace-pre-line">{contactAddress}</li>
+              ) : null}
+            </ul>
           </div>
           {footerNavGroups.map((group) => (
             <nav key={group.title} aria-label={group.title}>

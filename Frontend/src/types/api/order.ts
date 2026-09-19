@@ -17,6 +17,8 @@ export type OrderLine = {
 export type OrderRecord = {
   id: string;
   email: string;
+  contactName?: string | undefined;
+  phone?: string | undefined;
   createdAt: string;
   totalCents: number;
   discountCents: number;

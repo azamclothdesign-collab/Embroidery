@@ -2,6 +2,9 @@ export const productCopy = {
   breadcrumbHome: "Home",
   breadcrumbDesigns: "Designs",
   digitalDownload: "Digital Download",
+  howItWorksHeading: "Pay, then get your ZIP",
+  howItWorksBody:
+    "Add this design to your cart, complete payment, and download one embroidery ZIP instantly — no shipping.",
   includedFormats: "Embroidery Package",
   formatsNote: "One ZIP with all embroidery files for this design.",
   formatHelp: "Questions about your download?",
@@ -11,7 +14,7 @@ export const productCopy = {
   adding: "Adding...",
   added: "Added to Cart",
   addToWishlist: "Add to Wishlist",
-  instantDownload: "Instant digital download",
+  instantDownload: "Pay once, download ZIP instantly",
   secureCheckout: "Secure checkout",
   noPhysical: "No physical product shipped",
   toastAdded: "Added to cart",

@@ -114,6 +114,8 @@ export async function getAdminOrCustomerOrder(input: {
 export async function createOrder(input: {
   customerId?: string | undefined;
   email: string;
+  contactName: string;
+  phone: string;
   totalCents: number;
   discountCents: number;
   lines: readonly CartLine[];
@@ -131,6 +133,8 @@ export async function createOrder(input: {
   return insertOrder({
     id: createOrderId(),
     email: input.email,
+    contactName: input.contactName,
+    phone: input.phone,
     totalCents: computedTotal - input.discountCents,
     discountCents: input.discountCents,
     lines: orderLines,

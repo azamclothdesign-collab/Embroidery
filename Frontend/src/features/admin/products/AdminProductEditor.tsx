@@ -111,6 +111,7 @@ export function AdminProductEditor({
   );
   const [packageUploading, setPackageUploading] = useState(false);
   const packageInputRef = useRef<HTMLInputElement>(null);
+  const [isVisible, setIsVisible] = useState(product?.isVisible !== false);
   const [saveLabel, setSaveLabel] = useState<string>(adminCopy.productsSave);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -216,7 +217,7 @@ export function AdminProductEditor({
         packageFileName.trim().length > 0
           ? packageFileName.trim()
           : `${slug}.zip`,
-      isVisible: product?.isVisible !== false,
+      isVisible,
     };
 
     setSaveLabel(adminCopy.productsSaving);
@@ -229,7 +230,13 @@ export function AdminProductEditor({
 
       if (!result.ok) {
         setSaveLabel(adminCopy.productsSave);
-        setToast(result.error);
+        const message =
+          result.error === "conflict"
+            ? adminCopy.productsNameTaken
+            : result.error.includes("name already exists")
+              ? adminCopy.productsNameTaken
+              : result.error;
+        setToast(message);
         return;
       }
 
@@ -488,9 +495,29 @@ export function AdminProductEditor({
                       </p>
                     ) : null}
                     {section === adminCopy.productsSectionPublish ? (
-                      <p className="text-[0.875rem] leading-6 text-ink-soft">
-                        {adminCopy.productsPublishHint}
-                      </p>
+                      <div className="flex flex-col gap-4">
+                        <label className="flex items-start gap-3 text-[0.9375rem] text-ink">
+                          <input
+                            type="checkbox"
+                            className="mt-1 size-4"
+                            checked={isVisible}
+                            onChange={(event) => {
+                              setIsVisible(event.target.checked);
+                            }}
+                          />
+                          <span>
+                            <span className="block font-medium">
+                              {adminCopy.productsPublishToggle}
+                            </span>
+                            <span className="mt-1 block text-[0.875rem] leading-6 text-ink-soft">
+                              {adminCopy.productsPublishToggleHint}
+                            </span>
+                          </span>
+                        </label>
+                        <p className="text-[0.875rem] leading-6 text-ink-soft">
+                          {adminCopy.productsPublishHint}
+                        </p>
+                      </div>
                     ) : null}
                   </div>
                 ) : null}
@@ -541,9 +568,9 @@ export function AdminProductEditor({
             {adminCopy.productsZipLabel}
           </p>
           <p className="mt-4 text-[0.8125rem] text-ink-soft">
-            {mode === "edit"
+            {isVisible
               ? adminCopy.productsStatusLive
-              : adminCopy.productsDraftUntilSaved}
+              : adminCopy.productsStatusUnpublished}
           </p>
         </aside>
       </div>

@@ -26,6 +26,7 @@ export async function fetchCategories(): Promise<CategoryRecord[]> {
     method: "GET",
     path: apiRoutes.categories.list,
     cacheStrategy: { next: { revalidate: 300 } },
+    context: {},
   });
 
   return data.categories;

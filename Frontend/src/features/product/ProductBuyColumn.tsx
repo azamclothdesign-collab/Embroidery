@@ -1,7 +1,7 @@
 import { CheckIcon } from "@/components/icons/CheckIcon";
 import { StarRating } from "@/components/StarRating";
 import { productCopy } from "@/constants/productCopy";
-import { productDescriptionText, productSpecLabels } from "@/constants/productDetail";
+import { productDescriptionText } from "@/constants/productDetail";
 import { formatShopPrice, type ShopProduct } from "@/constants/shopCatalog";
 import { ProductPurchaseActions } from "@/features/product/ProductPurchaseActions";
 
@@ -12,7 +12,6 @@ type ProductBuyColumnProps = {
 
 export function ProductBuyColumn({ product }: ProductBuyColumnProps) {
   const priceLabel = formatShopPrice(product.priceCents);
-  const specs = productSpecLabels(product);
 
   return (
     <div className="flex flex-col lg:justify-center">
@@ -31,6 +30,14 @@ export function ProductBuyColumn({ product }: ProductBuyColumnProps) {
       <p className="productHeroCopy mt-1 text-meta uppercase tracking-[0.16em] text-ink-soft">
         {productCopy.digitalDownload}
       </p>
+      <div className="productHeroCopy mt-6 border border-line bg-paper px-4 py-4">
+        <h2 className="text-meta uppercase tracking-[0.16em] text-ink">
+          {productCopy.howItWorksHeading}
+        </h2>
+        <p className="mt-2 text-[0.9375rem] leading-7 text-ink-soft">
+          {productCopy.howItWorksBody}
+        </p>
+      </div>
       <p className="productHeroCopy mt-6 max-w-md text-body leading-8 text-ink-soft">
         {productDescriptionText(product)}
       </p>
@@ -43,44 +50,6 @@ export function ProductBuyColumn({ product }: ProductBuyColumnProps) {
         </p>
         <p className="mt-3 text-meta text-ink-soft">{productCopy.formatsNote}</p>
       </div>
-      <div className="productHeroCopy mt-8">
-        <h2 className="text-meta uppercase tracking-[0.16em] text-ink-soft">
-          {productCopy.designSize}
-        </h2>
-        <p className="mt-2 text-body text-ink">{specs.sizeLabel}</p>
-      </div>
-      <dl className="productHeroCopy mt-8 hidden grid-cols-2 gap-x-6 gap-y-4 text-meta uppercase tracking-[0.14em] lg:grid">
-        <div>
-          <dt className="text-ink-soft">Design Size</dt>
-          <dd className="mt-1 text-body normal-case tracking-normal text-ink">
-            {specs.sizeLabel}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-ink-soft">Stitch Count</dt>
-          <dd className="mt-1 text-body normal-case tracking-normal text-ink">
-            {specs.stitchLabel}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-ink-soft">Thread Colors</dt>
-          <dd className="mt-1 text-body normal-case tracking-normal text-ink">
-            {specs.colorLabel}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-ink-soft">Hoop</dt>
-          <dd className="mt-1 text-body normal-case tracking-normal text-ink">
-            {specs.hoopLabel}
-          </dd>
-        </div>
-        <div className="col-span-2">
-          <dt className="text-ink-soft">Package</dt>
-          <dd className="mt-1 text-body normal-case tracking-normal text-ink">
-            {specs.formatsLabel}
-          </dd>
-        </div>
-      </dl>
       <ProductPurchaseActions />
       <ul className="productHeroCopy mt-6 flex flex-col gap-2 text-meta text-ink-soft">
         <li className="flex items-center gap-2">

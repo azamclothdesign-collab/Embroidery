@@ -1,5 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
+import { locales } from "@/constants/locales";
 import { ApiClientError } from "@/lib/api/apiClient";
 import {
   type CategoryMutationInput,
@@ -35,7 +38,10 @@ type ActionResult<T> =
 
 function toError(error: unknown): string {
   if (error instanceof ApiClientError) {
-    if (error.code === "validation_error" && error.message.trim().length > 0) {
+    if (
+      (error.code === "validation_error" || error.code === "conflict") &&
+      error.message.trim().length > 0
+    ) {
       return error.message;
     }
 
@@ -43,6 +49,63 @@ function toError(error: unknown): string {
   }
 
   return "failed";
+}
+
+function revalidateProductCatalog(slug?: string | undefined): void {
+  revalidatePath("/", "layout");
+
+  for (const locale of locales) {
+    revalidatePath(`/${locale}`);
+    revalidatePath(`/${locale}/designs`);
+    revalidatePath(`/${locale}/new-arrivals`);
+    revalidatePath(`/${locale}/categories`);
+    revalidatePath(`/${locale}/admin/products`);
+    revalidatePath(`/${locale}/admin/categories`);
+
+    if (slug !== undefined && slug.trim().length > 0) {
+      revalidatePath(`/${locale}/designs/${slug}`);
+      revalidatePath(`/${locale}/admin/products/${slug}`);
+    }
+  }
+}
+
+function revalidateCategoryCatalog(): void {
+  revalidatePath("/", "layout");
+
+  for (const locale of locales) {
+    revalidatePath(`/${locale}`);
+    revalidatePath(`/${locale}/categories`);
+    revalidatePath(`/${locale}/designs`);
+    revalidatePath(`/${locale}/admin/categories`);
+  }
+}
+
+function resolveImageContentType(
+  file: File,
+): "image/jpeg" | "image/png" | "image/webp" | null {
+  if (
+    file.type === "image/jpeg" ||
+    file.type === "image/png" ||
+    file.type === "image/webp"
+  ) {
+    return file.type;
+  }
+
+  const name = file.name.toLowerCase();
+
+  if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
+    return "image/jpeg";
+  }
+
+  if (name.endsWith(".png")) {
+    return "image/png";
+  }
+
+  if (name.endsWith(".webp")) {
+    return "image/webp";
+  }
+
+  return null;
 }
 
 export async function uploadAdminImageAction(
@@ -55,18 +118,16 @@ export async function uploadAdminImageAction(
       return { ok: false, error: "validation_error" };
     }
 
-    if (
-      file.type !== "image/jpeg" &&
-      file.type !== "image/png" &&
-      file.type !== "image/webp"
-    ) {
+    const contentType = resolveImageContentType(file);
+
+    if (contentType === null) {
       return { ok: false, error: "validation_error" };
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const media = await uploadAdminMedia({
       fileName: file.name,
-      contentType: file.type,
+      contentType,
       contentBase64: buffer.toString("base64"),
     });
 
@@ -153,6 +214,7 @@ export async function createCategoryAction(
       imageSrc: input.imageSrc,
       imageAlt: input.imageAlt,
     });
+    revalidateCategoryCatalog();
     return { ok: true, data: category };
   } catch (error) {
     return { ok: false, error: toError(error) };
@@ -170,6 +232,7 @@ export async function updateCategoryAction(
       imageSrc: input.imageSrc,
       imageAlt: input.imageAlt,
     });
+    revalidateCategoryCatalog();
     return { ok: true, data: category };
   } catch (error) {
     return { ok: false, error: toError(error) };
@@ -181,6 +244,7 @@ export async function deleteCategoryAction(
 ): Promise<ActionResult<{ ok: true }>> {
   try {
     const result = await deleteCategory(id);
+    revalidateCategoryCatalog();
     return { ok: true, data: result };
   } catch (error) {
     return { ok: false, error: toError(error) };
@@ -192,6 +256,7 @@ export async function createProductAction(
 ): Promise<ActionResult<ShopProduct>> {
   try {
     const product = await createProduct(input);
+    revalidateProductCatalog(product.slug);
     return { ok: true, data: product };
   } catch (error) {
     return { ok: false, error: toError(error) };
@@ -204,6 +269,7 @@ export async function updateProductAction(
 ): Promise<ActionResult<ShopProduct>> {
   try {
     const product = await updateProduct(slug, input);
+    revalidateProductCatalog(product.slug);
     return { ok: true, data: product };
   } catch (error) {
     return { ok: false, error: toError(error) };
@@ -215,6 +281,7 @@ export async function deleteProductAction(
 ): Promise<ActionResult<{ ok: true }>> {
   try {
     const result = await deleteProduct(slug);
+    revalidateProductCatalog(slug);
     return { ok: true, data: result };
   } catch (error) {
     return { ok: false, error: toError(error) };

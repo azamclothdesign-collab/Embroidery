@@ -92,6 +92,13 @@ PORT=4000
 ALLOWED_ORIGINS=https://${DOMAIN},https://www.${DOMAIN}
 NODE_ENV=production
 UPLOAD_DIR=${APP_DIR}/Frontend/public/uploads
+CONTACT_INBOX=azamclothdesign@gmail.com
+# Set SMTP_* to enable contact-form email delivery (Gmail App Password recommended).
+# SMTP_HOST=smtp.gmail.com
+# SMTP_PORT=587
+# SMTP_USER=azamclothdesign@gmail.com
+# SMTP_PASS=
+# SMTP_FROM="Embroidery Support <azamclothdesign@gmail.com>"
 EOF
 
 cat > "${APP_DIR}/Database/.env" <<EOF

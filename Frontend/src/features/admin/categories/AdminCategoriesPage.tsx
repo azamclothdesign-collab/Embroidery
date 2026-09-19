@@ -32,6 +32,34 @@ function categoryImageDefaults(category: CategoryRecord | null): {
   };
 }
 
+function sortCategories(
+  categories: readonly CategoryRecord[],
+): CategoryRecord[] {
+  return [...categories].sort((left, right) => {
+    if (left.sortOrder !== right.sortOrder) {
+      return left.sortOrder - right.sortOrder;
+    }
+
+    return left.label.localeCompare(right.label);
+  });
+}
+
+function toCategoryMutationInput(
+  category: CategoryRecord,
+  overrides: Partial<{ sortOrder: number; isVisible: boolean }> = {},
+) {
+  const defaults = categoryImageDefaults(category);
+
+  return {
+    id: category.id,
+    label: category.label,
+    sortOrder: overrides.sortOrder ?? category.sortOrder,
+    isVisible: overrides.isVisible ?? category.isVisible,
+    imageSrc: defaults.imageSrc.length > 0 ? defaults.imageSrc : undefined,
+    imageAlt: defaults.imageAlt.length > 0 ? defaults.imageAlt : undefined,
+  };
+}
+
 type AdminCategoriesPageProps = {
   locale: string;
   categories: CategoryRecord[];
@@ -60,6 +88,21 @@ export function AdminCategoriesPage({
   const [confirmCategory, setConfirmCategory] = useState<CategoryRecord | null>(
     null,
   );
+
+  const orderedCategories = useMemo(
+    () => sortCategories(categories),
+    [categories],
+  );
+
+  const nextSortOrder = useMemo(() => {
+    if (orderedCategories.length === 0) {
+      return 10;
+    }
+
+    return (
+      Math.max(...orderedCategories.map((category) => category.sortOrder)) + 10
+    );
+  }, [orderedCategories]);
 
   const handleCreate = () => {
     setDialogMode("create");
@@ -99,24 +142,72 @@ export function AdminCategoriesPage({
     }
 
     const category = confirmCategory;
-    const defaults = categoryImageDefaults(category);
     closeConfirm();
 
     startTransition(async () => {
-      const result = await updateCategoryAction({
-        id: category.id,
-        label: category.label,
-        sortOrder: category.sortOrder,
-        isVisible: !category.isVisible,
-        imageSrc: defaults.imageSrc.length > 0 ? defaults.imageSrc : undefined,
-        imageAlt: defaults.imageAlt.length > 0 ? defaults.imageAlt : undefined,
-      });
+      const result = await updateCategoryAction(
+        toCategoryMutationInput(category, {
+          isVisible: !category.isVisible,
+        }),
+      );
 
       if (!result.ok) {
         setToast(result.error || adminCopy.categoriesActionFailed);
         return;
       }
 
+      router.refresh();
+    });
+  };
+
+  const moveCategory = (categoryId: string, direction: -1 | 1) => {
+    const index = orderedCategories.findIndex(
+      (category) => category.id === categoryId,
+    );
+    const swapIndex = index + direction;
+
+    if (index < 0 || swapIndex < 0 || swapIndex >= orderedCategories.length) {
+      return;
+    }
+
+    const reordered = [...orderedCategories];
+    const current = reordered[index];
+    const neighbor = reordered[swapIndex];
+
+    if (current === undefined || neighbor === undefined) {
+      return;
+    }
+
+    reordered[index] = neighbor;
+    reordered[swapIndex] = current;
+
+    setOpenMenuId(null);
+    setToast(null);
+
+    startTransition(async () => {
+      const updates = reordered.flatMap((category, position) => {
+        const sortOrder = (position + 1) * 10;
+
+        if (category.sortOrder === sortOrder) {
+          return [];
+        }
+
+        return [
+          updateCategoryAction(
+            toCategoryMutationInput(category, { sortOrder }),
+          ),
+        ];
+      });
+
+      const results = await Promise.all(updates);
+      const failed = results.find((result) => !result.ok);
+
+      if (failed !== undefined && !failed.ok) {
+        setToast(failed.error || adminCopy.categoriesReorderFailed);
+        return;
+      }
+
+      setToast(adminCopy.categoriesReordered);
       router.refresh();
     });
   };
@@ -144,7 +235,7 @@ export function AdminCategoriesPage({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    return categories.filter((cat) => {
+    return orderedCategories.filter((cat) => {
       if (statusFilter === "visible" && !cat.isVisible) {
         return false;
       }
@@ -161,7 +252,18 @@ export function AdminCategoriesPage({
         cat.label.toLowerCase().includes(q) || cat.id.toLowerCase().includes(q)
       );
     });
-  }, [categories, query, statusFilter]);
+  }, [orderedCategories, query, statusFilter]);
+
+  const canReorder = query.trim().length === 0 && statusFilter === "all";
+  const positionById = useMemo(() => {
+    const map = new Map<string, number>();
+
+    orderedCategories.forEach((category, index) => {
+      map.set(category.id, index);
+    });
+
+    return map;
+  }, [orderedCategories]);
 
   const statusChips: ReadonlyArray<{ id: StatusFilter; label: string }> = [
     { id: "all", label: adminCopy.categoriesFilterAll },
@@ -255,6 +357,9 @@ export function AdminCategoriesPage({
               <thead className="border-b border-line text-meta uppercase tracking-[0.14em] text-ink-soft">
                 <tr>
                   <th className="px-4 py-3 font-normal">
+                    {adminCopy.categoriesColPosition}
+                  </th>
+                  <th className="px-4 py-3 font-normal">
                     {adminCopy.categoriesColCategory}
                   </th>
                   <th className="px-4 py-3 font-normal">
@@ -268,12 +373,50 @@ export function AdminCategoriesPage({
               <tbody>
                 {filtered.map((cat) => {
                   const image = categoryImageDefaults(cat);
+                  const position = positionById.get(cat.id) ?? 0;
 
                   return (
                     <tr
                       key={cat.id}
                       className="border-b border-line last:border-b-0"
                     >
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2">
+                          <span className="min-w-6 text-ink-soft">
+                            {position + 1}
+                          </span>
+                          <div className="flex flex-col gap-1">
+                            <button
+                              type="button"
+                              className="inline-flex min-h-8 min-w-8 items-center justify-center border border-line text-ink disabled:opacity-40"
+                              aria-label={adminCopy.categoriesMoveUp}
+                              disabled={
+                                isPending || !canReorder || position === 0
+                              }
+                              onClick={() => {
+                                moveCategory(cat.id, -1);
+                              }}
+                            >
+                              ↑
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex min-h-8 min-w-8 items-center justify-center border border-line text-ink disabled:opacity-40"
+                              aria-label={adminCopy.categoriesMoveDown}
+                              disabled={
+                                isPending ||
+                                !canReorder ||
+                                position >= orderedCategories.length - 1
+                              }
+                              onClick={() => {
+                                moveCategory(cat.id, 1);
+                              }}
+                            >
+                              ↓
+                            </button>
+                          </div>
+                        </div>
+                      </td>
                       <td className="px-4 py-4 font-medium text-ink">
                         <div className="flex items-center gap-3">
                           <div className="relative size-12 shrink-0 overflow-hidden border border-line bg-paper">
@@ -350,6 +493,7 @@ export function AdminCategoriesPage({
           <ul className="flex list-none flex-col gap-3 p-0 lg:hidden">
             {filtered.map((cat) => {
               const image = categoryImageDefaults(cat);
+              const position = positionById.get(cat.id) ?? 0;
 
               return (
                 <li
@@ -357,6 +501,34 @@ export function AdminCategoriesPage({
                   className="rounded-2xl border border-line bg-surface p-4"
                 >
                   <div className="flex gap-3">
+                    <div className="flex flex-col gap-1">
+                      <button
+                        type="button"
+                        className="inline-flex min-h-8 min-w-8 items-center justify-center border border-line text-ink disabled:opacity-40"
+                        aria-label={adminCopy.categoriesMoveUp}
+                        disabled={isPending || !canReorder || position === 0}
+                        onClick={() => {
+                          moveCategory(cat.id, -1);
+                        }}
+                      >
+                        ↑
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex min-h-8 min-w-8 items-center justify-center border border-line text-ink disabled:opacity-40"
+                        aria-label={adminCopy.categoriesMoveDown}
+                        disabled={
+                          isPending ||
+                          !canReorder ||
+                          position >= orderedCategories.length - 1
+                        }
+                        onClick={() => {
+                          moveCategory(cat.id, 1);
+                        }}
+                      >
+                        ↓
+                      </button>
+                    </div>
                     <div className="relative size-14 shrink-0 overflow-hidden border border-line bg-paper">
                       {image.imageSrc.length === 0 ? (
                         <div className="flex size-full items-center justify-center text-[0.75rem] text-ink-soft">
@@ -374,6 +546,7 @@ export function AdminCategoriesPage({
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-ink">{cat.label}</p>
                       <p className="mt-1 text-[0.8125rem] text-ink-soft">
+                        #{position + 1} ·{" "}
                         {cat.isVisible
                           ? adminCopy.categoriesStatusLive
                           : adminCopy.categoriesStatusHidden}
@@ -435,7 +608,11 @@ export function AdminCategoriesPage({
         mode={dialogMode}
         initialCategoryId={editCategory?.id ?? ""}
         initialCategoryLabel={editCategory?.label ?? ""}
-        initialSortOrder={editCategory?.sortOrder ?? 0}
+        initialSortOrder={
+          dialogMode === "create"
+            ? nextSortOrder
+            : (editCategory?.sortOrder ?? nextSortOrder)
+        }
         initialIsVisible={editCategory?.isVisible ?? true}
         initialImageSrc={editDefaults.imageSrc}
         initialImageAlt={editDefaults.imageAlt}

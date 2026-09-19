@@ -18,6 +18,12 @@ const handle: ApiHandler = async (context) => {
 
   try {
     const product = await getProductBySlug(parsed.data.slug);
+
+    if (product.isVisible === false && context.adminUserId === undefined) {
+      context.sendError(404, "not_found", "Product not found");
+      return;
+    }
+
     context.sendJson(200, { product });
   } catch (error) {
     handleServiceError(context.sendError, error);

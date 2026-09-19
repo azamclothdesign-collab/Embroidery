@@ -9,13 +9,14 @@ import {
   type SitePagesSettings,
   type SiteSettingsKey,
 } from "../../../types/siteSettings.js";
+import { businessContact } from "../../../constants/businessContact.js";
 import { ServiceError } from "../../../utils/serviceError.js";
 
 const defaultGlobalSettings: SiteGlobalSettings = {
   brandName: "Embroidery",
   tagline: "Beautiful embroidery designs, ready for your next creation.",
-  contactEmail: "",
-  contactPhone: "",
+  contactEmail: businessContact.email,
+  contactPhone: businessContact.phone,
   contactAddress: "",
   instagram: "",
   pinterest: "",
@@ -98,8 +99,10 @@ function normalizeGlobal(value: unknown): SiteGlobalSettings {
   return {
     brandName: readString(record, "brandName") || defaultGlobalSettings.brandName,
     tagline: readString(record, "tagline"),
-    contactEmail: readString(record, "contactEmail"),
-    contactPhone: readString(record, "contactPhone"),
+    contactEmail:
+      readString(record, "contactEmail") || defaultGlobalSettings.contactEmail,
+    contactPhone:
+      readString(record, "contactPhone") || defaultGlobalSettings.contactPhone,
     contactAddress: readString(record, "contactAddress"),
     instagram: readString(record, "instagram"),
     pinterest: readString(record, "pinterest"),

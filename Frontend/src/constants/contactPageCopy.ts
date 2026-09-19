@@ -33,9 +33,11 @@ export const contactPageCopy = {
   nameRequired: "Please enter your name.",
   topicRequired: "Please select a topic.",
   messageRequired: "Please enter a message.",
-  preferEmailHeading: "Prefer Email?",
+  preferEmailHeading: "Prefer Email or WhatsApp?",
   preferEmailBody:
-    "A direct support email will appear here once the client publishes one. Until then, use the form and include your order number if you have one.",
+    "Email us at azamclothdesign@gmail.com, message us on WhatsApp, or use the form and include your order number if you have one.",
+  whatsappLabel: "Chat on WhatsApp",
+  whatsappBody: "Fastest way to reach us for order and download help.",
   orderSupportHeading: "Already Purchased a Design?",
   orderSupportBody:
     "If you're having trouble accessing a purchase, have your order number ready so we can help you faster.",

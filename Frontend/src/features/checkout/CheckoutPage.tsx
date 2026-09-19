@@ -14,7 +14,7 @@ import {
   CheckoutActions,
   type CheckoutPayState,
 } from "@/features/checkout/CheckoutActions";
-import { CheckoutEmail } from "@/features/checkout/CheckoutEmail";
+import { CheckoutContact } from "@/features/checkout/CheckoutContact";
 import { CheckoutHeader } from "@/features/checkout/CheckoutHeader";
 import { CheckoutHeading } from "@/features/checkout/CheckoutHeading";
 import { CheckoutPayment } from "@/features/checkout/CheckoutPayment";
@@ -47,8 +47,10 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
   const displayLines = useMemo(() => resolveCartDisplayLines(lines), [lines]);
   const subtotalCents = cartSubtotalCents(displayLines);
   const hasIssues = cartHasValidationIssues(displayLines);
+  const [contactName, setContactName] = useState("");
   const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [contactValid, setContactValid] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [discountCents, setDiscountCents] = useState(0);
   const [payState, setPayState] = useState<CheckoutPayState>("idle");
@@ -57,12 +59,12 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
   const canPay =
     displayLines.length > 0 &&
     !hasIssues &&
-    emailValid &&
+    contactValid &&
     termsAccepted &&
     payState !== "processing";
 
-  const onEmailValid = useCallback((isValid: boolean) => {
-    setEmailValid(isValid);
+  const onContactValid = useCallback((isValid: boolean) => {
+    setContactValid(isValid);
   }, []);
 
   const onPay = () => {
@@ -79,7 +81,9 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
         setOverlayPhase("preparing");
         window.setTimeout(() => {
           void createOrderAction({
-            email,
+            email: email.trim(),
+            contactName: contactName.trim(),
+            phone: phone.trim(),
             lines: displayLines.map((line) => ({
               slug: line.slug,
               pdpSlug: line.pdpSlug,
@@ -100,6 +104,8 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
             const order: LocalOrder = {
               id: result.order.id,
               email: result.order.email,
+              contactName: result.order.contactName,
+              phone: result.order.phone,
               createdAt: result.order.createdAt,
               totalCents: result.order.totalCents,
               discountCents: result.order.discountCents,
@@ -159,11 +165,15 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
       <CheckoutHeading />
       <div className="mx-auto grid w-full max-w-[85rem] gap-10 px-6 pb-28 lg:grid-cols-[minmax(0,1.5fr)_minmax(18rem,1fr)] lg:gap-14 lg:pb-20">
         <div className="checkoutForm">
-          <CheckoutEmail
+          <CheckoutContact
             locale={locale}
-            value={email}
-            onChange={setEmail}
-            onValidityChange={onEmailValid}
+            contactName={contactName}
+            email={email}
+            phone={phone}
+            onContactNameChange={setContactName}
+            onEmailChange={setEmail}
+            onPhoneChange={setPhone}
+            onValidityChange={onContactValid}
           />
           <CheckoutPayment />
           <div id="checkout-actions">

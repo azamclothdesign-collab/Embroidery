@@ -3,7 +3,7 @@ import { type Metadata } from "next";
 import { adminCopy } from "@/constants/adminCopy";
 import { AdminOverviewPage } from "@/features/admin/overview/AdminOverviewPage";
 import { fetchOrders } from "@/lib/api/ordersApi";
-import { fetchProducts } from "@/lib/api/productsApi";
+import { fetchProductsFresh } from "@/lib/api/productsApi";
 
 type AdminOverviewRouteProps = {
   params: Promise<{ locale: string }>;
@@ -19,7 +19,7 @@ export default async function AdminOverviewRoute({
 }: AdminOverviewRouteProps) {
   const { locale } = await params;
   const [products, orders] = await Promise.all([
-    fetchProducts(),
+    fetchProductsFresh(),
     fetchOrders().catch(() => []),
   ]);
 

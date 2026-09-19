@@ -3,7 +3,7 @@ import { type Metadata } from "next";
 import { adminCopy } from "@/constants/adminCopy";
 import { AdminProductEditor } from "@/features/admin/products/AdminProductEditor";
 import { fetchCategories } from "@/lib/api/categoriesApi";
-import { fetchProductBySlug } from "@/lib/api/productsApi";
+import { fetchProductBySlugFresh } from "@/lib/api/productsApi";
 import { type CategoryRecord, type ShopProduct } from "@/types/api/product";
 
 type RouteProps = {
@@ -26,7 +26,7 @@ export default async function AdminProductEditRoute({
   let categories: CategoryRecord[];
 
   try {
-    product = await fetchProductBySlug(slug);
+    product = await fetchProductBySlugFresh(slug);
   } catch {
     product = undefined;
   }

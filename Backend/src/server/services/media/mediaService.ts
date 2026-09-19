@@ -122,7 +122,7 @@ export async function storeAdminImage(
 
   const sniffed = sniffImageType(bytes);
 
-  if (sniffed === null || sniffed !== input.contentType) {
+  if (sniffed === null) {
     throw new ServiceError(400, "validation_error", "Invalid image type");
   }
 

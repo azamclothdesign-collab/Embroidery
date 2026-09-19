@@ -42,7 +42,11 @@ export function AdminImageField({
       const result = await uploadAdminImageAction(formData);
 
       if (!result.ok) {
-        setError(adminCopy.productsImageUploadFailed);
+        setError(
+          result.error === "validation_error" || result.error === "failed"
+            ? adminCopy.productsImageUploadFailed
+            : result.error,
+        );
         return;
       }
 

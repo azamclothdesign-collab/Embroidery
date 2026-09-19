@@ -5,6 +5,8 @@ import { type OrderLine, type OrderRecord } from "../../../../types/order.js";
 type OrderRow = {
   id: string;
   email: string;
+  contact_name: string | null;
+  phone: string | null;
   total_cents: number;
   discount_cents: number;
   created_at: Date;
@@ -25,6 +27,8 @@ type OrderLineRow = {
   package_path: string | null;
   package_file_name: string | null;
 };
+
+const orderSelect = `id, email, contact_name, phone, total_cents, discount_cents, created_at`;
 
 function mapOrderLine(row: OrderLineRow): OrderLine {
   const line: OrderLine = {
@@ -67,7 +71,7 @@ async function loadOrderLines(orderId: string): Promise<OrderLine[]> {
 }
 
 function mapOrderRow(row: OrderRow, lines: OrderLine[]): OrderRecord {
-  return {
+  const order: OrderRecord = {
     id: row.id,
     email: row.email,
     createdAt: row.created_at.toISOString(),
@@ -75,13 +79,23 @@ function mapOrderRow(row: OrderRow, lines: OrderLine[]): OrderRecord {
     discountCents: row.discount_cents,
     lines,
   };
+
+  if (row.contact_name !== null && row.contact_name.trim().length > 0) {
+    order.contactName = row.contact_name;
+  }
+
+  if (row.phone !== null && row.phone.trim().length > 0) {
+    order.phone = row.phone;
+  }
+
+  return order;
 }
 
 export async function listOrdersForCustomer(
   customerId: string,
 ): Promise<OrderRecord[]> {
   const result = await pool.query<OrderRow>(
-    `SELECT id, email, total_cents, discount_cents, created_at
+    `SELECT ${orderSelect}
      FROM orders
      WHERE customer_id = $1
      ORDER BY created_at DESC`,
@@ -100,7 +114,7 @@ export async function listOrdersForCustomer(
 
 export async function listAllOrders(): Promise<OrderRecord[]> {
   const result = await pool.query<OrderRow>(
-    `SELECT id, email, total_cents, discount_cents, created_at
+    `SELECT ${orderSelect}
      FROM orders
      ORDER BY created_at DESC`,
   );
@@ -119,7 +133,7 @@ export async function findOrderById(
   orderId: string,
 ): Promise<OrderRecord | null> {
   const result = await pool.query<OrderRow>(
-    `SELECT id, email, total_cents, discount_cents, created_at
+    `SELECT ${orderSelect}
      FROM orders
      WHERE id = $1`,
     [orderId],
@@ -140,7 +154,7 @@ export async function findOrderForCustomer(input: {
   customerId: string;
 }): Promise<OrderRecord | null> {
   const result = await pool.query<OrderRow>(
-    `SELECT id, email, total_cents, discount_cents, created_at
+    `SELECT ${orderSelect}
      FROM orders
      WHERE id = $1
        AND customer_id = $2`,
@@ -161,6 +175,8 @@ export async function insertOrder(input: {
   id: string;
   customerId?: string;
   email: string;
+  contactName: string;
+  phone: string;
   totalCents: number;
   discountCents: number;
   lines: OrderLine[];
@@ -171,12 +187,15 @@ export async function insertOrder(input: {
     await client.query("BEGIN");
 
     await client.query(
-      `INSERT INTO orders (id, customer_id, email, total_cents, discount_cents)
-       VALUES ($1, $2, $3, $4, $5)`,
+      `INSERT INTO orders (
+         id, customer_id, email, contact_name, phone, total_cents, discount_cents
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         input.id,
         input.customerId ?? null,
         input.email,
+        input.contactName,
+        input.phone,
         input.totalCents,
         input.discountCents,
       ],

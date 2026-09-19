@@ -135,6 +135,32 @@ export async function findProductBySlug(
   return mapProductRow(row, formatsBySlug.get(row.slug) ?? []);
 }
 
+export async function findProductByName(
+  name: string,
+  excludeSlug?: string | undefined,
+): Promise<ShopProduct | null> {
+  const result = await pool.query<ProductRow>(
+    `SELECT slug, pdp_slug, name, category_id, rating, price_cents, hoop_size,
+            stitch_count, badge, image_src, image_alt, stitched_image_src,
+            stitched_image_alt, description, package_path, package_file_name,
+            is_visible
+     FROM products
+     WHERE lower(trim(name)) = lower(trim($1))
+       AND ($2::text IS NULL OR slug <> $2)
+     LIMIT 1`,
+    [name, excludeSlug ?? null],
+  );
+
+  const row = result.rows[0];
+
+  if (row === undefined) {
+    return null;
+  }
+
+  const formatsBySlug = await loadFormatsBySlugs([row.slug]);
+  return mapProductRow(row, formatsBySlug.get(row.slug) ?? []);
+}
+
 export async function insertProduct(input: {
   slug: string;
   pdpSlug: string;
