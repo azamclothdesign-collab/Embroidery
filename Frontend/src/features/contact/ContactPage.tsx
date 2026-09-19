@@ -15,8 +15,8 @@ type ContactPageProps = {
 };
 
 export async function ContactPage({ locale }: ContactPageProps) {
-  let contactEmail = businessContact.email;
-  let contactPhone = businessContact.phone;
+  let contactEmail: string = businessContact.email;
+  let contactPhone: string = businessContact.phone;
   let contactAddress = "";
 
   try {

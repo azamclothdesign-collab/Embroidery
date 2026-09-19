@@ -16,8 +16,8 @@ type SiteFooterProps = {
 };
 
 export async function SiteFooter({ locale = defaultLocale }: SiteFooterProps) {
-  let contactEmail = businessContact.email;
-  let contactPhone = businessContact.phone;
+  let contactEmail: string = businessContact.email;
+  let contactPhone: string = businessContact.phone;
   let contactAddress = "";
   let brandName: string = footerCopy.brand;
   let tagline: string = footerCopy.tagline;
