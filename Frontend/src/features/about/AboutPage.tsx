@@ -1,3 +1,4 @@
+import { AboutBusinessModel } from "@/features/about/AboutBusinessModel";
 import { AboutCommunity } from "@/features/about/AboutCommunity";
 import { AboutCraft } from "@/features/about/AboutCraft";
 import { AboutExperience } from "@/features/about/AboutExperience";
@@ -22,6 +23,7 @@ export function AboutPage({ locale }: AboutPageProps) {
     <AboutScrollMotion>
       <AboutHero locale={locale} />
       <AboutWhy />
+      <AboutBusinessModel />
       <AboutStory />
       <AboutPrinciples />
       <AboutQuality />

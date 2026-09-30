@@ -33,6 +33,7 @@ export const footerNavGroups = [
       { href: "/contact", label: "Contact" },
       { href: "/licensing", label: "Licensing" },
       { href: "/refund-policy", label: "Refund Policy" },
+      { href: "/shipping-policy", label: "Shipping & Service" },
     ],
   },
   {
@@ -48,8 +49,9 @@ export const footerNavGroups = [
 export const footerLegalLinks = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
-  { href: "/cookie-policy", label: "Cookies" },
   { href: "/refund-policy", label: "Refund Policy" },
+  { href: "/shipping-policy", label: "Shipping & Service" },
+  { href: "/cookie-policy", label: "Cookies" },
   { href: "/licensing", label: "Licensing" },
 ] as const;
 

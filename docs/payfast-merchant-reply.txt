@@ -1,0 +1,61 @@
+Subject: Chand Designer / Azam Cloth Design — Website update, business model & PayFast gateway use case
+
+To: cs@gopayfast.com, ops@gopayfast.com
+
+Dear Premier PayFast Team,
+
+Thank you for your guidance. Please find below our business details, payment-gateway use case, and confirmation that the website meets your listed requirements.
+
+1) Business identity
+- Business name: Chand Designer / Azam Cloth Design
+- Website: https://embdesigens.com
+- Email: azamclothdesign@gmail.com
+- Phone / WhatsApp: +92 322 4725253
+- Office address: Kashmir Block, Hussain Chamber, 1st Floor, Office 16, Chona Mandi Chowk, Azam Cloth Market, Lahore
+
+2) Business model (detailed)
+We operate an online storefront that sells digitized embroidery design files as digital products only.
+
+Customer journey:
+1. Customer browses embroidery designs and categories on the website.
+2. Customer adds one or more designs to the cart.
+3. At checkout, the customer provides contact information (name, email, phone) and agrees to terms.
+4. Customer pays online through the payment gateway.
+5. On successful payment, the order is confirmed and embroidery ZIP packages are unlocked for immediate download.
+6. No physical goods are manufactured, packed, or couriered. There is no COD settlement and no shipping logistics.
+
+Revenue is earned only from successful online payments for digital downloads.
+
+3) Exact use case for the intended PayFast payment gateway
+We require PayFast as the checkout payment processor for digital product purchases on https://embdesigens.com.
+
+Intended flow:
+- Amount due = cart total for selected embroidery designs.
+- Customer is redirected / processed through PayFast for payment (cards, Raast, bank account, and/or mobile wallets as enabled).
+- On successful payment callback/confirmation from PayFast, our system marks the order paid and unlocks ZIP download access for that order.
+- On failed or cancelled payment, no download is granted and no product is delivered.
+
+This is a pure digital payment capture + confirmation use case. PayFast is not used for disbursements to end customers, marketplace splits, or physical shipment COD.
+
+4) Website policy pages (live)
+- Privacy Policy: https://embdesigens.com/en/privacy
+- Terms & Conditions: https://embdesigens.com/en/terms
+- Refund / Return Policy: https://embdesigens.com/en/refund-policy
+- Shipping & Service (Digital Delivery) Policy: https://embdesigens.com/en/shipping-policy
+- Cookie Policy: https://embdesigens.com/en/cookie-policy
+- Contact (address, phone, email): https://embdesigens.com/en/contact
+- About / business model: https://embdesigens.com/en/about
+- Product catalog: https://embdesigens.com/en/designs
+
+5) Products / services listed
+Our public catalog lists multiple digital embroidery designs (more than 7–8 visible products/services) on the Designs page and homepage category sections.
+
+Please let us know if you need any additional documents (CNIC/NTN, bank letter, screenshots, or test credentials) to complete merchant onboarding.
+
+Kind regards,
+Chand Designer / Azam Cloth Design
+Kashmir Block, Hussain Chamber, 1st Floor, Office 16
+Chona Mandi Chowk, Azam Cloth Market, Lahore
+Email: azamclothdesign@gmail.com
+Phone: +92 322 4725253
+Website: https://embdesigens.com

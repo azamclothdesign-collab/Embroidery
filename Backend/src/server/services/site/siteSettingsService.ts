@@ -17,7 +17,7 @@ const defaultGlobalSettings: SiteGlobalSettings = {
   tagline: "Beautiful embroidery designs, ready for your next creation.",
   contactEmail: businessContact.email,
   contactPhone: businessContact.phone,
-  contactAddress: "",
+  contactAddress: businessContact.address,
   instagram: "",
   pinterest: "",
 };
@@ -103,7 +103,9 @@ function normalizeGlobal(value: unknown): SiteGlobalSettings {
       readString(record, "contactEmail") || defaultGlobalSettings.contactEmail,
     contactPhone:
       readString(record, "contactPhone") || defaultGlobalSettings.contactPhone,
-    contactAddress: readString(record, "contactAddress"),
+    contactAddress:
+      readString(record, "contactAddress") ||
+      defaultGlobalSettings.contactAddress,
     instagram: readString(record, "instagram"),
     pinterest: readString(record, "pinterest"),
   };

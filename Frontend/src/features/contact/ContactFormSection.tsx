@@ -26,13 +26,16 @@ export function ContactFormSection({
   locale,
   contactEmail = businessContact.email,
   contactPhone = businessContact.phone,
-  contactAddress = "",
+  contactAddress = businessContact.address,
 }: ContactFormSectionProps) {
   const email =
     contactEmail.trim().length > 0 ? contactEmail.trim() : businessContact.email;
   const phone =
     contactPhone.trim().length > 0 ? contactPhone.trim() : businessContact.phone;
-  const address = contactAddress.trim();
+  const address =
+    contactAddress.trim().length > 0
+      ? contactAddress.trim()
+      : businessContact.address;
 
   return (
     <section

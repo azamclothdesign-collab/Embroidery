@@ -17,13 +17,14 @@ type ContactPageProps = {
 export async function ContactPage({ locale }: ContactPageProps) {
   let contactEmail: string = businessContact.email;
   let contactPhone: string = businessContact.phone;
-  let contactAddress = "";
+  let contactAddress: string = businessContact.address;
 
   try {
     const global = await fetchSiteGlobal();
     contactEmail = global.contactEmail.trim() || businessContact.email;
     contactPhone = global.contactPhone.trim() || businessContact.phone;
-    contactAddress = global.contactAddress.trim();
+    contactAddress =
+      global.contactAddress.trim() || businessContact.address;
   } catch {
     // Keep business contact defaults when CMS is unavailable.
   }

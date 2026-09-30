@@ -18,7 +18,7 @@ type SiteFooterProps = {
 export async function SiteFooter({ locale = defaultLocale }: SiteFooterProps) {
   let contactEmail: string = businessContact.email;
   let contactPhone: string = businessContact.phone;
-  let contactAddress = "";
+  let contactAddress: string = businessContact.address;
   let brandName: string = footerCopy.brand;
   let tagline: string = footerCopy.tagline;
 
@@ -26,7 +26,8 @@ export async function SiteFooter({ locale = defaultLocale }: SiteFooterProps) {
     const global = await fetchSiteGlobal();
     contactEmail = global.contactEmail.trim() || businessContact.email;
     contactPhone = global.contactPhone.trim() || businessContact.phone;
-    contactAddress = global.contactAddress.trim();
+    contactAddress =
+      global.contactAddress.trim() || businessContact.address;
     brandName =
       global.brandName.trim().length > 0 ? global.brandName.trim() : brandName;
     tagline =

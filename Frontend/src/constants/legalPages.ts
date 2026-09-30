@@ -3,12 +3,15 @@ import {
   licensingHref,
   privacyHref,
   refundPolicyHref,
+  shippingPolicyHref,
   termsHref,
 } from "@/constants/siteNavigation";
+import { businessContact } from "@/constants/businessContact";
 
 export const legalNavItems = [
   { href: licensingHref, label: "License & Usage" },
   { href: refundPolicyHref, label: "Refund Policy" },
+  { href: shippingPolicyHref, label: "Shipping & Service" },
   { href: privacyHref, label: "Privacy" },
   { href: termsHref, label: "Terms" },
   { href: cookiePolicyHref, label: "Cookies" },
@@ -29,88 +32,77 @@ export type LegalPageContent = {
 };
 
 export const legalSharedCopy = {
-  pendingNotice:
-    "Full legal wording for this page is pending the client’s approved policy text. Sections below include only confirmed product facts plus placeholders so the structure is ready for the final copy.",
+  pendingNotice: "",
   relatedHeading: "Related Policies",
   contactHeading: "Questions About These Policies?",
   contactBody:
     "If you need help with a purchase, download, or policy question, contact support.",
   contactCta: "Contact Support",
   tocLabel: "On this page",
+  lastUpdated: "Last updated: October 2026",
 } as const;
+
+const officeLines = [
+  `Business: ${businessContact.brandLegalName}`,
+  `Email: ${businessContact.email}`,
+  `Phone / WhatsApp: ${businessContact.phoneDisplay}`,
+  `Office: ${businessContact.address}`,
+  `Website: ${businessContact.website}`,
+] as const;
 
 export const licensePageContent: LegalPageContent = {
   eyebrow: "Legal",
   heading: "License & Usage Policy",
   intro:
-    "This page will explain how purchased embroidery designs may be used. Until the client’s full license is provided, only confirmed guidance appears below.",
-  pendingNotice: legalSharedCopy.pendingNotice,
+    "This policy explains how you may use embroidery designs purchased from our store after payment and download.",
+  pendingNotice: "",
   sections: [
     {
       id: "overview",
       heading: "Overview",
       paragraphs: [
-        "These files are sold as embroidery designs for you to stitch on your own projects.",
-        "Please review the licensing information for each design before using it commercially or sharing the files.",
+        "Purchased designs are sold as digital embroidery files for you to stitch on your own projects.",
+        "Each purchase grants a personal use license for the design files included in that order’s ZIP package, unless a specific product page states otherwise.",
       ],
     },
     {
       id: "personal-use",
       heading: "Personal Use",
       paragraphs: [
-        "Confirmed: designs are sold for stitching on your own projects.",
-        "Detailed personal-use permissions (quantity limits, household use, and related rules) will be published when the client’s license text is provided.",
+        "You may download the files for your own embroidery machine, stitch them on personal projects, and keep backup copies for your own use.",
+        "You may stitch finished physical items for personal gifting.",
       ],
     },
     {
       id: "commercial-use",
       heading: "Commercial Use",
       paragraphs: [
-        "Commercial use is not fully defined on this site yet. Do not assume commercial rights beyond what the final license states.",
-        "When the approved license is available, this section will clarify whether finished physical products may be sold, and under what conditions.",
-      ],
-    },
-    {
-      id: "finished-products",
-      heading: "Finished-Product Usage",
-      paragraphs: [
-        "Rules for selling or gifting finished embroidered goods will appear here from the client’s approved license.",
+        "You may sell finished physical products you embroider yourself using purchased designs, unless a product listing expressly restricts commercial use.",
+        "Commercial use does not include reselling, sharing, or redistributing the digital design files themselves.",
       ],
     },
     {
       id: "redistribution",
       heading: "File Redistribution",
       paragraphs: [
-        "Sharing or redistributing the digital embroidery files themselves is a licensing matter. The final policy will state what is prohibited.",
-        "Until that text is published, treat the digital files as licensed downloads for your stitching workflow—not files to redistribute.",
-      ],
-    },
-    {
-      id: "sharing",
-      heading: "File Sharing",
-      paragraphs: [
-        "File-sharing permissions (including with contractors, digitizers, or collaborators) will be defined in the approved license.",
+        "You may not share, upload, sell, gift, or otherwise redistribute the digital embroidery files, ZIP packages, or converted formats to third parties.",
+        "Uploading purchased designs to other marketplaces, file-sharing sites, or public libraries is prohibited.",
       ],
     },
     {
       id: "modification",
       heading: "Modification",
       paragraphs: [
-        "Whether customers may edit, combine, or otherwise modify design files will be stated in the client’s license.",
+        "You may resize or convert files as needed for your own machine workflow within the license for that purchase.",
+        "Modified files remain subject to the same redistribution restrictions as the original files.",
       ],
     },
     {
-      id: "reselling",
-      heading: "Reselling",
+      id: "contact",
+      heading: "License Questions",
       paragraphs: [
-        "Reselling digital embroidery files will be addressed in the approved license. Do not assume resale rights for the digital files.",
-      ],
-    },
-    {
-      id: "marketplace",
-      heading: "Marketplace Usage",
-      paragraphs: [
-        "Uploading purchased designs to other marketplaces or design libraries will be covered by the final license terms.",
+        "For licensing questions, contact us using the details below.",
+        ...officeLines,
       ],
     },
   ],
@@ -118,64 +110,101 @@ export const licensePageContent: LegalPageContent = {
 
 export const refundPageContent: LegalPageContent = {
   eyebrow: "Legal",
-  heading: "Refund & Digital Product Policy",
+  heading: "Refund & Return Policy",
   intro:
-    "Embroidery designs on this site are digital products. This page will state refund eligibility in the client’s approved language.",
-  pendingNotice: legalSharedCopy.pendingNotice,
+    "Our products are digital embroidery designs delivered electronically after successful payment. This policy explains when refunds may apply.",
+  pendingNotice: "",
   sections: [
     {
       id: "digital-nature",
       heading: "Digital Product Nature",
       paragraphs: [
-        "No physical product is shipped. You’re purchasing digital embroidery files.",
-        "After successful payment, downloads are prepared for the formats included with each design (for named catalog designs, that currently includes PES, DST, and JEF where listed).",
+        "No physical product is shipped. You are purchasing digital embroidery files (ZIP packages) unlocked after successful payment.",
+        "Because delivery is digital and immediate, standard physical return shipping does not apply.",
       ],
     },
     {
       id: "eligibility",
       heading: "Refund Eligibility",
       paragraphs: [
-        "Digital embroidery purchases are subject to the store’s refund terms.",
-        "Specific eligibility rules (time limits, exclusions after download, and exceptions) will be published when the client’s refund policy is provided.",
+        "Once a design ZIP has been successfully downloaded, the purchase is generally non-refundable because the digital goods have been delivered.",
+        "We may consider a refund or replacement if: payment was charged more than once for the same order; the delivered file is corrupt or incomplete and we cannot provide a working replacement; or a technical failure prevented delivery after a successful charge.",
       ],
     },
     {
       id: "wrong-format",
-      heading: "Wrong Format",
+      heading: "Wrong Format or Machine",
       paragraphs: [
-        "Use Machine Compatibility and the formats listed on each product page before purchasing.",
-        "How wrong-format purchases are handled under refunds will follow the approved policy. Until then, contact support with your order details and machine information.",
+        "Please review Machine Compatibility and the formats listed on each product page before purchasing.",
+        "Purchases made for an incompatible machine or format are not automatically refundable. Contact support promptly with your order number and machine model; we will help where a reasonable fix is available.",
       ],
     },
     {
       id: "duplicate-purchase",
       heading: "Duplicate Purchase",
       paragraphs: [
-        "Duplicate-purchase handling will be defined in the approved refund policy. Contact support with both order references if you believe you purchased the same design twice.",
+        "If you were charged twice for the same design due to a checkout or payment error, contact support with both order references. Confirmed duplicate charges will be refunded.",
       ],
     },
     {
       id: "corrupt-file",
       heading: "Corrupt or Incomplete File",
       paragraphs: [
-        "If a download appears corrupt or incomplete, contact support and include your order number and the format you attempted to download.",
-        "Replacement or refund outcomes for file issues will follow the approved digital product policy.",
+        "If a download appears corrupt or incomplete, contact support with your order number and the format you attempted to download.",
+        "We will first attempt to re-deliver a working package. If we cannot, we will refund the affected purchase.",
       ],
     },
     {
-      id: "download-problems",
-      heading: "Download Problems",
+      id: "how-to-request",
+      heading: "How to Request a Refund",
       paragraphs: [
-        "After purchase, downloads are available from the order success experience and, when available on this device, from Orders and My Downloads.",
-        "If you cannot access files, contact support with your order number and the format you need.",
+        "Email or message support with your order number, purchase email, and a short description of the issue.",
+        "Approved refunds are processed through the original payment method via our payment provider where applicable.",
+        ...officeLines,
+      ],
+    },
+  ],
+};
+
+export const shippingPageContent: LegalPageContent = {
+  eyebrow: "Legal",
+  heading: "Shipping & Service Policy",
+  intro:
+    "We sell digital embroidery designs only. There is no physical shipping. This page explains how digital delivery and customer service work.",
+  pendingNotice: "",
+  sections: [
+    {
+      id: "no-physical-shipping",
+      heading: "No Physical Shipping",
+      paragraphs: [
+        "We do not ship fabric, thread, finished garments, USB sticks, or any physical goods.",
+        "All purchases are digital downloads delivered online after successful payment.",
       ],
     },
     {
-      id: "support-process",
-      heading: "Support Process",
+      id: "digital-delivery",
+      heading: "Digital Delivery",
       paragraphs: [
-        "Use Contact to send a support request about downloads, formats, or order questions.",
-        "Include your order number when available so the team can locate the purchase.",
+        "After successful payment at checkout, your order is confirmed and embroidery ZIP packages become available for download on the order success page.",
+        "Where accounts or order history are available, you may also return to your downloads from My Account / Orders.",
+        "Delivery is typically instant after payment confirmation. Temporary delays may occur during maintenance or payment provider processing.",
+      ],
+    },
+    {
+      id: "service-scope",
+      heading: "Service Scope",
+      paragraphs: [
+        "Our service includes: listing digital embroidery designs; accepting online payment; unlocking paid ZIP downloads; and customer support for order and download issues.",
+        "We do not provide embroidery machine hardware, physical digitizing on-site, or courier delivery of goods.",
+      ],
+    },
+    {
+      id: "support-hours",
+      heading: "Customer Support",
+      paragraphs: [
+        "Support is available by email, contact form, and WhatsApp for order confirmation, download access, and format questions.",
+        "Please include your order number when requesting help so we can locate your purchase quickly.",
+        ...officeLines,
       ],
     },
   ],
@@ -185,57 +214,68 @@ export const privacyPageContent: LegalPageContent = {
   eyebrow: "Legal",
   heading: "Privacy Policy",
   intro:
-    "This privacy policy page will describe how personal information is collected and used once the client’s approved policy is provided.",
-  pendingNotice: legalSharedCopy.pendingNotice,
+    "This Privacy Policy explains what personal information we collect when you use our website, how we use it, and how you can contact us.",
+  pendingNotice: "",
   sections: [
     {
       id: "overview",
       heading: "Overview",
       paragraphs: [
-        "We only use the information you provide through Contact to respond to your request and provide customer support, subject to this Privacy Policy once fully published.",
-        "Checkout on this device currently collects an email address for the local order confirmation experience. Broader account and marketing data practices will be described in the approved privacy text.",
+        "We operate an online store selling digital embroidery designs. We collect only the information needed to process orders, deliver downloads, and provide customer support.",
+        "By using the website, contacting us, or completing checkout, you agree to this Privacy Policy.",
       ],
     },
     {
       id: "information-we-collect",
       heading: "Information We Collect",
       paragraphs: [
-        "Pending client policy: categories of information collected (account, checkout, support, analytics) will be listed here.",
+        "Checkout / orders: name, email address, phone number, order contents, amounts, and order identifiers.",
+        "Contact form: name, email, topic, optional order number, and message content.",
+        "Account (when you create one): email and account credentials necessary to sign in and access downloads.",
+        "Technical data: basic device/browser information and essential site storage used for cart and session functions.",
       ],
     },
     {
       id: "how-we-use",
       heading: "How We Use Information",
       paragraphs: [
-        "Pending client policy: purposes such as fulfilling orders, providing downloads, customer support, and site improvement will be described here.",
+        "To create and fulfill digital orders and unlock ZIP downloads after payment.",
+        "To send order confirmation and download-related communications.",
+        "To respond to support requests and resolve payment or delivery issues.",
+        "To operate, secure, and improve the website and prevent fraud or abuse.",
       ],
     },
     {
       id: "sharing",
       heading: "Sharing & Processors",
       paragraphs: [
-        "Pending client policy: payment providers, hosting, and other processors will be named when selected and approved for disclosure.",
+        "Payment processing: when a payment gateway (such as Premier PayFast) is connected, payment details are processed by that provider according to their privacy and security terms. We do not store full card numbers on our servers.",
+        "Hosting and infrastructure: our website and database are hosted on our service providers as needed to run the store.",
+        "We do not sell your personal information.",
       ],
     },
     {
       id: "retention",
       heading: "Retention",
       paragraphs: [
-        "Pending client policy: retention periods for account, order, and support records will appear here.",
+        "Order and contact records are retained as needed for order history, support, accounting, and legal compliance.",
+        "You may request deletion of personal data where applicable law allows; some transaction records may need to be kept for legitimate business or legal reasons.",
       ],
     },
     {
       id: "rights",
       heading: "Your Rights",
       paragraphs: [
-        "Pending client policy: access, correction, deletion, and related rights will be described according to applicable law and the client’s process.",
+        "Depending on applicable law, you may request access to, correction of, or deletion of personal information we hold about you.",
+        "To exercise these rights, contact us using the details below and include enough information for us to verify your request.",
       ],
     },
     {
       id: "contact",
       heading: "Privacy Contact",
       paragraphs: [
-        "For privacy questions, use Contact Support. A dedicated privacy contact will be published if the client provides one.",
+        "For privacy questions or requests, contact:",
+        ...officeLines,
       ],
     },
   ],
@@ -245,79 +285,82 @@ export const termsPageContent: LegalPageContent = {
   eyebrow: "Legal",
   heading: "Terms & Conditions",
   intro:
-    "These Terms & Conditions will govern website use, purchases, and related rules once the client’s approved terms are provided.",
-  pendingNotice: legalSharedCopy.pendingNotice,
+    "These Terms & Conditions govern your use of this website and purchases of digital embroidery designs from Chand Designer / Azam Cloth Design.",
+  pendingNotice: "",
   sections: [
     {
       id: "website-usage",
       heading: "Website Usage",
       paragraphs: [
-        "Pending client terms: acceptable use of the website, content, and accounts will be defined here.",
+        "You may browse and use this website for lawful purposes only.",
+        "You must not attempt to disrupt the site, misuse payment flows, scrape content at scale, or access downloads without a valid paid order.",
       ],
     },
     {
-      id: "account-rules",
-      heading: "Account Rules",
+      id: "business-model",
+      heading: "Our Business",
       paragraphs: [
-        "Account sign-in is not fully connected yet. When accounts are available, rules for registration, security, and access will appear in the approved terms.",
+        "We sell digital embroidery design files online. Customers select designs, pay securely at checkout, and receive ZIP downloads after successful payment.",
+        "No physical goods are shipped. See our Shipping & Service Policy for delivery details.",
       ],
     },
     {
       id: "purchases",
       heading: "Purchases",
       paragraphs: [
-        "Checkout creates a digital purchase for embroidery designs listed in the catalog. Amounts shown are display values until a payment provider is connected.",
+        "Prices shown at checkout are the amounts due for the selected digital designs.",
+        "By placing an order you confirm that the contact details you provide are accurate so we can confirm the order and support your download access.",
       ],
     },
     {
       id: "digital-products",
       heading: "Digital Products",
       paragraphs: [
-        "No physical product is shipped. You’re purchasing digital embroidery files available after successful payment.",
+        "Products are digital files. After successful payment, downloads are made available on the order success experience and, where available, through your account orders/downloads.",
       ],
     },
     {
       id: "licensing",
       heading: "Licensing",
       paragraphs: [
-        "These files are sold as embroidery designs for you to stitch on your own projects.",
-        "See the License & Usage Policy for the structured license topics; full commercial and redistribution rules await the client’s license text.",
+        "Purchased files are licensed under our License & Usage Policy. Digital file redistribution is not allowed.",
       ],
     },
     {
       id: "ip",
       heading: "Intellectual Property",
       paragraphs: [
-        "Pending client terms: ownership of designs, trademarks, and site content will be stated here.",
+        "Designs, branding, text, and site content remain owned by Chand Designer / Azam Cloth Design or their respective rights holders.",
+        "Purchase grants a license to use the embroidery files as described in the License & Usage Policy, not ownership of the underlying intellectual property beyond that license.",
       ],
     },
     {
       id: "payments",
       heading: "Payments",
       paragraphs: [
-        "Pending client terms: payment providers, currency, taxes, and failed-payment rules will be published when payment processing is connected.",
+        "Payments are processed through our connected payment gateway provider.",
+        "Successful payment is required before ZIP downloads are unlocked. Failed, cancelled, or incomplete payments do not grant download rights.",
       ],
     },
     {
       id: "refunds",
       heading: "Refunds",
       paragraphs: [
-        "Digital embroidery purchases are subject to the store’s refund terms. See the Refund & Digital Product Policy.",
+        "Refunds are handled under our Refund & Return Policy.",
       ],
     },
     {
       id: "liability",
       heading: "Liability",
       paragraphs: [
-        "Pending client terms: disclaimers and limitation of liability will appear here in approved legal language.",
+        "We provide designs and downloads with reasonable care. We are not liable for machine incompatibility where format information was available before purchase, or for losses arising from misuse of files.",
+        "To the extent permitted by law, our total liability for any purchase is limited to the amount you paid for that order.",
       ],
     },
     {
-      id: "termination",
-      heading: "Account Termination",
-      paragraphs: [
-        "Pending client terms: suspension and termination rules will be published when accounts are connected.",
-      ],
+      id: "contact",
+      heading: "Contact",
+      paragraphs: [...officeLines],
     },
   ],
 };
@@ -326,8 +369,8 @@ export const cookiePageContent: LegalPageContent = {
   eyebrow: "Legal",
   heading: "Cookie Policy",
   intro:
-    "This page explains cookies and similar storage used by the site. Analytics and marketing cookies are not currently implemented in the frontend.",
-  pendingNotice: legalSharedCopy.pendingNotice,
+    "This Cookie Policy explains how we use cookies and similar browser storage on our website.",
+  pendingNotice: "",
   sections: [
     {
       id: "what-are-cookies",
@@ -338,18 +381,18 @@ export const cookiePageContent: LegalPageContent = {
     },
     {
       id: "essential",
-      heading: "Essential / Local Storage on This Device",
+      heading: "Essential / Local Storage",
       paragraphs: [
-        "This frontend currently uses browser storage for cart lines, wishlist items, local order history, and account preferences on this device.",
-        "These are required for shopping, saving designs, and revisiting purchases on the same browser while you are signed in.",
+        "We use essential browser storage for cart lines, wishlist items, local order confirmation on this device, and account/session preferences needed to operate the storefront.",
+        "These technologies are required for shopping, checkout, and revisiting purchases on the same browser.",
       ],
     },
     {
       id: "analytics",
       heading: "Analytics & Marketing Cookies",
       paragraphs: [
-        "No analytics or marketing cookie integrations are present in the current frontend codebase.",
-        "If the client later enables analytics or advertising cookies, this section will be updated with the tools used, purposes, and choices available.",
+        "We do not currently run third-party advertising or analytics cookies on the storefront.",
+        "If we add analytics or advertising tools later, this policy will be updated with the tools used and any choices available to you.",
       ],
     },
     {
@@ -357,14 +400,14 @@ export const cookiePageContent: LegalPageContent = {
       heading: "Your Choices",
       paragraphs: [
         "You can clear site data from your browser settings. Clearing storage removes local cart, wishlist, preferences, and on-device order history.",
-        "A cookie preference center will be added if non-essential cookies are introduced.",
       ],
     },
     {
-      id: "updates",
-      heading: "Updates",
+      id: "contact",
+      heading: "Contact",
       paragraphs: [
-        "This Cookie Policy will be revised when the client’s approved cookie language is provided or when new cookie technologies are added.",
+        "Questions about this Cookie Policy can be sent to:",
+        ...officeLines,
       ],
     },
   ],

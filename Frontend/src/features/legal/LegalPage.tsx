@@ -56,14 +56,20 @@ export function LegalPage({ locale, content, currentHref }: LegalPageProps) {
                   {content.intro}
                 </p>
 
-                <div
-                  className="legalHeroCopy mt-8 border border-line bg-surface px-5 py-5"
-                  role="note"
-                >
-                  <p className="text-body leading-8 text-ink-soft">
-                    {content.pendingNotice}
+                {content.pendingNotice.trim().length > 0 ? (
+                  <div
+                    className="legalHeroCopy mt-8 border border-line bg-surface px-5 py-5"
+                    role="note"
+                  >
+                    <p className="text-body leading-8 text-ink-soft">
+                      {content.pendingNotice}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="legalHeroCopy mt-4 text-meta uppercase tracking-[0.14em] text-ink-soft">
+                    {legalSharedCopy.lastUpdated}
                   </p>
-                </div>
+                )}
 
                 <div className="legalSections mt-14 flex flex-col gap-12">
                   {content.sections.map((section) => (

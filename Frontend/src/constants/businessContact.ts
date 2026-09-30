@@ -3,6 +3,10 @@ export const businessContact = {
   phone: "+923224725253",
   phoneDisplay: "+92 322 4725253",
   whatsappE164: "923224725253",
+  address:
+    "Kashmir Block, Hussain Chamber, 1st Floor, Office 16, Chona Mandi Chowk, Azam Cloth Market, Lahore",
+  brandLegalName: "Chand Designer / Azam Cloth Design",
+  website: "https://embdesigens.com",
 } as const;
 
 export function businessMailtoHref(): string {

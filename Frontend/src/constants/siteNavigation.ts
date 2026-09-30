@@ -27,6 +27,7 @@ export const privacyHref = "/privacy";
 export const licensingHref = "/licensing";
 export const refundPolicyHref = "/refund-policy";
 export const cookiePolicyHref = "/cookie-policy";
+export const shippingPolicyHref = "/shipping-policy";
 
 export function orderDetailPath(orderId: string): string {
   return `/orders/${orderId}`;

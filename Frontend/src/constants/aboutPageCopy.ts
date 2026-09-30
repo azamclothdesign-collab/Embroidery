@@ -114,6 +114,29 @@ export const aboutPageCopy = {
   supportBody:
     "Whether you're unsure about a file format or having trouble accessing your purchase, we're here to help.",
   contactSupport: "Contact Support",
+  businessEyebrow: "Business Model",
+  businessHeading: "How Chand Designer Works.",
+  businessBody:
+    "We are an online embroidery design store based in Lahore. Customers browse digital designs, pay securely at checkout, and receive embroidery ZIP files instantly — no physical products are shipped.",
+  businessPoints: [
+    {
+      title: "What we sell",
+      body: "Digitized embroidery design files packaged as ZIP downloads for machine embroidery.",
+    },
+    {
+      title: "How payment works",
+      body: "You select designs, enter contact details at checkout, and pay through our online payment gateway. Successful payment unlocks your downloads.",
+    },
+    {
+      title: "How delivery works",
+      body: "Delivery is 100% digital. After payment confirmation, ZIP packages appear on your order success page for immediate download.",
+    },
+    {
+      title: "Where we operate",
+      body: "Support and business operations are handled from our office in Azam Cloth Market, Lahore, via email, WhatsApp, and the contact form.",
+    },
+  ] as const,
+  officeHeading: "Office & Contact",
   proofHeading: "Made for People Who Love to Create.",
   proofBody: "Loved by embroidery enthusiasts and makers.",
   communityEyebrow: "Made by You",
