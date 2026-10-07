@@ -23,6 +23,8 @@ PayFast sandbox UAT checklist
 
 4) Test checkout on https://embdesigens.com
    - Add a design → Checkout → fill contact → Pay
+   - Browser must redirect to ipguat.apps.net.pk (if stuck on “Processing”,
+     redeploy Frontend so CSP form-action allows https://*.apps.net.pk)
    - On PayFast page use DEMO details from PayFast email:
        Bank Name: Demo Bank
        Account No: 12353940226802034243

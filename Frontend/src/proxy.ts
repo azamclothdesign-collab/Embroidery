@@ -27,7 +27,8 @@ function createContentSecurityPolicy(nonce: string, apiBaseUrl: string): string 
     connectSrc,
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    // PayFast hosted checkout posts the browser form off-site.
+    "form-action 'self' https://*.apps.net.pk",
     "frame-ancestors 'none'",
     ...(isDev ? [] : ["upgrade-insecure-requests"]),
   ].join("; ");
