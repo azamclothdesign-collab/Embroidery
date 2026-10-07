@@ -1,21 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useId } from "react";
+import Link from "next/link";
 
 import { CheckIcon } from "@/components/icons/CheckIcon";
+import { LockIcon } from "@/components/icons/LockIcon";
 import { TextButton } from "@/components/TextButton";
 import { cartCopy } from "@/constants/cartCopy";
+import { checkoutCopy } from "@/constants/checkoutCopy";
 import { formatShopPrice } from "@/constants/shopCatalog";
-import { checkoutHref } from "@/constants/siteNavigation";
+import {
+  licensingHref,
+  privacyHref,
+  termsHref,
+} from "@/constants/siteNavigation";
 import { CartCoupon } from "@/features/cart/CartCoupon";
+import { CheckoutContact } from "@/features/checkout/CheckoutContact";
+import { type CheckoutPayState } from "@/features/checkout/CheckoutActions";
 
 type CartSummaryProps = {
   locale: string;
   subtotalCents: number;
   discountCents: number;
   onDiscountChange: (discountCents: number) => void;
-  canCheckout: boolean;
+  canPay: boolean;
+  payState: CheckoutPayState;
+  onPay: () => void;
+  contactName: string;
+  email: string;
+  phone: string;
+  onContactNameChange: (value: string) => void;
+  onEmailChange: (value: string) => void;
+  onPhoneChange: (value: string) => void;
+  onContactValidChange: (isValid: boolean) => void;
+  termsAccepted: boolean;
+  onTermsChange: (accepted: boolean) => void;
+  gatewayReady: boolean;
+  gatewayEnabled: boolean;
+  payError: string | null;
 };
 
 export function CartSummary({
@@ -23,11 +45,29 @@ export function CartSummary({
   subtotalCents,
   discountCents,
   onDiscountChange,
-  canCheckout,
+  canPay,
+  payState,
+  onPay,
+  contactName,
+  email,
+  phone,
+  onContactNameChange,
+  onEmailChange,
+  onPhoneChange,
+  onContactValidChange,
+  termsAccepted,
+  onTermsChange,
+  gatewayReady,
+  gatewayEnabled,
+  payError,
 }: CartSummaryProps) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const termsId = useId();
   const totalCents = Math.max(0, subtotalCents - discountCents);
+  const totalLabel = formatShopPrice(totalCents);
+  const label =
+    payState === "processing"
+      ? cartCopy.checkoutLoading
+      : `${cartCopy.checkout} ${totalLabel} ${cartCopy.checkoutSecurely}`;
 
   return (
     <aside
@@ -62,22 +102,87 @@ export function CartSummary({
       <div className="mt-6">
         <CartCoupon onAppliedChange={onDiscountChange} />
       </div>
+
+      <div className="mt-8 border-t border-line pt-8">
+        <CheckoutContact
+          locale={locale}
+          contactName={contactName}
+          email={email}
+          phone={phone}
+          onContactNameChange={onContactNameChange}
+          onEmailChange={onEmailChange}
+          onPhoneChange={onPhoneChange}
+          onValidityChange={onContactValidChange}
+        />
+      </div>
+
+      <div className="mt-8 border-t border-line pt-8">
+        <p className="text-meta uppercase tracking-[0.14em] text-ink-soft">
+          {checkoutCopy.paymentMethod}
+        </p>
+        <p className="mt-3 text-body text-ink">{checkoutCopy.paymentPayFast}</p>
+        {!gatewayReady ? (
+          <p className="mt-3 text-meta leading-6 text-ink-soft">
+            {checkoutCopy.paymentChecking}
+          </p>
+        ) : gatewayEnabled ? (
+          <p className="mt-3 text-meta leading-6 text-ink-soft">
+            {checkoutCopy.paymentPayFastBody}
+          </p>
+        ) : (
+          <p className="mt-3 text-meta leading-6 text-ink-soft">
+            {cartCopy.paymentGatewayOff}
+          </p>
+        )}
+      </div>
+
+      <div className="mt-8 flex items-start gap-3">
+        <input
+          id={termsId}
+          type="checkbox"
+          checked={termsAccepted}
+          className="mt-1 size-4 accent-ink"
+          onChange={(event) => {
+            onTermsChange(event.target.checked);
+          }}
+        />
+        <label htmlFor={termsId} className="text-meta leading-6 text-ink-soft">
+          {cartCopy.termsLabel}{" "}
+          <Link
+            href={`/${locale}${termsHref}`}
+            className="text-ink underline-offset-4 hover:underline"
+          >
+            {cartCopy.terms}
+          </Link>
+          ,{" "}
+          <Link
+            href={`/${locale}${privacyHref}`}
+            className="text-ink underline-offset-4 hover:underline"
+          >
+            {cartCopy.privacy}
+          </Link>
+          ,{" "}
+          <Link
+            href={`/${locale}${licensingHref}`}
+            className="text-ink underline-offset-4 hover:underline"
+          >
+            {cartCopy.licensing}
+          </Link>
+          .
+        </label>
+      </div>
+
+      {payError === null ? null : (
+        <p className="mt-6 text-meta leading-6 text-ink-soft">{payError}</p>
+      )}
+
       <div className="mt-8">
         <TextButton
           className="h-[3.625rem] w-full min-h-[3.625rem]"
-          disabled={!canCheckout || isLoading}
-          onClick={() => {
-            if (!canCheckout || isLoading) {
-              return;
-            }
-
-            setIsLoading(true);
-            window.setTimeout(() => {
-              router.push(`/${locale}${checkoutHref}`);
-            }, 700);
-          }}
+          disabled={!canPay || payState === "processing"}
+          onClick={onPay}
         >
-          {isLoading ? cartCopy.checkoutLoading : `${cartCopy.checkout} →`}
+          {label}
         </TextButton>
       </div>
       <p className="mt-5 text-meta leading-6 text-ink-soft">{cartCopy.digitalNotice}</p>
@@ -96,7 +201,8 @@ export function CartSummary({
         </li>
       </ul>
       <div className="mt-8 border-t border-line pt-6">
-        <p className="text-meta uppercase tracking-[0.14em] text-ink">
+        <p className="inline-flex items-center gap-2 text-meta uppercase tracking-[0.14em] text-ink">
+          <LockIcon />
           {cartCopy.secureCheckout}
         </p>
         <p className="mt-2 text-meta leading-6 text-ink-soft">{cartCopy.secureBody}</p>

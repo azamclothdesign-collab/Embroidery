@@ -13,8 +13,18 @@ export const cartCopy = {
   subtotal: "Subtotal",
   discount: "Discount",
   total: "Total",
-  checkout: "Continue to Pay",
-  checkoutLoading: "Preparing secure checkout...",
+  checkout: "Pay",
+  checkoutSecurely: "Securely",
+  checkoutLoading: "Redirecting to PayFast…",
+  paymentGatewayOff:
+    "Online payments are temporarily unavailable. Please try again later or contact support.",
+  paymentFailedBody:
+    "We couldn't start PayFast checkout. Your order has not been charged.",
+  termsLabel:
+    "I agree to the Terms & Conditions and understand this is a digital product — I pay, then download a ZIP.",
+  terms: "Terms",
+  privacy: "Privacy",
+  licensing: "Licensing",
   securePayment: "Secure payment",
   instantDelivery: "Instant ZIP download after payment",
   downloadAfter: "Download files after purchase",

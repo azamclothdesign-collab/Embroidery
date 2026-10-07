@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { SiteHeader } from "@/components/SiteHeader";
 import { checkoutCopy } from "@/constants/checkoutCopy";
-import { cartHref, checkoutHref } from "@/constants/siteNavigation";
+import { cartHref } from "@/constants/siteNavigation";
 import { confirmPayFastPaymentAction } from "@/server/actions/orderActions";
 
 type RouteProps = {
@@ -55,7 +55,7 @@ export default async function PayFastFailureRoute({
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
-            href={`/${locale}${checkoutHref}`}
+            href={`/${locale}${cartHref}`}
             className="inline-flex min-h-11 items-center justify-center bg-ink px-5 text-meta uppercase tracking-[0.14em] text-paper"
           >
             {checkoutCopy.tryAgain}

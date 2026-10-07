@@ -61,7 +61,7 @@ export const checkoutCopy = {
   licensing: "Licensing",
   paySecurely: "Pay",
   paySecurelySuffix: "Securely",
-  processing: "Processing Payment…",
+  processing: "Redirecting to PayFast…",
   paymentFailed: "Payment failed — Try Again",
   paymentFailedHeading: "Payment Couldn't Be Completed",
   paymentFailedBody:

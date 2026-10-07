@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useCallback, useMemo, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { TextButton } from "@/components/TextButton";
@@ -13,8 +13,14 @@ import { CartLineItem } from "@/features/cart/CartLineItem";
 import { CartStickyBar } from "@/features/cart/CartStickyBar";
 import { CartSummary } from "@/features/cart/CartSummary";
 import { CartToast } from "@/features/cart/CartToast";
+import { type CheckoutPayState } from "@/features/checkout/CheckoutActions";
+import {
+  type CheckoutOverlayPhase,
+  CheckoutProcessingOverlay,
+} from "@/features/checkout/CheckoutProcessingOverlay";
 import { useCartLines, useCartLinesReady } from "@/hooks/useCartLines";
 import { applyWishlistSnapshot } from "@/hooks/useWishlistItems";
+import { submitPayFastForm } from "@/lib/payments/submitPayFastForm";
 import {
   cartHasValidationIssues,
   resolveCartDisplayLines,
@@ -29,6 +35,11 @@ import {
   removeCartLineAction,
   updateCartAction,
 } from "@/server/actions/cartActions";
+import {
+  createOrderAction,
+  getPaymentGatewayStatusAction,
+  initPayFastPaymentAction,
+} from "@/server/actions/orderActions";
 import { addWishlistItemAction } from "@/server/actions/wishlistActions";
 
 type CartBodyProps = {
@@ -49,14 +60,94 @@ export function CartBody({ locale, hero, explore, trust }: CartBodyProps) {
   const [toastAction, setToastAction] = useState<string | undefined>(undefined);
   const [undoLine, setUndoLine] = useState<CartLine | null>(null);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [contactName, setContactName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [contactValid, setContactValid] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [payState, setPayState] = useState<CheckoutPayState>("idle");
+  const [overlayPhase, setOverlayPhase] =
+    useState<CheckoutOverlayPhase>("hidden");
+  const [gatewayEnabled, setGatewayEnabled] = useState(false);
+  const [gatewayReady, setGatewayReady] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
   const totalCents = Math.max(0, subtotalCents - discountCents);
-  const canCheckout = displayLines.length > 0 && !hasIssues;
+  const canPay =
+    displayLines.length > 0 &&
+    !hasIssues &&
+    contactValid &&
+    termsAccepted &&
+    gatewayEnabled &&
+    payState !== "processing";
 
   const hideToast = useCallback(() => {
     setToastMessage(null);
     setToastAction(undefined);
     setUndoLine(null);
   }, []);
+
+  const onContactValidChange = useCallback((isValid: boolean) => {
+    setContactValid(isValid);
+  }, []);
+
+  useEffect(() => {
+    void getPaymentGatewayStatusAction().then((status) => {
+      setGatewayEnabled(status.enabled);
+      setGatewayReady(true);
+    });
+  }, []);
+
+  const onPay = () => {
+    if (!canPay) {
+      return;
+    }
+
+    setPayError(null);
+    setPayState("processing");
+    setOverlayPhase("processing");
+
+    void createOrderAction({
+      email: email.trim(),
+      contactName: contactName.trim(),
+      phone: phone.trim(),
+      lines: displayLines.map((line) => ({
+        slug: line.slug,
+        pdpSlug: line.pdpSlug,
+        name: line.name,
+        priceCents: line.priceCents,
+        imageSrc: line.imageSrc,
+        imageAlt: line.imageAlt,
+      })),
+      totalCents,
+      discountCents,
+    }).then(async (result) => {
+      if (!result.ok) {
+        setPayState("idle");
+        setOverlayPhase("hidden");
+        setPayError(cartCopy.paymentFailedBody);
+        return;
+      }
+
+      const init = await initPayFastPaymentAction({
+        orderId: result.order.id,
+        locale,
+      });
+
+      if (!init.ok) {
+        setPayState("idle");
+        setOverlayPhase("hidden");
+        setPayError(
+          init.error === "gateway_disabled"
+            ? cartCopy.paymentGatewayOff
+            : cartCopy.paymentFailedBody,
+        );
+        return;
+      }
+
+      setOverlayPhase("confirmed");
+      submitPayFastForm(init.checkout.checkoutUrl, init.checkout.fields);
+    });
+  };
 
   if (!cartReady) {
     return (
@@ -192,15 +283,30 @@ export function CartBody({ locale, hero, explore, trust }: CartBodyProps) {
           subtotalCents={subtotalCents}
           discountCents={discountCents}
           onDiscountChange={setDiscountCents}
-          canCheckout={canCheckout}
+          canPay={canPay}
+          payState={payState}
+          onPay={onPay}
+          contactName={contactName}
+          email={email}
+          phone={phone}
+          onContactNameChange={setContactName}
+          onEmailChange={setEmail}
+          onPhoneChange={setPhone}
+          onContactValidChange={onContactValidChange}
+          termsAccepted={termsAccepted}
+          onTermsChange={setTermsAccepted}
+          gatewayReady={gatewayReady}
+          gatewayEnabled={gatewayEnabled}
+          payError={payError}
         />
       </div>
       {explore}
       {trust}
       <CartStickyBar
-        locale={locale}
         totalCents={totalCents}
-        canCheckout={canCheckout}
+        canPay={canPay}
+        payState={payState}
+        onPay={onPay}
       />
       <CartToast
         message={toastMessage}
@@ -224,6 +330,7 @@ export function CartBody({ locale, hero, explore, trust }: CartBodyProps) {
           setIsWishlistOpen(false);
         }}
       />
+      <CheckoutProcessingOverlay phase={overlayPhase} />
     </>
   );
 }
