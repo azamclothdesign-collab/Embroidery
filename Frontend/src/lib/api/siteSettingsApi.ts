@@ -5,6 +5,7 @@ import {
   type SiteGlobalSettings,
   type SiteHomeSettings,
   type SitePagesSettings,
+  type SitePaymentsSettings,
 } from "@/types/api/siteSettings";
 
 import "server-only";
@@ -13,6 +14,7 @@ type GlobalResponse = { settings: SiteGlobalSettings };
 type HomeResponse = { settings: SiteHomeSettings };
 type FaqsResponse = { settings: SiteFaqsSettings };
 type PagesResponse = { settings: SitePagesSettings };
+type PaymentsResponse = { settings: SitePaymentsSettings };
 
 export async function fetchSiteGlobal(): Promise<SiteGlobalSettings> {
   const data = await requestApiJsonWithContext<GlobalResponse>({
@@ -99,6 +101,29 @@ export async function updateSitePages(
   const data = await requestApiJsonWithContext<PagesResponse>({
     method: "PUT",
     path: apiRoutes.adminSite.pages,
+    body: settings,
+    cacheStrategy: { cache: "no-store" },
+  });
+
+  return data.settings;
+}
+
+export async function fetchSitePayments(): Promise<SitePaymentsSettings> {
+  const data = await requestApiJsonWithContext<PaymentsResponse>({
+    method: "GET",
+    path: apiRoutes.adminSite.payments,
+    cacheStrategy: { cache: "no-store" },
+  });
+
+  return data.settings;
+}
+
+export async function updateSitePayments(
+  settings: SitePaymentsSettings,
+): Promise<SitePaymentsSettings> {
+  const data = await requestApiJsonWithContext<PaymentsResponse>({
+    method: "PUT",
+    path: apiRoutes.adminSite.payments,
     body: settings,
     cacheStrategy: { cache: "no-store" },
   });

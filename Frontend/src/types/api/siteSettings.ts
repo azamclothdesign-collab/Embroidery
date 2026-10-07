@@ -45,3 +45,17 @@ export type SitePageItem = {
 export type SitePagesSettings = {
   pages: SitePageItem[];
 };
+
+export type SitePaymentsSettings = {
+  gatewayEnabled: boolean;
+  provider: "payfast";
+  mode: "sandbox" | "live";
+  merchantId: string;
+  securedKey: string;
+  merchantName: string;
+  tokenUrl: string;
+  checkoutUrl: string;
+  successPath: string;
+  failurePath: string;
+  hasSecuredKey?: boolean;
+};

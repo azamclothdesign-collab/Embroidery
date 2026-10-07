@@ -35,6 +35,9 @@ const authActionVerbs: Record<string, string> = {
   upload: "POST",
   package: "POST",
   download: "POST",
+  init: "POST",
+  confirm: "POST",
+  status: "GET",
 };
 
 export type ResolvedRoute = {

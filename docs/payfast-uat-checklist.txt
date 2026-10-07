@@ -1,0 +1,42 @@
+PayFast sandbox UAT checklist
+=============================
+
+1) Deploy
+   cd /var/www/embroidery
+   git pull --ff-only origin main
+   cd Database && npm run migrate
+   cd ../Backend && npm install && pm2 restart embroidery-api --update-env
+   cd ../Frontend && npm install && npm run build
+   cd .. && pm2 restart embroidery-web --update-env && pm2 save
+
+2) Optional Backend/.env
+   APP_PUBLIC_ORIGIN=https://embdesigens.com
+
+3) Admin → Settings → Payments (or /en/admin/settings/payments)
+   - Merchant ID: 14833
+   - Merchant Name: Designer
+   - Secured Key: (from PayFast email)
+   - Mode: Sandbox
+   - Leave Token/Checkout URLs as defaults
+   - Turn Payment gateway ENABLED on
+   - Save
+
+4) Test checkout on https://embdesigens.com
+   - Add a design → Checkout → fill contact → Pay
+   - On PayFast page use DEMO details from PayFast email:
+       Bank Name: Demo Bank
+       Account No: 12353940226802034243
+       NIC: 4210131315089
+       OTP: 123456
+   - Do NOT use real card/bank details
+
+5) After success
+   - Copy the order id (e.g. FLB-xxxxx) from the success URL/page
+   - Paste it into PayFast signup field "Test Order ID"
+
+6) Toggle test
+   - Admin → Payments → turn gateway OFF → Save
+   - Checkout Pay should show unavailable
+   - Turn ON again when ready
+
+Recipients for questions: cs@gopayfast.com / 021-37132793

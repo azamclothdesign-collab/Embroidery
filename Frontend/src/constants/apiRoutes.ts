@@ -57,6 +57,12 @@ export const apiRoutes = {
     home: "/admin/site/home",
     pages: "/admin/site/pages",
     faqs: "/admin/site/faqs",
+    payments: "/admin/site/payments",
+  },
+  payments: {
+    status: "/payments/status",
+    payfastInit: "/payments/payfast/init",
+    payfastConfirm: "/payments/payfast/confirm",
   },
   adminMedia: {
     upload: "/admin/media/upload",

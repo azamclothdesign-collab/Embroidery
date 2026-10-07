@@ -1,6 +1,10 @@
 import { pool } from "../../pool.js";
 
-import { type OrderLine, type OrderRecord } from "../../../../types/order.js";
+import {
+  type OrderLine,
+  type OrderPaymentStatus,
+  type OrderRecord,
+} from "../../../../types/order.js";
 
 type OrderRow = {
   id: string;
@@ -9,6 +13,10 @@ type OrderRow = {
   phone: string | null;
   total_cents: number;
   discount_cents: number;
+  payment_status: string;
+  payment_provider: string | null;
+  payment_reference: string | null;
+  paid_at: Date | null;
   created_at: Date;
 };
 
@@ -28,7 +36,16 @@ type OrderLineRow = {
   package_file_name: string | null;
 };
 
-const orderSelect = `id, email, contact_name, phone, total_cents, discount_cents, created_at`;
+const orderSelect = `id, email, contact_name, phone, total_cents, discount_cents,
+  payment_status, payment_provider, payment_reference, paid_at, created_at`;
+
+function mapPaymentStatus(value: string): OrderPaymentStatus {
+  if (value === "paid" || value === "failed") {
+    return value;
+  }
+
+  return "pending";
+}
 
 function mapOrderLine(row: OrderLineRow): OrderLine {
   const line: OrderLine = {
@@ -77,6 +94,7 @@ function mapOrderRow(row: OrderRow, lines: OrderLine[]): OrderRecord {
     createdAt: row.created_at.toISOString(),
     totalCents: row.total_cents,
     discountCents: row.discount_cents,
+    paymentStatus: mapPaymentStatus(row.payment_status),
     lines,
   };
 
@@ -86,6 +104,21 @@ function mapOrderRow(row: OrderRow, lines: OrderLine[]): OrderRecord {
 
   if (row.phone !== null && row.phone.trim().length > 0) {
     order.phone = row.phone;
+  }
+
+  if (row.payment_provider !== null && row.payment_provider.trim().length > 0) {
+    order.paymentProvider = row.payment_provider;
+  }
+
+  if (
+    row.payment_reference !== null &&
+    row.payment_reference.trim().length > 0
+  ) {
+    order.paymentReference = row.payment_reference;
+  }
+
+  if (row.paid_at !== null) {
+    order.paidAt = row.paid_at.toISOString();
   }
 
   return order;
@@ -129,9 +162,7 @@ export async function listAllOrders(): Promise<OrderRecord[]> {
   return orders;
 }
 
-export async function findOrderById(
-  orderId: string,
-): Promise<OrderRecord | null> {
+export async function findOrderById(orderId: string): Promise<OrderRecord | null> {
   const result = await pool.query<OrderRow>(
     `SELECT ${orderSelect}
      FROM orders
@@ -145,19 +176,18 @@ export async function findOrderById(
     return null;
   }
 
-  const lines = await loadOrderLines(orderId);
+  const lines = await loadOrderLines(row.id);
   return mapOrderRow(row, lines);
 }
 
 export async function findOrderForCustomer(input: {
-  orderId: string;
   customerId: string;
+  orderId: string;
 }): Promise<OrderRecord | null> {
   const result = await pool.query<OrderRow>(
     `SELECT ${orderSelect}
      FROM orders
-     WHERE id = $1
-       AND customer_id = $2`,
+     WHERE id = $1 AND customer_id = $2`,
     [input.orderId, input.customerId],
   );
 
@@ -167,7 +197,7 @@ export async function findOrderForCustomer(input: {
     return null;
   }
 
-  const lines = await loadOrderLines(input.orderId);
+  const lines = await loadOrderLines(row.id);
   return mapOrderRow(row, lines);
 }
 
@@ -180,16 +210,20 @@ export async function insertOrder(input: {
   totalCents: number;
   discountCents: number;
   lines: OrderLine[];
+  paymentStatus?: OrderPaymentStatus;
+  paymentProvider?: string;
 }): Promise<OrderRecord> {
   const client = await pool.connect();
+  const paymentStatus = input.paymentStatus ?? "pending";
 
   try {
     await client.query("BEGIN");
 
     await client.query(
       `INSERT INTO orders (
-         id, customer_id, email, contact_name, phone, total_cents, discount_cents
-       ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+         id, customer_id, email, contact_name, phone, total_cents, discount_cents,
+         payment_status, payment_provider
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
         input.id,
         input.customerId ?? null,
@@ -198,6 +232,8 @@ export async function insertOrder(input: {
         input.phone,
         input.totalCents,
         input.discountCents,
+        paymentStatus,
+        input.paymentProvider ?? null,
       ],
     );
 
@@ -242,6 +278,37 @@ export async function insertOrder(input: {
   }
 
   return order;
+}
+
+export async function updateOrderPayment(input: {
+  orderId: string;
+  paymentStatus: OrderPaymentStatus;
+  paymentProvider?: string;
+  paymentReference?: string;
+}): Promise<OrderRecord | null> {
+  const paidAt =
+    input.paymentStatus === "paid" ? new Date().toISOString() : null;
+
+  await pool.query(
+    `UPDATE orders
+     SET payment_status = $2,
+         payment_provider = COALESCE($3, payment_provider),
+         payment_reference = COALESCE($4, payment_reference),
+         paid_at = CASE
+           WHEN $2 = 'paid' THEN COALESCE(paid_at, $5::timestamptz)
+           ELSE paid_at
+         END
+     WHERE id = $1`,
+    [
+      input.orderId,
+      input.paymentStatus,
+      input.paymentProvider ?? null,
+      input.paymentReference ?? null,
+      paidAt,
+    ],
+  );
+
+  return findOrderById(input.orderId);
 }
 
 export async function deleteOrder(orderId: string): Promise<boolean> {

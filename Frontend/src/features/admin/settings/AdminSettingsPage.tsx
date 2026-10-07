@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { adminCopy } from "@/constants/adminCopy";
+import { adminPaymentsHref } from "@/constants/adminNav";
 import { updateSiteGlobalAction } from "@/server/actions/adminCatalogActions";
 import { type SiteGlobalSettings } from "@/types/api/siteSettings";
 
@@ -13,7 +15,7 @@ type AdminSettingsPageProps = {
 };
 
 export function AdminSettingsPage({
-  locale: _locale,
+  locale,
   initialSettings,
 }: AdminSettingsPageProps) {
   const [isPending, startTransition] = useTransition();
@@ -21,8 +23,6 @@ export function AdminSettingsPage({
   const [storeEmail, setStoreEmail] = useState(
     initialSettings.contactEmail || "azamclothdesign@gmail.com",
   );
-  const [currency, setCurrency] = useState("USD");
-  const [stripeKey, setStripeKey] = useState("pk_test_...");
   const [orderConfirmation, setOrderConfirmation] = useState(true);
   const [tagline, setTagline] = useState(initialSettings.tagline);
   const [saveLabel, setSaveLabel] = useState<string>(adminCopy.settingsSave);
@@ -112,29 +112,15 @@ export function AdminSettingsPage({
         <h2 className="text-meta uppercase tracking-[0.14em] text-ink-soft">
           {adminCopy.settingsSectionPayments}
         </h2>
-        <div className="flex flex-col gap-4">
-          <label className="flex flex-col gap-2 text-[0.875rem] text-ink">
-            {adminCopy.settingsCurrency}
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              className="min-h-11 border border-line bg-paper px-3 text-body text-ink"
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-2 text-[0.875rem] text-ink">
-            {adminCopy.settingsStripeKey}
-            <input
-              type="text"
-              value={stripeKey}
-              onChange={(e) => setStripeKey(e.target.value)}
-              className="min-h-11 border border-line bg-paper px-3 text-body text-ink"
-            />
-          </label>
-        </div>
+        <p className="text-body leading-8 text-ink-soft">
+          {adminCopy.paymentsBody}
+        </p>
+        <Link
+          href={`/${locale}${adminPaymentsHref}`}
+          className="inline-flex min-h-11 w-fit items-center bg-ink px-5 text-meta uppercase tracking-[0.14em] text-paper"
+        >
+          {adminCopy.paymentsOpenLink}
+        </Link>
       </section>
 
       <section className="flex flex-col gap-6 rounded-2xl border border-line bg-surface p-6">

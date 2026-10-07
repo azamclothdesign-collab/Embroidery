@@ -63,3 +63,18 @@ export const sitePagesSettingsSchema = z
     pages: z.array(sitePageItemSchema),
   })
   .strip();
+
+export const sitePaymentsSettingsSchema = z
+  .object({
+    gatewayEnabled: z.boolean(),
+    provider: z.literal("payfast"),
+    mode: z.enum(["sandbox", "live"]),
+    merchantId: z.string().trim().max(80),
+    securedKey: z.string().trim().max(200),
+    merchantName: z.string().trim().max(120),
+    tokenUrl: z.string().trim().max(500),
+    checkoutUrl: z.string().trim().max(500),
+    successPath: z.string().trim().max(300),
+    failurePath: z.string().trim().max(300),
+  })
+  .strip();

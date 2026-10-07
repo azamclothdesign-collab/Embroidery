@@ -29,9 +29,15 @@ export const checkoutCopy = {
   paymentSecure: "Secure payment",
   paymentMethod: "Payment Method",
   paymentCard: "Card",
+  paymentPayFast: "PayFast",
+  paymentPayFastBody:
+    "You’ll be redirected to PayFast’s secure page to complete payment. Card and bank details are entered only on PayFast.",
+  paymentChecking: "Checking payment availability…",
+  paymentGatewayOff:
+    "Online payments are temporarily unavailable. Please try again later or contact support.",
   paymentProviderPending:
     "Your payment provider's secure checkout will appear here once it is connected. Card details are never entered on this page until then.",
-  paymentReadyHint: "We'll process payment through your connected provider.",
+  paymentReadyHint: "We’ll process payment through PayFast after you click Pay.",
   yourOrder: "Your Order",
   subtotal: "Subtotal",
   discount: "Discount",

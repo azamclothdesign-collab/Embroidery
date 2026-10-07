@@ -9,6 +9,7 @@ const envSchema = z.object({
   RATE_LIMIT_CAPACITY: z.coerce.number().positive().default(120),
   RATE_LIMIT_REFILL_PER_SECOND: z.coerce.number().positive().default(2),
   UPLOAD_DIR: z.string().trim().min(1).optional(),
+  APP_PUBLIC_ORIGIN: z.string().trim().url().optional(),
 });
 
 export const env = envSchema.parse({
@@ -20,6 +21,7 @@ export const env = envSchema.parse({
   RATE_LIMIT_CAPACITY: process.env.RATE_LIMIT_CAPACITY,
   RATE_LIMIT_REFILL_PER_SECOND: process.env.RATE_LIMIT_REFILL_PER_SECOND,
   UPLOAD_DIR: process.env.UPLOAD_DIR,
+  APP_PUBLIC_ORIGIN: process.env.APP_PUBLIC_ORIGIN,
 });
 
 export function readAllowedOrigins(): readonly string[] {

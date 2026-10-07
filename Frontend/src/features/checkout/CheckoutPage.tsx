@@ -1,13 +1,11 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { TextLink } from "@/components/TextLink";
 import { checkoutCopy } from "@/constants/checkoutCopy";
 import {
   cartHref,
-  orderSuccessPath,
   shopDesignsHref,
 } from "@/constants/siteNavigation";
 import {
@@ -26,22 +24,43 @@ import { CheckoutProgress } from "@/features/checkout/CheckoutProgress";
 import { CheckoutStickyBar } from "@/features/checkout/CheckoutStickyBar";
 import { CheckoutSummary } from "@/features/checkout/CheckoutSummary";
 import { useCartLines, useCartLinesReady } from "@/hooks/useCartLines";
-import { notifyOrderHistoryUpdated } from "@/hooks/useOrderHistory";
 import {
   cartHasValidationIssues,
   resolveCartDisplayLines,
 } from "@/lib/session/cartDisplay";
-import { cartSubtotalCents, notifyCartUpdated } from "@/lib/session/cartSession";
-import { type LocalOrder, writeLocalOrder } from "@/lib/session/orderSession";
-import { clearCartAction } from "@/server/actions/cartActions";
-import { createOrderAction } from "@/server/actions/orderActions";
+import { cartSubtotalCents } from "@/lib/session/cartSession";
+import {
+  createOrderAction,
+  getPaymentGatewayStatusAction,
+  initPayFastPaymentAction,
+} from "@/server/actions/orderActions";
 
 type CheckoutPageProps = {
   locale: string;
 };
 
+function submitPayFastForm(
+  checkoutUrl: string,
+  fields: Record<string, string>,
+): void {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = checkoutUrl;
+  form.style.display = "none";
+
+  for (const [name, value] of Object.entries(fields)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
+
 export function CheckoutPage({ locale }: CheckoutPageProps) {
-  const router = useRouter();
   const lines = useCartLines();
   const cartReady = useCartLinesReady();
   const displayLines = useMemo(() => resolveCartDisplayLines(lines), [lines]);
@@ -55,13 +74,24 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
   const [discountCents, setDiscountCents] = useState(0);
   const [payState, setPayState] = useState<CheckoutPayState>("idle");
   const [overlayPhase, setOverlayPhase] = useState<CheckoutOverlayPhase>("hidden");
+  const [gatewayEnabled, setGatewayEnabled] = useState(false);
+  const [gatewayReady, setGatewayReady] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
   const totalCents = Math.max(0, subtotalCents - discountCents);
   const canPay =
     displayLines.length > 0 &&
     !hasIssues &&
     contactValid &&
     termsAccepted &&
+    gatewayEnabled &&
     payState !== "processing";
+
+  useEffect(() => {
+    void getPaymentGatewayStatusAction().then((status) => {
+      setGatewayEnabled(status.enabled);
+      setGatewayReady(true);
+    });
+  }, []);
 
   const onContactValid = useCallback((isValid: boolean) => {
     setContactValid(isValid);
@@ -72,55 +102,51 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
       return;
     }
 
+    setPayError(null);
     setPayState("processing");
     setOverlayPhase("processing");
 
-    window.setTimeout(() => {
+    void createOrderAction({
+      email: email.trim(),
+      contactName: contactName.trim(),
+      phone: phone.trim(),
+      lines: displayLines.map((line) => ({
+        slug: line.slug,
+        pdpSlug: line.pdpSlug,
+        name: line.name,
+        priceCents: line.priceCents,
+        imageSrc: line.imageSrc,
+        imageAlt: line.imageAlt,
+      })),
+      totalCents,
+      discountCents,
+    }).then(async (result) => {
+      if (!result.ok) {
+        setPayState("idle");
+        setOverlayPhase("hidden");
+        setPayError(checkoutCopy.paymentFailedBody);
+        return;
+      }
+
+      const init = await initPayFastPaymentAction({
+        orderId: result.order.id,
+        locale,
+      });
+
+      if (!init.ok) {
+        setPayState("idle");
+        setOverlayPhase("hidden");
+        setPayError(
+          init.error === "gateway_disabled"
+            ? checkoutCopy.paymentGatewayOff
+            : checkoutCopy.paymentFailedBody,
+        );
+        return;
+      }
+
       setOverlayPhase("confirmed");
-      window.setTimeout(() => {
-        setOverlayPhase("preparing");
-        window.setTimeout(() => {
-          void createOrderAction({
-            email: email.trim(),
-            contactName: contactName.trim(),
-            phone: phone.trim(),
-            lines: displayLines.map((line) => ({
-              slug: line.slug,
-              pdpSlug: line.pdpSlug,
-              name: line.name,
-              priceCents: line.priceCents,
-              imageSrc: line.imageSrc,
-              imageAlt: line.imageAlt,
-            })),
-            totalCents,
-            discountCents,
-          }).then(async (result) => {
-            if (!result.ok) {
-              setPayState("idle");
-              setOverlayPhase("hidden");
-              return;
-            }
-
-            const order: LocalOrder = {
-              id: result.order.id,
-              email: result.order.email,
-              contactName: result.order.contactName,
-              phone: result.order.phone,
-              createdAt: result.order.createdAt,
-              totalCents: result.order.totalCents,
-              discountCents: result.order.discountCents,
-              lines: result.order.lines,
-            };
-
-            writeLocalOrder(order);
-            await clearCartAction();
-            notifyCartUpdated();
-            notifyOrderHistoryUpdated();
-            router.push(`/${locale}${orderSuccessPath(order.id)}`);
-          });
-        }, 700);
-      }, 650);
-    }, 900);
+      submitPayFastForm(init.checkout.checkoutUrl, init.checkout.fields);
+    });
   };
 
   if (!cartReady) {
@@ -128,13 +154,13 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
       <>
         <CheckoutHeader locale={locale} />
         <section className="mx-auto w-full max-w-xl px-6 py-20 text-center">
-          <p className="text-body text-ink-soft">Loading checkout…</p>
+          <p className="text-body text-ink-soft">{checkoutCopy.processing}</p>
         </section>
       </>
     );
   }
 
-  if (lines.length === 0) {
+  if (displayLines.length === 0) {
     return (
       <>
         <CheckoutHeader locale={locale} />
@@ -175,7 +201,13 @@ export function CheckoutPage({ locale }: CheckoutPageProps) {
             onPhoneChange={setPhone}
             onValidityChange={onContactValid}
           />
-          <CheckoutPayment />
+          <CheckoutPayment
+            gatewayEnabled={gatewayEnabled}
+            gatewayReady={gatewayReady}
+          />
+          {payError === null ? null : (
+            <p className="mt-6 text-body text-ink-soft">{payError}</p>
+          )}
           <div id="checkout-actions">
             <CheckoutActions
               locale={locale}

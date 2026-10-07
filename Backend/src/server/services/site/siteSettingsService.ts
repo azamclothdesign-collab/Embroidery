@@ -7,6 +7,7 @@ import {
   type SiteGlobalSettings,
   type SiteHomeSettings,
   type SitePagesSettings,
+  type SitePaymentsSettings,
   type SiteSettingsKey,
 } from "../../../types/siteSettings.js";
 import { businessContact } from "../../../constants/businessContact.js";
@@ -70,6 +71,21 @@ const defaultPagesSettings: SitePagesSettings = {
       visible: true,
     },
   ],
+};
+
+export const defaultPaymentsSettings: SitePaymentsSettings = {
+  gatewayEnabled: false,
+  provider: "payfast",
+  mode: "sandbox",
+  merchantId: "",
+  securedKey: "",
+  merchantName: "Designer",
+  tokenUrl:
+    "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken",
+  checkoutUrl:
+    "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/PostTransaction",
+  successPath: "/checkout/payfast/success",
+  failurePath: "/checkout/payfast/failure",
 };
 
 function requireAdmin(adminUserId?: string): string {
@@ -154,6 +170,55 @@ function normalizeHome(value: unknown): SiteHomeSettings {
   };
 }
 
+export function normalizePayments(value: unknown): SitePaymentsSettings {
+  const record = asRecord(value);
+  const modeRaw = readString(record, "mode");
+  const mode = modeRaw === "live" ? "live" : "sandbox";
+
+  return {
+    gatewayEnabled: record.gatewayEnabled === true,
+    provider: "payfast",
+    mode,
+    merchantId: readString(record, "merchantId"),
+    securedKey: readString(record, "securedKey"),
+    merchantName:
+      readString(record, "merchantName") || defaultPaymentsSettings.merchantName,
+    tokenUrl:
+      readString(record, "tokenUrl") || defaultPaymentsSettings.tokenUrl,
+    checkoutUrl:
+      readString(record, "checkoutUrl") || defaultPaymentsSettings.checkoutUrl,
+    successPath:
+      readString(record, "successPath") || defaultPaymentsSettings.successPath,
+    failurePath:
+      readString(record, "failurePath") || defaultPaymentsSettings.failurePath,
+  };
+}
+
+export function paymentsConfigured(settings: SitePaymentsSettings): boolean {
+  return (
+    settings.merchantId.trim().length > 0 &&
+    settings.securedKey.trim().length > 0 &&
+    settings.merchantName.trim().length > 0 &&
+    settings.tokenUrl.trim().length > 0 &&
+    settings.checkoutUrl.trim().length > 0
+  );
+}
+
+export function toAdminPaymentsView(settings: SitePaymentsSettings): {
+  settings: Omit<SitePaymentsSettings, "securedKey"> & {
+    securedKey: string;
+    hasSecuredKey: boolean;
+  };
+} {
+  return {
+    settings: {
+      ...settings,
+      securedKey: "",
+      hasSecuredKey: settings.securedKey.trim().length > 0,
+    },
+  };
+}
+
 export async function getSiteSettings<TValue>(
   key: SiteSettingsKey,
 ): Promise<TValue> {
@@ -165,6 +230,10 @@ export async function getSiteSettings<TValue>(
 
   if (key === "home") {
     return normalizeHome(value ?? defaultHomeSettings) as TValue;
+  }
+
+  if (key === "payments") {
+    return normalizePayments(value ?? defaultPaymentsSettings) as TValue;
   }
 
   if (value === null) {
@@ -193,6 +262,17 @@ export async function putSiteSettings<TValue>(input: {
   if (input.key === "home") {
     const normalized = normalizeHome(input.value);
     return (await writeSiteSettings(input.key, normalized)) as TValue;
+  }
+
+  if (input.key === "payments") {
+    const incoming = normalizePayments(input.value);
+    const existing = await getSiteSettings<SitePaymentsSettings>("payments");
+
+    if (incoming.securedKey.trim().length === 0) {
+      incoming.securedKey = existing.securedKey;
+    }
+
+    return (await writeSiteSettings(input.key, incoming)) as TValue;
   }
 
   return writeSiteSettings(input.key, input.value);

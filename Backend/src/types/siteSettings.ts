@@ -1,4 +1,4 @@
-export type SiteSettingsKey = "global" | "home" | "faqs" | "pages";
+export type SiteSettingsKey = "global" | "home" | "faqs" | "pages" | "payments";
 
 export type SiteGlobalSettings = {
   brandName: string;
@@ -8,6 +8,19 @@ export type SiteGlobalSettings = {
   contactAddress: string;
   instagram: string;
   pinterest: string;
+};
+
+export type SitePaymentsSettings = {
+  gatewayEnabled: boolean;
+  provider: "payfast";
+  mode: "sandbox" | "live";
+  merchantId: string;
+  securedKey: string;
+  merchantName: string;
+  tokenUrl: string;
+  checkoutUrl: string;
+  successPath: string;
+  failurePath: string;
 };
 
 export type SiteHomeSection = {

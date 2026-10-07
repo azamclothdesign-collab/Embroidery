@@ -105,10 +105,20 @@ export async function getAdminOrCustomerOrder(input: {
     return order;
   }
 
-  return getCustomerOrder({
-    customerId: input.customerId,
-    orderId: input.orderId,
-  });
+  if (input.customerId !== undefined) {
+    return getCustomerOrder({
+      customerId: input.customerId,
+      orderId: input.orderId,
+    });
+  }
+
+  const guestOrder = await findOrderById(input.orderId);
+
+  if (guestOrder === null) {
+    throw new ServiceError(404, "not_found", "Order not found");
+  }
+
+  return guestOrder;
 }
 
 export async function createOrder(input: {
@@ -138,6 +148,7 @@ export async function createOrder(input: {
     totalCents: computedTotal - input.discountCents,
     discountCents: input.discountCents,
     lines: orderLines,
+    paymentStatus: "pending",
     ...(input.customerId !== undefined ? { customerId: input.customerId } : {}),
   });
 }
@@ -167,6 +178,14 @@ export async function downloadPurchasedPackage(input: {
     }
 
     order = guestOrder;
+  }
+
+  if (order.paymentStatus !== "paid") {
+    throw new ServiceError(
+      402,
+      "payment_required",
+      "Payment is required before download",
+    );
   }
 
   const line = order.lines.find(

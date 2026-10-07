@@ -18,6 +18,7 @@ export const adminSiteHomeHref = "/admin/site/home";
 export const adminSitePagesHref = "/admin/site/pages";
 export const adminSiteFaqsHref = "/admin/site/faqs";
 export const adminSiteGlobalHref = "/admin/site/global";
+export const adminPaymentsHref = "/admin/settings/payments";
 
 export function adminProductEditHref(
   slug: string,

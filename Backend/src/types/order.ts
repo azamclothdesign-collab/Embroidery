@@ -14,6 +14,8 @@ export type OrderLine = {
   packageFileName?: string | undefined;
 };
 
+export type OrderPaymentStatus = "pending" | "paid" | "failed";
+
 export type OrderRecord = {
   id: string;
   email: string;
@@ -22,5 +24,9 @@ export type OrderRecord = {
   createdAt: string;
   totalCents: number;
   discountCents: number;
+  paymentStatus: OrderPaymentStatus;
+  paymentProvider?: string | undefined;
+  paymentReference?: string | undefined;
+  paidAt?: string | undefined;
   lines: OrderLine[];
 };
