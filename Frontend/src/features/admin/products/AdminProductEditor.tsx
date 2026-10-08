@@ -559,7 +559,7 @@ export function AdminProductEditor({
           </p>
           <p className="mt-3 text-[1.125rem] font-medium text-ink">
             {price.trim().length > 0
-              ? `$${price}`
+              ? formatShopPrice(Math.round(Number.parseFloat(price) * 100) || 0)
               : product === undefined
                 ? adminCopy.emDash
                 : formatShopPrice(product.priceCents)}

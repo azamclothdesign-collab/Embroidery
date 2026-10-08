@@ -133,7 +133,7 @@ export const aboutPageCopy = {
     },
     {
       title: "Where we operate",
-      body: "Support and business operations are handled from our office in Azam Cloth Market, Lahore, via email, WhatsApp, and the contact form.",
+      body: "Support and business operations are handled from our shop at 2381-F, Shop No. 12, Chuna Mandi, Lahore, via email, WhatsApp, and the contact form.",
     },
   ] as const,
   officeHeading: "Office & Contact",

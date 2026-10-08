@@ -21,7 +21,7 @@ type AdminOverviewPageProps = {
 };
 
 function formatMoney(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatShopPrice(cents);
 }
 
 export function AdminOverviewPage({

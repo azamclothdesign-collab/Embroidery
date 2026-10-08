@@ -1,6 +1,5 @@
 export const businessContact = {
   email: "azamclothdesign@gmail.com",
   phone: "+923224725253",
-  address:
-    "Kashmir Block, Hussain Chamber, 1st Floor, Office 16, Chona Mandi Chowk, Azam Cloth Market, Lahore",
+  address: "2381-F, Shop No. 12, Chuna Mandi, Lahore",
 } as const;

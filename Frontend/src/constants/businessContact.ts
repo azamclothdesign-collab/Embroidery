@@ -3,8 +3,7 @@ export const businessContact = {
   phone: "+923224725253",
   phoneDisplay: "+92 322 4725253",
   whatsappE164: "923224725253",
-  address:
-    "Kashmir Block, Hussain Chamber, 1st Floor, Office 16, Chona Mandi Chowk, Azam Cloth Market, Lahore",
+  address: "2381-F, Shop No. 12, Chuna Mandi, Lahore",
   brandLegalName: "Chand Designer / Azam Cloth Design",
   website: "https://embdesigens.com",
 } as const;

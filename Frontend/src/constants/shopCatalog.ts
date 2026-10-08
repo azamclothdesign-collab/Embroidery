@@ -82,7 +82,12 @@ export const machineCompatibilityHref = "/machine-compatibility";
 export const shopRecentSearchesKey = "embroidery-shop-recent-searches";
 
 export function formatShopPrice(priceCents: number): string {
-  return `$${(priceCents / 100).toFixed(2)}`;
+  return new Intl.NumberFormat("en-PK", {
+    style: "currency",
+    currency: "PKR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(priceCents / 100);
 }
 
 export function formatDesignCount(count: number): string {

@@ -146,7 +146,7 @@ export const adminCopy = {
   productsName: "Name",
   productsDescription: "Description",
   productsCategory: "Category",
-  productsPrice: "Price",
+  productsPrice: "Price (PKR)",
   productsFormat: "Package",
   productsVersion: "Version",
   productsSize: "Size",
