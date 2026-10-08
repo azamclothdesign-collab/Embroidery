@@ -109,6 +109,25 @@ function readString(record: Record<string, unknown>, key: string): string {
   return typeof value === "string" ? value : "";
 }
 
+function resolveContactAddress(stored: string): string {
+  const trimmed = stored.trim();
+
+  if (trimmed.length === 0) {
+    return defaultGlobalSettings.contactAddress;
+  }
+
+  // Replace superseded office text so the public site matches utility-bill KYC.
+  if (
+    /hussain chamber|kashmir block|azam cloth market|chona mandi chowk/i.test(
+      trimmed,
+    )
+  ) {
+    return defaultGlobalSettings.contactAddress;
+  }
+
+  return trimmed;
+}
+
 function normalizeGlobal(value: unknown): SiteGlobalSettings {
   const record = asRecord(value);
 
@@ -119,9 +138,7 @@ function normalizeGlobal(value: unknown): SiteGlobalSettings {
       readString(record, "contactEmail") || defaultGlobalSettings.contactEmail,
     contactPhone:
       readString(record, "contactPhone") || defaultGlobalSettings.contactPhone,
-    contactAddress:
-      readString(record, "contactAddress") ||
-      defaultGlobalSettings.contactAddress,
+    contactAddress: resolveContactAddress(readString(record, "contactAddress")),
     instagram: readString(record, "instagram"),
     pinterest: readString(record, "pinterest"),
   };
