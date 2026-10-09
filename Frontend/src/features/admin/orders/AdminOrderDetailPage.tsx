@@ -9,6 +9,7 @@ import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { CoverImage } from "@/components/CoverImage";
 import { adminCopy } from "@/constants/adminCopy";
+import { formatShopPrice } from "@/constants/shopCatalog";
 import { deleteOrderAction } from "@/server/actions/orderActions";
 import { type OrderRecord } from "@/types/api/order";
 
@@ -19,7 +20,7 @@ type AdminOrderDetailPageProps = {
 };
 
 function formatMoney(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatShopPrice(cents);
 }
 
 export function AdminOrderDetailPage({

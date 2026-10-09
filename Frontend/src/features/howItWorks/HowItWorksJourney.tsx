@@ -24,7 +24,7 @@ function stepHref(locale: string): string {
 export function HowItWorksJourney({ locale, products }: HowItWorksJourneyProps) {
   const product = products[0];
   const price =
-    product === undefined ? formatShopPrice(499) : formatShopPrice(product.priceCents);
+    product === undefined ? formatShopPrice(149900) : formatShopPrice(product.priceCents);
   const packageLabel =
     product === undefined ? "ZIP package" : productPackageLabel(product);
   const sizeLabel = product?.hoopSize ?? '4 × 4"';

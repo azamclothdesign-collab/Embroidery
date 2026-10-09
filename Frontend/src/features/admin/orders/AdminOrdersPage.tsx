@@ -11,6 +11,7 @@ import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { CoverImage } from "@/components/CoverImage";
 import { adminCopy } from "@/constants/adminCopy";
 import { adminOrderDetailHref } from "@/constants/adminNav";
+import { formatShopPrice } from "@/constants/shopCatalog";
 import { deleteOrderAction } from "@/server/actions/orderActions";
 import { type OrderLine, type OrderRecord } from "@/types/api/order";
 
@@ -22,7 +23,7 @@ type AdminOrdersPageProps = {
 const maxVisibleDesigns = 3;
 
 function formatMoney(cents: number): string {
-  return `$${(cents / 100).toFixed(2)}`;
+  return formatShopPrice(cents);
 }
 
 function formatDate(value: string): string {

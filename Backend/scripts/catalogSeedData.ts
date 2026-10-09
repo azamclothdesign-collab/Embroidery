@@ -88,7 +88,7 @@ function productSeed(
     categoryId,
     rating: 4.9,
     formats: [...defaultFormats],
-    priceCents: 499,
+    priceCents: 149900,
     hoopSize: '5 × 7"',
     stitchCount: 15000,
     badge: "Best Seller",

@@ -94,7 +94,7 @@ export function ShopFilterForm({
           <ShopFilterGroup title="Price">
             <label className="flex flex-col gap-3 text-body">
               <span>
-                $0 — ${priceDollars}
+                Rs 0 — Rs {priceDollars}
                 {catalog.filters.priceMaxCents >= shopPriceMaxCents ? "+" : ""}
               </span>
               <input

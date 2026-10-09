@@ -77,7 +77,8 @@ export type ShopSortId = (typeof shopSortOptions)[number]["id"];
 
 export const shopKnownPdpSlug = "floral-butterfly-embroidery";
 export const shopPageSize = 24;
-export const shopPriceMaxCents = 2500;
+/** Shop filter ceiling in minor units (paisa). Rs 5,000.00 */
+export const shopPriceMaxCents = 500000;
 export const machineCompatibilityHref = "/machine-compatibility";
 export const shopRecentSearchesKey = "embroidery-shop-recent-searches";
 
