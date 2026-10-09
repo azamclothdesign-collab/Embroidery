@@ -22,7 +22,7 @@ PayFast sandbox UAT checklist
    - Save
 
 4) Test checkout on https://embdesigens.com
-   - Confirm catalog shows PKR list prices (e.g. Rs 1,499.00), not Rs 4.99
+   - Confirm catalog shows PKR list prices (e.g. Rs 2,999.00), not Rs 4.99
    - Add a design → Cart → fill contact → Pay
    - Browser must redirect to ipguat.apps.net.pk (if stuck on “Processing”,
      redeploy Frontend so CSP form-action allows https://*.apps.net.pk)

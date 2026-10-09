@@ -75,7 +75,7 @@ export function AdminProductEditor({
   const [name, setName] = useState(product?.name ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
   const [price, setPrice] = useState(
-    product === undefined ? "1499.00" : (product.priceCents / 100).toFixed(2),
+    product === undefined ? "2999.00" : (product.priceCents / 100).toFixed(2),
   );
   const categoryOptions =
     categories.length > 0
