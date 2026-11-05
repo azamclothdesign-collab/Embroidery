@@ -24,12 +24,14 @@ This store is a custom Next.js + PayFast API integration.
    - Mode: Live  (auto-fills ipg1.apps.net.pk token/checkout URLs)
    - Merchant ID: (live Merchant ID from PayFast email)
    - Merchant Name: registered business / trading name
-   - Secured Key: paste live key once → Save
+   - Secured Key: MUST paste the NEW live key again (do not leave blank if
+     you previously saved the sandbox key — blank keep-current can leave UAT key)
    - Token URL: https://ipg1.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken
    - Checkout URL: https://ipg1.apps.net.pk/Ecommerce/api/Transaction/PostTransaction
    - Success path: /checkout/payfast/success
    - Failure path: /checkout/payfast/failure
    - Save Settings
+   - Confirm Token/Checkout show ipg1 (not ipguat) after save
 
 4) Smoke test (REAL money — Demo Bank/OTP do not work in live)
    - Add one design (Rs 2,999) → Cart → contact + terms → Pay

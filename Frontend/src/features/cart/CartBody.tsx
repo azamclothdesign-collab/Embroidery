@@ -124,7 +124,7 @@ export function CartBody({ locale, hero, explore, trust }: CartBodyProps) {
       if (!result.ok) {
         setPayState("idle");
         setOverlayPhase("hidden");
-        setPayError(cartCopy.paymentFailedBody);
+        setPayError(`${cartCopy.paymentFailedBody} (${result.error})`);
         return;
       }
 
@@ -139,7 +139,9 @@ export function CartBody({ locale, hero, explore, trust }: CartBodyProps) {
         setPayError(
           init.error === "gateway_disabled"
             ? cartCopy.paymentGatewayOff
-            : cartCopy.paymentFailedBody,
+            : init.error === "payfast_token_failed"
+              ? `${cartCopy.paymentFailedBody} (PayFast token failed — re-save Live Merchant ID + Secured Key)`
+              : `${cartCopy.paymentFailedBody} (${init.error})`,
         );
         return;
       }
