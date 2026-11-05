@@ -13,15 +13,9 @@ type CartLineItemProps = {
   locale: string;
   line: CartDisplayLine;
   onRemove: (slug: string) => void;
-  onSaveForLater: (slug: string) => void;
 };
 
-export function CartLineItem({
-  locale,
-  line,
-  onRemove,
-  onSaveForLater,
-}: CartLineItemProps) {
+export function CartLineItem({ locale, line, onRemove }: CartLineItemProps) {
   const itemRef = useRef<HTMLLIElement>(null);
   const reduceMotion = usePrefersReducedMotion();
 
@@ -47,56 +41,43 @@ export function CartLineItem({
   };
 
   return (
-    <li
-      ref={itemRef}
-      className="cartLine overflow-hidden border-b border-line py-6"
-    >
-      <div className="flex gap-4 md:gap-6">
+    <li ref={itemRef} className="overflow-hidden border-b border-line py-5">
+      <div className="flex gap-4">
         <Link
           href={shopProductHref(locale, line.slug)}
-          className="relative size-24 shrink-0 overflow-hidden bg-line md:size-28"
+          className="relative size-20 shrink-0 overflow-hidden bg-line md:size-24"
         >
           <CoverImage
             src={line.imageSrc}
             alt={line.imageAlt}
-            sizes="112px"
+            sizes="96px"
             className="absolute inset-0 size-full max-w-none object-cover"
           />
         </Link>
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex flex-col gap-1 md:flex-row md:items-start md:justify-between md:gap-6">
-            <div className="min-w-0">
-              <Link
-                href={shopProductHref(locale, line.slug)}
-                className="text-body font-medium tracking-tight text-ink"
-              >
-                {line.displayName}
-              </Link>
-              {line.formatsLabel.length > 0 ? (
-                <p className="mt-1 text-meta uppercase tracking-[0.14em] text-ink-soft">
-                  {line.formatsLabel}
-                </p>
-              ) : null}
-              {line.sizeLabel.length > 0 ? (
-                <p className="mt-1 text-meta text-ink-soft">{line.sizeLabel}</p>
-              ) : null}
-              <p className="mt-2 text-meta uppercase tracking-[0.14em] text-ink-soft">
-                {cartCopy.instantDownload}
+        <div className="flex min-w-0 flex-1 items-start justify-between gap-4">
+          <div className="min-w-0">
+            <Link
+              href={shopProductHref(locale, line.slug)}
+              className="block text-body font-medium tracking-tight text-ink"
+            >
+              {line.displayName}
+            </Link>
+            {line.formatsLabel.length > 0 ? (
+              <p className="mt-1 text-meta uppercase tracking-[0.14em] text-ink-soft">
+                {line.formatsLabel}
               </p>
-              {!line.isAvailable ? (
-                <p className="mt-2 text-meta text-ink-soft">
-                  {cartCopy.somethingChangedBody}
-                </p>
-              ) : null}
-            </div>
-            <p className="shrink-0 text-body font-medium text-ink">
-              {formatShopPrice(line.priceCents)}
-            </p>
-          </div>
-          <div className="mt-2 flex flex-wrap gap-4 text-meta uppercase tracking-[0.14em]">
+            ) : null}
+            {line.sizeLabel.length > 0 ? (
+              <p className="mt-1 text-meta text-ink-soft">{line.sizeLabel}</p>
+            ) : null}
+            {!line.isAvailable ? (
+              <p className="mt-1 text-meta text-ink-soft">
+                {cartCopy.somethingChangedBody}
+              </p>
+            ) : null}
             <button
               type="button"
-              className="min-h-11 text-ink-soft hover:text-ink"
+              className="mt-1 inline-flex min-h-11 items-center text-meta uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
               onClick={() => {
                 animateOut(() => {
                   onRemove(line.slug);
@@ -105,18 +86,10 @@ export function CartLineItem({
             >
               {cartCopy.remove}
             </button>
-            <button
-              type="button"
-              className="min-h-11 text-ink-soft hover:text-ink"
-              onClick={() => {
-                animateOut(() => {
-                  onSaveForLater(line.slug);
-                });
-              }}
-            >
-              {cartCopy.saveForLater}
-            </button>
           </div>
+          <p className="shrink-0 text-body font-medium text-ink">
+            {formatShopPrice(line.priceCents)}
+          </p>
         </div>
       </div>
     </li>

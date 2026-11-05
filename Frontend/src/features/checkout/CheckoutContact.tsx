@@ -1,22 +1,22 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import Link from "next/link";
 
 import { checkoutCopy } from "@/constants/checkoutCopy";
-import { accountLoginHref } from "@/constants/siteNavigation";
 import { isValidEmail } from "@/schemas/authFormSchema";
 
 type CheckoutContactProps = {
-  locale: string;
   contactName: string;
   email: string;
   phone: string;
+  showAllErrors: boolean;
   onContactNameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onValidityChange: (isValid: boolean) => void;
 };
+
+type ContactField = "name" | "email" | "phone";
 
 function isValidPhone(value: string): boolean {
   const trimmed = value.trim();
@@ -27,11 +27,17 @@ function isValidName(value: string): boolean {
   return value.trim().length >= 2 && value.trim().length <= 120;
 }
 
+const labelClassName =
+  "block text-meta uppercase tracking-[0.14em] text-ink-soft";
+const inputClassName =
+  "mt-2 min-h-11 w-full border border-line bg-paper px-3 text-body text-ink";
+const errorClassName = "mt-1.5 text-meta text-ink";
+
 export function CheckoutContact({
-  locale,
   contactName,
   email,
   phone,
+  showAllErrors,
   onContactNameChange,
   onEmailChange,
   onPhoneChange,
@@ -40,34 +46,37 @@ export function CheckoutContact({
   const nameId = useId();
   const emailId = useId();
   const phoneId = useId();
-  const hintId = useId();
-  const [touched, setTouched] = useState(false);
+  const [touched, setTouched] = useState<ReadonlySet<ContactField>>(
+    () => new Set(),
+  );
 
   const nameValid = isValidName(contactName);
   const emailValid = isValidEmail(email);
   const phoneValid = isValidPhone(phone);
   const isValid = nameValid && emailValid && phoneValid;
-  const showStatus = touched || contactName.length > 0 || email.length > 0 || phone.length > 0;
+  const showNameError = (showAllErrors || touched.has("name")) && !nameValid;
+  const showEmailError = (showAllErrors || touched.has("email")) && !emailValid;
+  const showPhoneError = (showAllErrors || touched.has("phone")) && !phoneValid;
 
   useEffect(() => {
     onValidityChange(isValid);
   }, [isValid, onValidityChange]);
 
+  const markTouched = (field: ContactField) => {
+    setTouched((current) =>
+      current.has(field) ? current : new Set(current).add(field),
+    );
+  };
+
   return (
     <section aria-labelledby="checkout-info-heading">
-      <h2 id="checkout-info-heading" className="text-h3 font-medium text-ink">
+      <h2 id="checkout-info-heading" className={labelClassName}>
         {checkoutCopy.contactHeading}
       </h2>
-      <p className="mt-2 text-meta leading-6 text-ink-soft">
-        {checkoutCopy.contactBody}
-      </p>
 
-      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <label
-            htmlFor={nameId}
-            className="block text-meta uppercase tracking-[0.14em] text-ink-soft"
-          >
+      <div className="mt-4 flex flex-col gap-4">
+        <div>
+          <label htmlFor={nameId} className={labelClassName}>
             {checkoutCopy.contactNameLabel}
           </label>
           <input
@@ -78,27 +87,22 @@ export function CheckoutContact({
             required
             maxLength={120}
             value={contactName}
-            aria-invalid={showStatus && !nameValid}
-            className="mt-2 min-h-12 w-full border border-line bg-paper px-4 text-body text-ink"
+            aria-invalid={showNameError}
+            className={inputClassName}
             onBlur={() => {
-              setTouched(true);
+              markTouched("name");
             }}
             onChange={(event) => {
               onContactNameChange(event.target.value);
             }}
           />
-          {showStatus && !nameValid ? (
-            <p className="mt-2 text-meta text-ink-soft">
-              {checkoutCopy.contactNameInvalid}
-            </p>
+          {showNameError ? (
+            <p className={errorClassName}>{checkoutCopy.contactNameInvalid}</p>
           ) : null}
         </div>
 
         <div>
-          <label
-            htmlFor={emailId}
-            className="block text-meta uppercase tracking-[0.14em] text-ink-soft"
-          >
+          <label htmlFor={emailId} className={labelClassName}>
             {checkoutCopy.emailLabel}
           </label>
           <input
@@ -109,34 +113,22 @@ export function CheckoutContact({
             required
             maxLength={254}
             value={email}
-            aria-describedby={hintId}
-            aria-invalid={showStatus && !emailValid}
-            className="mt-2 min-h-12 w-full border border-line bg-paper px-4 text-body text-ink"
+            aria-invalid={showEmailError}
+            className={inputClassName}
             onBlur={() => {
-              setTouched(true);
+              markTouched("email");
             }}
             onChange={(event) => {
               onEmailChange(event.target.value);
             }}
           />
-          {showStatus ? (
-            <p
-              className={
-                emailValid
-                  ? "mt-2 text-meta text-ink"
-                  : "mt-2 text-meta text-ink-soft"
-              }
-            >
-              {emailValid ? checkoutCopy.emailValid : checkoutCopy.emailInvalid}
-            </p>
+          {showEmailError ? (
+            <p className={errorClassName}>{checkoutCopy.emailInvalid}</p>
           ) : null}
         </div>
 
         <div>
-          <label
-            htmlFor={phoneId}
-            className="block text-meta uppercase tracking-[0.14em] text-ink-soft"
-          >
+          <label htmlFor={phoneId} className={labelClassName}>
             {checkoutCopy.phoneLabel}
           </label>
           <input
@@ -147,38 +139,20 @@ export function CheckoutContact({
             required
             maxLength={30}
             value={phone}
-            aria-invalid={showStatus && !phoneValid}
-            className="mt-2 min-h-12 w-full border border-line bg-paper px-4 text-body text-ink"
+            aria-invalid={showPhoneError}
+            className={inputClassName}
             onBlur={() => {
-              setTouched(true);
+              markTouched("phone");
             }}
             onChange={(event) => {
               onPhoneChange(event.target.value);
             }}
           />
-          {showStatus && !phoneValid ? (
-            <p className="mt-2 text-meta text-ink-soft">
-              {checkoutCopy.phoneInvalid}
-            </p>
+          {showPhoneError ? (
+            <p className={errorClassName}>{checkoutCopy.phoneInvalid}</p>
           ) : null}
         </div>
       </div>
-
-      <p id={hintId} className="mt-4 text-meta leading-6 text-ink-soft">
-        {checkoutCopy.contactHint}
-      </p>
-      <p className="mt-6 text-meta text-ink-soft">
-        {checkoutCopy.signInPrompt}{" "}
-        <Link
-          href={`/${locale}${accountLoginHref}`}
-          className="text-ink underline-offset-4 hover:underline"
-        >
-          {checkoutCopy.signIn}
-        </Link>
-      </p>
-      <p className="mt-2 text-meta leading-6 text-ink-soft">
-        {checkoutCopy.accountAfter}
-      </p>
     </section>
   );
 }

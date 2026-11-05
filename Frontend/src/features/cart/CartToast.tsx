@@ -34,7 +34,7 @@ export function CartToast({
   return (
     <div
       role="status"
-      className={`fade-rise fixed bottom-28 left-1/2 z-40 flex -translate-x-1/2 items-center gap-4 border border-line bg-paper px-5 py-3 text-meta text-ink${isVisible ? " is-visible" : ""}`}
+      className={`fade-rise fixed bottom-8 left-1/2 z-40 flex -translate-x-1/2 items-center gap-4 border border-line bg-paper px-5 py-3 text-meta text-ink${isVisible ? " is-visible" : ""}`}
     >
       <span>{message}</span>
       {actionLabel !== undefined && onAction !== undefined ? (
