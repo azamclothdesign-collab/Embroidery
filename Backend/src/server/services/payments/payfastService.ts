@@ -82,9 +82,23 @@ export async function requireEnabledPayments(): Promise<SitePaymentsSettings> {
 
 async function fetchAccessToken(
   settings: SitePaymentsSettings,
-  customerIp: string,
+  input: {
+    customerIp: string;
+    basketId: string;
+    amount: string;
+  },
 ): Promise<string> {
+  const customerIp =
+    input.customerIp.trim().length > 0 ? input.customerIp.trim() : "127.0.0.1";
+
+  // Live PayFast expects basket/amount (+ currency). Keep grant_type fields for
+  // sandbox-compatible endpoints. Empty User-Agent is rejected by PayFast.
   const body = new URLSearchParams({
+    MERCHANT_ID: settings.merchantId,
+    SECURED_KEY: settings.securedKey,
+    BASKET_ID: input.basketId,
+    TXNAMT: input.amount,
+    CURRENCY_CODE: "PKR",
     merchant_id: settings.merchantId,
     secured_key: settings.securedKey,
     grant_type: "client_credentials",
@@ -95,20 +109,39 @@ async function fetchAccessToken(
     method: "POST",
     headers: {
       "content-type": "application/x-www-form-urlencoded",
+      "user-agent": "EmbroideryStore/1.0 (PayFast Checkout)",
     },
     body,
   });
 
-  const raw = (await response.json()) as Record<string, unknown>;
+  const text = await response.text();
+  let raw: Record<string, unknown> = {};
+
+  try {
+    raw = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    console.error(
+      "[payfast] token non-json",
+      response.status,
+      text.slice(0, 500),
+    );
+    throw new ServiceError(
+      502,
+      "payfast_token_failed",
+      "Unable to start PayFast payment",
+    );
+  }
+
+  const data = asRecord(raw.data);
   const token =
     (typeof raw.token === "string" && raw.token) ||
     (typeof raw.ACCESS_TOKEN === "string" && raw.ACCESS_TOKEN) ||
-    (typeof asRecord(raw.data).token === "string" &&
-      String(asRecord(raw.data).token)) ||
+    (typeof data.token === "string" && data.token) ||
+    (typeof data.ACCESS_TOKEN === "string" && data.ACCESS_TOKEN) ||
     "";
 
   if (!response.ok || token.length === 0) {
-    console.error("[payfast] token error", raw);
+    console.error("[payfast] token error", response.status, raw);
     throw new ServiceError(
       502,
       "payfast_token_failed",
@@ -143,8 +176,12 @@ export async function initPayFastCheckout(input: {
     throw new ServiceError(409, "already_paid", "Order is already paid");
   }
 
-  const token = await fetchAccessToken(settings, input.customerIp);
   const amount = amountFromCents(order.totalCents);
+  const token = await fetchAccessToken(settings, {
+    customerIp: input.customerIp,
+    basketId: order.id,
+    amount,
+  });
   const signature = buildPayFastSignature({
     merchantId: settings.merchantId,
     merchantName: settings.merchantName,
@@ -162,6 +199,7 @@ export async function initPayFastCheckout(input: {
     TOKEN: token,
     PROCCODE: "00",
     TXNAMT: amount,
+    CURRENCY_CODE: "PKR",
     CUSTOMER_MOBILE_NO: mobile,
     CUSTOMER_EMAIL_ADDRESS: order.email,
     SIGNATURE: signature,
