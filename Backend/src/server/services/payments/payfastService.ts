@@ -140,7 +140,14 @@ async function fetchAccessToken(
     (typeof data.ACCESS_TOKEN === "string" && data.ACCESS_TOKEN) ||
     "";
 
-  if (!response.ok || token.length === 0) {
+  const errorCode =
+    typeof raw.errorCode === "string"
+      ? raw.errorCode
+      : typeof raw.error_code === "string"
+        ? raw.error_code
+        : "";
+
+  if (!response.ok || token.length === 0 || errorCode.length > 0) {
     console.error("[payfast] token error", response.status, raw);
     throw new ServiceError(
       502,

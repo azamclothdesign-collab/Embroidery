@@ -73,6 +73,15 @@ const defaultPagesSettings: SitePagesSettings = {
   ],
 };
 
+const sandboxTokenUrl =
+  "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken";
+const sandboxCheckoutUrl =
+  "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/PostTransaction";
+const liveTokenUrl =
+  "https://ipg1.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken";
+const liveCheckoutUrl =
+  "https://ipg1.apps.net.pk/Ecommerce/api/Transaction/PostTransaction";
+
 export const defaultPaymentsSettings: SitePaymentsSettings = {
   gatewayEnabled: false,
   provider: "payfast",
@@ -80,13 +89,22 @@ export const defaultPaymentsSettings: SitePaymentsSettings = {
   merchantId: "",
   securedKey: "",
   merchantName: "Designer",
-  tokenUrl:
-    "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken",
-  checkoutUrl:
-    "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/PostTransaction",
+  tokenUrl: sandboxTokenUrl,
+  checkoutUrl: sandboxCheckoutUrl,
   successPath: "/checkout/payfast/success",
   failurePath: "/checkout/payfast/failure",
 };
+
+function endpointsForMode(mode: "sandbox" | "live"): {
+  tokenUrl: string;
+  checkoutUrl: string;
+} {
+  if (mode === "live") {
+    return { tokenUrl: liveTokenUrl, checkoutUrl: liveCheckoutUrl };
+  }
+
+  return { tokenUrl: sandboxTokenUrl, checkoutUrl: sandboxCheckoutUrl };
+}
 
 function requireAdmin(adminUserId?: string): string {
   if (adminUserId === undefined) {
@@ -191,6 +209,17 @@ export function normalizePayments(value: unknown): SitePaymentsSettings {
   const record = asRecord(value);
   const modeRaw = readString(record, "mode");
   const mode = modeRaw === "live" ? "live" : "sandbox";
+  const endpoints = endpointsForMode(mode);
+  const storedToken = readString(record, "tokenUrl");
+  const storedCheckout = readString(record, "checkoutUrl");
+  // Keep mode and PayFast hosts in sync so Live never posts to ipguat (sandbox).
+  const useCanonicalEndpoints =
+    storedToken.length === 0 ||
+    storedCheckout.length === 0 ||
+    storedToken.includes("ipguat.apps.net.pk") ||
+    storedToken.includes("ipg1.apps.net.pk") ||
+    storedCheckout.includes("ipguat.apps.net.pk") ||
+    storedCheckout.includes("ipg1.apps.net.pk");
 
   return {
     gatewayEnabled: record.gatewayEnabled === true,
@@ -200,10 +229,12 @@ export function normalizePayments(value: unknown): SitePaymentsSettings {
     securedKey: readString(record, "securedKey"),
     merchantName:
       readString(record, "merchantName") || defaultPaymentsSettings.merchantName,
-    tokenUrl:
-      readString(record, "tokenUrl") || defaultPaymentsSettings.tokenUrl,
-    checkoutUrl:
-      readString(record, "checkoutUrl") || defaultPaymentsSettings.checkoutUrl,
+    tokenUrl: useCanonicalEndpoints
+      ? endpoints.tokenUrl
+      : storedToken || endpoints.tokenUrl,
+    checkoutUrl: useCanonicalEndpoints
+      ? endpoints.checkoutUrl
+      : storedCheckout || endpoints.checkoutUrl,
     successPath:
       readString(record, "successPath") || defaultPaymentsSettings.successPath,
     failurePath:

@@ -83,6 +83,15 @@ export function AdminPaymentsPage({
 
   const handleSave = () => {
     setSaveLabel(adminCopy.productsSaving);
+    const modeUrls = urlsForMode(mode);
+    const nextTokenUrl = shouldReplaceEndpointUrl(tokenUrl)
+      ? modeUrls.tokenUrl
+      : tokenUrl.trim();
+    const nextCheckoutUrl = shouldReplaceEndpointUrl(checkoutUrl)
+      ? modeUrls.checkoutUrl
+      : checkoutUrl.trim();
+    setTokenUrl(nextTokenUrl);
+    setCheckoutUrl(nextCheckoutUrl);
 
     startTransition(async () => {
       const result = await updateSitePaymentsAction({
@@ -92,8 +101,8 @@ export function AdminPaymentsPage({
         merchantId: merchantId.trim(),
         securedKey: securedKey.trim(),
         merchantName: merchantName.trim() || "Designer",
-        tokenUrl: tokenUrl.trim(),
-        checkoutUrl: checkoutUrl.trim(),
+        tokenUrl: nextTokenUrl,
+        checkoutUrl: nextCheckoutUrl,
         successPath: successPath.trim() || "/checkout/payfast/success",
         failurePath: failurePath.trim() || "/checkout/payfast/failure",
       });
