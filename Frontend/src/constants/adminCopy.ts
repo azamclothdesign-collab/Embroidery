@@ -257,6 +257,17 @@ export const adminCopy = {
   paymentsOpenLink: "Open Payments",
   paymentsHasKey: "Secured key is saved",
   paymentsNoKey: "No secured key saved yet",
+  paymentsVerify: "Test PayFast connection",
+  paymentsVerifying: "Testing PayFast…",
+  paymentsVerifyOk: "PayFast connection OK — PayFast issued a token for the saved credentials.",
+  paymentsVerifyInvalidCredentials:
+    "PayFast rejected the saved Merchant ID / Secured Key. Paste the Secured Key from the PayFast live email into the field above, then Save again.",
+  paymentsVerifyUnexpected:
+    "PayFast returned a web page instead of a token. PayFast may be blocking this server — send PayFast support the server IP and ask them to whitelist it.",
+  paymentsVerifyUnreachable: "The server could not reach PayFast.",
+  paymentsVerifyRejected: "PayFast refused the token request.",
+  paymentsVerifyNotConfigured:
+    "Save Merchant ID, Merchant Name, and Secured Key before testing.",
 
   ordersTitle: "Orders",
   ordersBody: "Track purchases, payments, and digital delivery.",

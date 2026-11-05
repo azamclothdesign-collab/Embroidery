@@ -37,6 +37,7 @@ const authActionVerbs: Record<string, string> = {
   download: "POST",
   init: "POST",
   confirm: "POST",
+  verify: "POST",
   status: "GET",
 };
 

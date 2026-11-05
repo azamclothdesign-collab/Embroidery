@@ -15,6 +15,40 @@ import {
 
 export type PayFastCheckoutFields = Record<string, string>;
 
+type PayFastTokenFailureReason =
+  | "invalid_credentials"
+  | "rejected"
+  | "unexpected_response"
+  | "unreachable";
+
+type PayFastTokenResult =
+  | { ok: true; token: string }
+  | {
+      ok: false;
+      reason: PayFastTokenFailureReason;
+      status: number | null;
+      detail: string;
+    };
+
+export type PayFastVerifyResult = {
+  ok: boolean;
+  mode: SitePaymentsSettings["mode"];
+  merchantId: string;
+  tokenUrl: string;
+  reason?: PayFastTokenFailureReason;
+  status?: number | null;
+  detail?: string;
+};
+
+const tokenRequestTimeoutMs = 20_000;
+
+const tokenFailureCodes: Record<PayFastTokenFailureReason, string> = {
+  invalid_credentials: "payfast_invalid_credentials",
+  rejected: "payfast_rejected",
+  unexpected_response: "payfast_unexpected_response",
+  unreachable: "payfast_unreachable",
+};
+
 function publicOrigin(): string {
   if (env.APP_PUBLIC_ORIGIN !== undefined) {
     return env.APP_PUBLIC_ORIGIN.replace(/\/$/, "");
@@ -80,14 +114,14 @@ export async function requireEnabledPayments(): Promise<SitePaymentsSettings> {
   return settings;
 }
 
-async function fetchAccessToken(
+async function requestAccessToken(
   settings: SitePaymentsSettings,
   input: {
     customerIp: string;
     basketId: string;
     amount: string;
   },
-): Promise<string> {
+): Promise<PayFastTokenResult> {
   const customerIp =
     input.customerIp.trim().length > 0 ? input.customerIp.trim() : "127.0.0.1";
 
@@ -105,58 +139,184 @@ async function fetchAccessToken(
     customer_ip: customerIp,
   });
 
-  const response = await fetch(settings.tokenUrl, {
-    method: "POST",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      "user-agent": "EmbroideryStore/1.0 (PayFast Checkout)",
-    },
-    body,
-  });
-
-  const text = await response.text();
-  let raw: Record<string, unknown> = {};
+  let status: number;
+  let text: string;
 
   try {
-    raw = JSON.parse(text) as Record<string, unknown>;
+    const response = await fetch(settings.tokenUrl, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "user-agent": "EmbroideryStore/1.0 (PayFast Checkout)",
+      },
+      body,
+      signal: AbortSignal.timeout(tokenRequestTimeoutMs),
+    });
+    status = response.status;
+    text = await response.text();
+  } catch (error) {
+    return {
+      ok: false,
+      reason: "unreachable",
+      status: null,
+      detail: describeFetchError(error),
+    };
+  }
+
+  let raw: Record<string, unknown>;
+
+  try {
+    raw = asRecord(JSON.parse(text));
   } catch {
-    console.error(
-      "[payfast] token non-json",
-      response.status,
-      text.slice(0, 500),
-    );
-    throw new ServiceError(
-      502,
-      "payfast_token_failed",
-      "Unable to start PayFast payment",
-    );
+    return {
+      ok: false,
+      reason: "unexpected_response",
+      status,
+      detail: describeNonJsonBody(text),
+    };
   }
 
   const data = asRecord(raw.data);
   const token =
-    (typeof raw.token === "string" && raw.token) ||
-    (typeof raw.ACCESS_TOKEN === "string" && raw.ACCESS_TOKEN) ||
-    (typeof data.token === "string" && data.token) ||
-    (typeof data.ACCESS_TOKEN === "string" && data.ACCESS_TOKEN) ||
-    "";
+    readText(raw.token) ||
+    readText(raw.ACCESS_TOKEN) ||
+    readText(data.token) ||
+    readText(data.ACCESS_TOKEN);
+  const errorCode = readText(raw.errorCode) || readText(raw.error_code);
+  const errorDescription =
+    readText(raw.errorDescription) ||
+    readText(raw.error_description) ||
+    readText(raw.Message) ||
+    readText(raw.message);
+  const succeeded =
+    status >= 200 &&
+    status < 300 &&
+    token.length > 0 &&
+    /^0*$/.test(errorCode);
 
-  const errorCode =
-    typeof raw.errorCode === "string"
-      ? raw.errorCode
-      : typeof raw.error_code === "string"
-        ? raw.error_code
-        : "";
+  if (succeeded) {
+    return { ok: true, token };
+  }
 
-  if (!response.ok || token.length === 0 || errorCode.length > 0) {
-    console.error("[payfast] token error", response.status, raw);
+  return {
+    ok: false,
+    reason: /secret key|secured key|not matched/i.test(errorDescription)
+      ? "invalid_credentials"
+      : "rejected",
+    status,
+    detail:
+      [errorCode, errorDescription]
+        .filter((part) => part.length > 0)
+        .join(": ") || `HTTP ${status}`,
+  };
+}
+
+async function fetchAccessToken(
+  settings: SitePaymentsSettings,
+  input: {
+    customerIp: string;
+    basketId: string;
+    amount: string;
+  },
+): Promise<string> {
+  const result = await requestAccessToken(settings, input);
+
+  if (result.ok) {
+    return result.token;
+  }
+
+  console.error("[payfast] token failed", {
+    mode: settings.mode,
+    merchantId: settings.merchantId,
+    tokenUrl: settings.tokenUrl,
+    reason: result.reason,
+    status: result.status,
+    detail: result.detail,
+  });
+
+  throw new ServiceError(
+    502,
+    tokenFailureCodes[result.reason],
+    "Unable to start PayFast payment",
+  );
+}
+
+export async function verifyPayFastCredentials(): Promise<PayFastVerifyResult> {
+  const settings = await getPaymentsSettings();
+
+  if (!paymentsConfigured(settings)) {
     throw new ServiceError(
-      502,
-      "payfast_token_failed",
-      "Unable to start PayFast payment",
+      400,
+      "gateway_not_configured",
+      "Payment gateway is not configured",
     );
   }
 
-  return token;
+  const summary = {
+    mode: settings.mode,
+    merchantId: settings.merchantId,
+    tokenUrl: settings.tokenUrl,
+  };
+  const result = await requestAccessToken(settings, {
+    customerIp: "127.0.0.1",
+    basketId: `VERIFY-${Date.now()}`,
+    amount: "1.00",
+  });
+
+  if (result.ok) {
+    return { ok: true, ...summary };
+  }
+
+  console.error("[payfast] verify failed", {
+    ...summary,
+    reason: result.reason,
+    status: result.status,
+    detail: result.detail,
+  });
+
+  return {
+    ok: false,
+    ...summary,
+    reason: result.reason,
+    status: result.status,
+    detail: result.detail,
+  };
+}
+
+function describeFetchError(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return "Network error";
+  }
+
+  if (error.name === "TimeoutError") {
+    return `No response within ${tokenRequestTimeoutMs / 1000}s`;
+  }
+
+  const causeCode = readText(asRecord(error.cause).code);
+  return causeCode.length > 0 ? `${error.message} (${causeCode})` : error.message;
+}
+
+function describeNonJsonBody(text: string): string {
+  const title = /<title[^>]*>([^<]*)<\/title>/i.exec(text)?.[1]?.trim() ?? "";
+
+  if (title.length > 0) {
+    return title;
+  }
+
+  const snippet = text.replace(/\s+/g, " ").trim().slice(0, 160);
+  return snippet.length > 0 ? snippet : "Empty response";
+}
+
+function readText(value: unknown): string {
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  return "";
 }
 
 function asRecord(value: unknown): Record<string, unknown> {

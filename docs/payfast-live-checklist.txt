@@ -41,10 +41,16 @@ This store is a custom Next.js + PayFast API integration.
    - Confirm transaction appears in PayFast portal → Transactions
    - Settlement: Transaction Date + 2 working days (per PayFast)
 
-5) If checkout fails to start ("We couldn't start PayFast checkout")
+5) If checkout fails to start ("We couldn't start PayFast checkout (code)")
+   - Admin → Settings → Payments → "Test PayFast connection" (also runs after
+     every Save) shows PayFast's own answer for the saved credentials:
+       payfast_invalid_credentials ("rejected the saved Merchant ID / Secured Key")
+         → paste the live Secured Key from the PayFast email again → Save
+       payfast_unexpected_response ("returned a web page instead of a token")
+         → PayFast is blocking the server; send PayFast the VPS IP to whitelist
+       payfast_unreachable → the VPS cannot reach ipg1.apps.net.pk at all
    - Confirm Mode is Live and URLs use ipg1 (not ipguat)
-   - Confirm live Merchant ID + Secured Key were saved (re-paste key once if unsure)
-   - Check API logs: pm2 logs embroidery-api --lines 80 | grep payfast
+   - Check API logs: pm2 logs embroidery-api --lines 200 --nostream | grep -A8 "\[payfast\]"
    - Backend must be restarted after pulling token-request fixes:
        cd /var/www/embroidery/Backend && pm2 restart embroidery-api --update-env
    - Confirm APP_PUBLIC_ORIGIN=https://embdesigens.com

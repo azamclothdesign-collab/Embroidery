@@ -24,6 +24,7 @@ import {
   updateSiteHome,
   updateSitePages,
   updateSitePayments,
+  verifySitePayments,
 } from "@/lib/api/siteSettingsApi";
 import { type CategoryRecord, type ShopProduct } from "@/types/api/product";
 import {
@@ -32,6 +33,7 @@ import {
   type SiteHomeSettings,
   type SitePagesSettings,
   type SitePaymentsSettings,
+  type SitePaymentsVerifyResult,
 } from "@/types/api/siteSettings";
 
 type ActionResult<T> =
@@ -340,6 +342,17 @@ export async function updateSitePaymentsAction(
   try {
     const next = await updateSitePayments(settings);
     return { ok: true, data: next };
+  } catch (error) {
+    return { ok: false, error: toError(error) };
+  }
+}
+
+export async function verifySitePaymentsAction(): Promise<
+  ActionResult<SitePaymentsVerifyResult>
+> {
+  try {
+    const result = await verifySitePayments();
+    return { ok: true, data: result };
   } catch (error) {
     return { ok: false, error: toError(error) };
   }

@@ -58,6 +58,7 @@ export const apiRoutes = {
     pages: "/admin/site/pages",
     faqs: "/admin/site/faqs",
     payments: "/admin/site/payments",
+    paymentsVerify: "/admin/site/payments/verify",
   },
   payments: {
     status: "/payments/status",

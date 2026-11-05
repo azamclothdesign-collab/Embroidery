@@ -139,9 +139,7 @@ export function CartBody({ locale, hero, explore, trust }: CartBodyProps) {
         setPayError(
           init.error === "gateway_disabled"
             ? cartCopy.paymentGatewayOff
-            : init.error === "payfast_token_failed"
-              ? `${cartCopy.paymentFailedBody} (PayFast token failed — re-save Live Merchant ID + Secured Key)`
-              : `${cartCopy.paymentFailedBody} (${init.error})`,
+            : `${cartCopy.paymentFailedBody} (${init.error})`,
         );
         return;
       }

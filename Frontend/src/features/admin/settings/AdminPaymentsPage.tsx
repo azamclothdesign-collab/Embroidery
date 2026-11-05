@@ -5,12 +5,23 @@ import Link from "next/link";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { adminCopy } from "@/constants/adminCopy";
-import { updateSitePaymentsAction } from "@/server/actions/adminCatalogActions";
-import { type SitePaymentsSettings } from "@/types/api/siteSettings";
+import {
+  updateSitePaymentsAction,
+  verifySitePaymentsAction,
+} from "@/server/actions/adminCatalogActions";
+import {
+  type SitePaymentsSettings,
+  type SitePaymentsVerifyResult,
+} from "@/types/api/siteSettings";
 
 type AdminPaymentsPageProps = {
   locale: string;
   initialSettings: SitePaymentsSettings;
+};
+
+type VerifyNotice = {
+  tone: "ok" | "error";
+  message: string;
 };
 
 const sandboxTokenUrl =
@@ -46,11 +57,43 @@ function shouldReplaceEndpointUrl(url: string): boolean {
   );
 }
 
+function describeVerifyResult(result: SitePaymentsVerifyResult): VerifyNotice {
+  const modeLabel =
+    result.mode === "live"
+      ? adminCopy.paymentsModeLive
+      : adminCopy.paymentsModeSandbox;
+  const target = `${modeLabel}, Merchant ID ${result.merchantId}`;
+
+  if (result.ok) {
+    return { tone: "ok", message: `${adminCopy.paymentsVerifyOk} (${target})` };
+  }
+
+  const summary =
+    result.reason === "invalid_credentials"
+      ? adminCopy.paymentsVerifyInvalidCredentials
+      : result.reason === "unexpected_response"
+        ? adminCopy.paymentsVerifyUnexpected
+        : result.reason === "unreachable"
+          ? adminCopy.paymentsVerifyUnreachable
+          : adminCopy.paymentsVerifyRejected;
+  const status =
+    result.status === undefined || result.status === null
+      ? ""
+      : `HTTP ${result.status} · `;
+
+  return {
+    tone: "error",
+    message: `${summary} (${target}; ${status}${result.detail ?? "no details"})`,
+  };
+}
+
 export function AdminPaymentsPage({
   locale,
   initialSettings,
 }: AdminPaymentsPageProps) {
   const [isPending, startTransition] = useTransition();
+  const [isVerifying, startVerifyTransition] = useTransition();
+  const [verifyNotice, setVerifyNotice] = useState<VerifyNotice | null>(null);
   const [gatewayEnabled, setGatewayEnabled] = useState(
     initialSettings.gatewayEnabled,
   );
@@ -79,6 +122,25 @@ export function AdminPaymentsPage({
     if (shouldReplaceEndpointUrl(checkoutUrl)) {
       setCheckoutUrl(nextUrls.checkoutUrl);
     }
+  };
+
+  const runVerify = () => {
+    setVerifyNotice(null);
+    startVerifyTransition(async () => {
+      const result = await verifySitePaymentsAction();
+
+      setVerifyNotice(
+        result.ok
+          ? describeVerifyResult(result.data)
+          : {
+              tone: "error",
+              message:
+                result.error === "gateway_not_configured"
+                  ? adminCopy.paymentsVerifyNotConfigured
+                  : result.error,
+            },
+      );
+    });
   };
 
   const handleSave = () => {
@@ -121,6 +183,10 @@ export function AdminPaymentsPage({
         setSaveLabel(adminCopy.settingsSave);
         setToast(null);
       }, 2000);
+
+      if (result.data.hasSecuredKey === true) {
+        runVerify();
+      }
     });
   };
 
@@ -270,14 +336,37 @@ export function AdminPaymentsPage({
           />
         </label>
 
-        <button
-          type="button"
-          disabled={isPending}
-          className="inline-flex min-h-11 items-center justify-center bg-ink px-5 text-meta uppercase tracking-[0.14em] text-paper disabled:opacity-60"
-          onClick={handleSave}
-        >
-          {saveLabel}
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            disabled={isPending}
+            className="inline-flex min-h-11 items-center justify-center bg-ink px-5 text-meta uppercase tracking-[0.14em] text-paper disabled:opacity-60"
+            onClick={handleSave}
+          >
+            {saveLabel}
+          </button>
+          <button
+            type="button"
+            disabled={isPending || isVerifying}
+            className="admin-link-ghost min-h-11 justify-center disabled:opacity-60"
+            onClick={runVerify}
+          >
+            {isVerifying ? adminCopy.paymentsVerifying : adminCopy.paymentsVerify}
+          </button>
+        </div>
+
+        {verifyNotice === null ? null : (
+          <p
+            role="status"
+            className={
+              verifyNotice.tone === "ok"
+                ? "border border-admin-success/30 bg-admin-success/8 px-4 py-3 text-[0.875rem] text-admin-success"
+                : "border border-admin-error/25 bg-admin-error/8 px-4 py-3 text-[0.875rem] text-admin-error"
+            }
+          >
+            {verifyNotice.message}
+          </p>
+        )}
       </section>
     </div>
   );

@@ -6,6 +6,7 @@ import {
   type SiteHomeSettings,
   type SitePagesSettings,
   type SitePaymentsSettings,
+  type SitePaymentsVerifyResult,
 } from "@/types/api/siteSettings";
 
 import "server-only";
@@ -129,4 +130,13 @@ export async function updateSitePayments(
   });
 
   return data.settings;
+}
+
+export async function verifySitePayments(): Promise<SitePaymentsVerifyResult> {
+  return requestApiJsonWithContext<SitePaymentsVerifyResult>({
+    method: "POST",
+    path: apiRoutes.adminSite.paymentsVerify,
+    body: {},
+    cacheStrategy: { cache: "no-store" },
+  });
 }

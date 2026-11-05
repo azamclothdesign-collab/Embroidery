@@ -59,3 +59,19 @@ export type SitePaymentsSettings = {
   failurePath: string;
   hasSecuredKey?: boolean;
 };
+
+export type SitePaymentsVerifyReason =
+  | "invalid_credentials"
+  | "rejected"
+  | "unexpected_response"
+  | "unreachable";
+
+export type SitePaymentsVerifyResult = {
+  ok: boolean;
+  mode: "sandbox" | "live";
+  merchantId: string;
+  tokenUrl: string;
+  reason?: SitePaymentsVerifyReason;
+  status?: number | null;
+  detail?: string;
+};
