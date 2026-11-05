@@ -1,0 +1,52 @@
+PayFast live / production go-live checklist
+==========================================
+
+Do NOT put the Secured Key in git or Frontend/.env.
+Enter it only in Admin → Settings → Payments on the live server.
+
+Shopping cart plugins (Magento / OpenCart / WHMCS / Shopify) are NOT used.
+This store is a custom Next.js + PayFast API integration.
+
+1) Deploy Frontend (URL auto-fill for Live mode)
+   cd /var/www/embroidery
+   git pull --ff-only origin main
+   cd Frontend && npm run build
+   cd .. && pm2 restart embroidery-web --update-env && pm2 save
+
+2) Backend callbacks
+   In Backend/.env ensure:
+     APP_PUBLIC_ORIGIN=https://embdesigens.com
+   Then:
+     pm2 restart embroidery-api --update-env && pm2 save
+
+3) Admin → Settings → Payments (/en/admin/settings/payments)
+   - Payment gateway: ENABLED
+   - Mode: Live  (auto-fills ipg1.apps.net.pk token/checkout URLs)
+   - Merchant ID: (live Merchant ID from PayFast email)
+   - Merchant Name: registered business / trading name
+   - Secured Key: paste live key once → Save
+   - Token URL: https://ipg1.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken
+   - Checkout URL: https://ipg1.apps.net.pk/Ecommerce/api/Transaction/PostTransaction
+   - Success path: /checkout/payfast/success
+   - Failure path: /checkout/payfast/failure
+   - Save Settings
+
+4) Smoke test (REAL money — Demo Bank/OTP do not work in live)
+   - Add one design (Rs 2,999) → Cart → contact + terms → Pay
+   - Browser must open PayFast production (ipg1.apps.net.pk), NOT ipguat
+   - Complete payment with a real card/bank/wallet
+   - Confirm success page unlocks ZIP and order is paid
+   - Confirm transaction appears in PayFast portal → Transactions
+   - Settlement: Transaction Date + 2 working days (per PayFast)
+
+5) If checkout fails to start
+   - Confirm Mode is Live and URLs use ipg1 (not ipguat)
+   - Confirm live Merchant ID + Secured Key were saved
+   - Check embroidery-api logs for [payfast] token error
+   - Confirm APP_PUBLIC_ORIGIN matches the public site HTTPS origin
+
+6) Rollback to sandbox (if needed)
+   - Admin → Payments → Mode: Sandbox (URLs switch back to ipguat)
+   - Restore sandbox Merchant ID + Secured Key → Save
+
+Support: cs@gopayfast.com / +92 21 37133278

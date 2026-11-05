@@ -13,6 +13,39 @@ type AdminPaymentsPageProps = {
   initialSettings: SitePaymentsSettings;
 };
 
+const sandboxTokenUrl =
+  "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken";
+const sandboxCheckoutUrl =
+  "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/PostTransaction";
+const liveTokenUrl =
+  "https://ipg1.apps.net.pk/Ecommerce/api/Transaction/GetAccessToken";
+const liveCheckoutUrl =
+  "https://ipg1.apps.net.pk/Ecommerce/api/Transaction/PostTransaction";
+
+function urlsForMode(nextMode: "sandbox" | "live"): {
+  tokenUrl: string;
+  checkoutUrl: string;
+} {
+  if (nextMode === "live") {
+    return { tokenUrl: liveTokenUrl, checkoutUrl: liveCheckoutUrl };
+  }
+
+  return { tokenUrl: sandboxTokenUrl, checkoutUrl: sandboxCheckoutUrl };
+}
+
+function shouldReplaceEndpointUrl(url: string): boolean {
+  const trimmed = url.trim();
+
+  if (trimmed.length === 0) {
+    return true;
+  }
+
+  return (
+    trimmed.includes("ipguat.apps.net.pk") ||
+    trimmed.includes("ipg1.apps.net.pk")
+  );
+}
+
 export function AdminPaymentsPage({
   locale,
   initialSettings,
@@ -34,6 +67,19 @@ export function AdminPaymentsPage({
   );
   const [saveLabel, setSaveLabel] = useState<string>(adminCopy.settingsSave);
   const [toast, setToast] = useState<string | null>(null);
+
+  const applyMode = (nextMode: "sandbox" | "live") => {
+    setMode(nextMode);
+    const nextUrls = urlsForMode(nextMode);
+
+    if (shouldReplaceEndpointUrl(tokenUrl)) {
+      setTokenUrl(nextUrls.tokenUrl);
+    }
+
+    if (shouldReplaceEndpointUrl(checkoutUrl)) {
+      setCheckoutUrl(nextUrls.checkoutUrl);
+    }
+  };
 
   const handleSave = () => {
     setSaveLabel(adminCopy.productsSaving);
@@ -112,7 +158,7 @@ export function AdminPaymentsPage({
             value={mode}
             className="min-h-11 border border-line bg-paper px-3 text-body text-ink"
             onChange={(event) => {
-              setMode(event.target.value === "live" ? "live" : "sandbox");
+              applyMode(event.target.value === "live" ? "live" : "sandbox");
             }}
           >
             <option value="sandbox">{adminCopy.paymentsModeSandbox}</option>
