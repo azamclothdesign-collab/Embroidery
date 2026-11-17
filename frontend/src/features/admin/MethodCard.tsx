@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { saveMethodAction, testMethodAction } from "@/actions/admin";
 import { cn } from "@/lib/cn";
+import { validateMethodConfig } from "@/features/admin/paymentMethodValidation";
 import { BilingualRow, TextArea, TextField, Toggle } from "./fields";
 
 export type AdminMethod = {
@@ -22,11 +23,23 @@ export type AdminMethod = {
   callbackUrls: string[];
 };
 
+function mapApiFieldErrors(
+  fields: Record<string, string> | undefined,
+): Record<string, string> {
+  if (fields === undefined) return {};
+  const mapped: Record<string, string> = {};
+  for (const [key, message] of Object.entries(fields)) {
+    mapped[key.startsWith("config.") ? key.slice("config.".length) : key] = message;
+  }
+  return mapped;
+}
+
 export function MethodCard({ method }: { method: AdminMethod }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [testing, setTesting] = useState(false);
   const [test, setTest] = useState<{ ok: boolean; message: string } | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [v, setV] = useState({
     enabled: method.enabled,
     mode: method.mode,
@@ -41,12 +54,42 @@ export function MethodCard({ method }: { method: AdminMethod }) {
   );
   const set = <K extends keyof typeof v>(key: K, value: (typeof v)[K]) => setV((current) => ({ ...current, [key]: value }));
 
+  const updateConfig = (key: string, value: string) => {
+    setConfig((current) => ({ ...current, [key]: value }));
+    setFieldErrors((current) => {
+      if (current[key] === undefined) return current;
+      const next = { ...current };
+      delete next[key];
+      return next;
+    });
+  };
+
   const save = () =>
     startTransition(async () => {
+      const local = validateMethodConfig(method, config);
+      if (!local.ok) {
+        setFieldErrors(local.errors);
+        toast.error(`Fill these required fields: ${local.missingLabels.join(", ")}`);
+        return;
+      }
+
       const result = await saveMethodAction(method.code, { ...v, config });
-      if (!result.ok) return void toast.error(result.message);
+      if (!result.ok) {
+        setFieldErrors(mapApiFieldErrors(result.fields));
+        toast.error(result.message);
+        return;
+      }
+
+      setFieldErrors({});
       toast.success(`${v.labelEn} saved`);
-      setConfig((current) => Object.fromEntries(Object.entries(current).map(([k, val]) => [k, method.fields.find((f) => f.key === k)?.secret ? "" : val])));
+      setConfig((current) =>
+        Object.fromEntries(
+          Object.entries(current).map(([k, val]) => [
+            k,
+            method.fields.find((f) => f.key === k)?.secret ? "" : val,
+          ]),
+        ),
+      );
       router.refresh();
     });
 
@@ -90,24 +133,32 @@ export function MethodCard({ method }: { method: AdminMethod }) {
 
         {method.fields.length > 0 && (
           <div className="grid gap-4 md:grid-cols-2">
-            {method.fields.map((field) => (
-              <div key={field.key}>
-                <TextField
-                  id={`${method.code}-${field.key}`}
-                  label={field.label}
-                  required={field.required}
-                  type={field.secret ? "password" : "text"}
-                  dir="ltr"
-                  value={config[field.key] ?? ""}
-                  placeholder={field.secret && method.config[field.key]?.set ? "•••••••• saved — leave empty to keep" : ""}
-                  onChange={(value) => setConfig((current) => ({ ...current, [field.key]: value }))}
-                  {...(field.help !== undefined ? { help: field.help } : {})}
-                />
-                {field.secret && method.config[field.key]?.set && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-success"><KeyRound className="size-3" aria-hidden /> Encrypted and saved</p>
-                )}
-              </div>
-            ))}
+            {method.fields.map((field) => {
+              const secretSaved = field.secret && method.config[field.key]?.set === true;
+              const showRequired = field.required && !secretSaved;
+              const error = fieldErrors[field.key];
+              return (
+                <div key={field.key}>
+                  <TextField
+                    id={`${method.code}-${field.key}`}
+                    label={field.label}
+                    required={showRequired}
+                    type={field.secret ? "password" : "text"}
+                    dir="ltr"
+                    value={config[field.key] ?? ""}
+                    placeholder={secretSaved ? "•••••••• saved — leave empty to keep" : ""}
+                    onChange={(value) => updateConfig(field.key, value)}
+                    {...(error !== undefined ? { error } : {})}
+                    {...(field.help !== undefined ? { help: field.help } : {})}
+                  />
+                  {secretSaved ? (
+                    <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-success">
+                      <KeyRound className="size-3" aria-hidden /> Encrypted and saved
+                    </p>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         )}
 

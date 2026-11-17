@@ -144,9 +144,15 @@ export async function saveMethod(code: MethodCode, input: z.infer<typeof methodU
   }
 
   const candidate: PaymentMethod = { ...current, config: next };
-  const missing = missingFields(candidate);
-  if (input.enabled && missing.length > 0) {
-    throw badRequest("method_incomplete", `Fill these before enabling: ${missing.join(", ")}`);
+  const incomplete = spec.fields.filter(
+    (fieldSpec) => fieldSpec.required && (next[fieldSpec.key] ?? "").trim().length === 0,
+  );
+  if (incomplete.length > 0) {
+    throw badRequest(
+      "method_incomplete",
+      `Fill these required fields: ${incomplete.map((fieldSpec) => fieldSpec.label).join(", ")}`,
+      Object.fromEntries(incomplete.map((fieldSpec) => [`config.${fieldSpec.key}`, "Required"])),
+    );
   }
 
   await pool.query(

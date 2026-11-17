@@ -45,6 +45,7 @@ export function TextField({
           onChange={(e) => onChange(e.target.value)}
           className={prefix !== undefined ? "field ps-12" : "field"}
           aria-invalid={error !== undefined}
+          aria-required={required || undefined}
           aria-describedby={`${id}-hint`}
           {...(dir === undefined ? {} : { dir })}
           {...(maxLength === undefined ? {} : { maxLength })}
