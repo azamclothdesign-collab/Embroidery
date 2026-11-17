@@ -2,11 +2,45 @@ import { NextResponse, type NextRequest } from "next/server";
 import { requestIp } from "@/lib/api.server";
 import { serverEnv } from "@/lib/env.server";
 import { getAdminToken } from "@/lib/session.server";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 /** Allow large ZIP packages; nginx also sets a long read timeout for this path. */
 export const maxDuration = 600;
+
+/** Origins allowed for same-site admin uploads (browser Origin vs internal Next URL differ behind nginx). */
+function allowedUploadOrigins(request: NextRequest): Set<string> {
+  const allowed = new Set<string>();
+  const add = (raw: string | null | undefined) => {
+    if (raw === null || raw === undefined || raw.length === 0) return;
+    try {
+      allowed.add(new URL(raw).origin);
+    } catch {
+      /* ignore bad URL */
+    }
+  };
+
+  add(SITE_URL);
+  add(request.nextUrl.origin);
+
+  try {
+    const site = new URL(SITE_URL);
+    if (site.hostname.startsWith("www.")) {
+      add(`${site.protocol}//${site.hostname.slice(4)}`);
+    } else if (site.hostname.includes(".")) {
+      add(`${site.protocol}//www.${site.hostname}`);
+    }
+  } catch {
+    /* ignore */
+  }
+
+  const proto = (request.headers.get("x-forwarded-proto") ?? "https").split(",")[0]?.trim();
+  const host = (request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "").split(",")[0]?.trim();
+  if (proto && host) add(`${proto}://${host}`);
+
+  return allowed;
+}
 
 /**
  * Streams admin uploads (images, ZIP packages) straight to the backend.
@@ -20,7 +54,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   if (token === null) return NextResponse.json({ title: "Please sign in again" }, { status: 401 });
 
   const origin = request.headers.get("origin");
-  if (origin !== null && origin !== request.nextUrl.origin) {
+  if (origin !== null && !allowedUploadOrigins(request).has(origin)) {
     return NextResponse.json({ title: "Cross-site upload blocked" }, { status: 403 });
   }
   const contentType = request.headers.get("content-type") ?? "";

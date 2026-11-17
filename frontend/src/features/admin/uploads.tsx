@@ -97,8 +97,8 @@ export function ImagesField({ value, onChange, max = 8, label = "Images" }: { va
           </li>
         )}
       </ul>
-      <input ref={input} type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden onChange={(e) => void add(e.target.files)} />
-      <p className="field-help">JPG, PNG or WebP (not HEIC). Resized to fast WebP automatically. First image is the cover.</p>
+      <input ref={input} type="file" accept="image/jpeg,image/jpg,image/pjpeg,image/png,image/webp,image/avif,image/gif,.jpg,.jpeg,.jfif,.png,.webp,.avif,.gif" multiple hidden onChange={(e) => void add(e.target.files)} />
+      <p className="field-help">JPG/JFIF, PNG, WebP or GIF (not HEIC). Resized to fast WebP automatically. First image is the cover.</p>
     </div>
   );
 }
