@@ -16,6 +16,35 @@ import { inspectZip } from "../features/media/zipInspect.ts";
 const legacyUrl = process.env.LEGACY_DATABASE_URL ?? "";
 const legacyRoot = process.env.LEGACY_ROOT ?? "";
 
+/** Old DB left many category.image_src blank; files still live under assets/images. */
+const categoryImageFallbacks: Record<string, string> = {
+  "wilcom-embroidery-software": "cat_wilcom.jpg",
+  "embroidery-digitizing-course": "cat_course.jpg",
+  "step-by-step-embroidery-digitizing-guide": "cat_guide.jpg",
+  "cap-cart-embroidery": "cat_cap_cart.jpg",
+  "anarkali-kurti-shirt-embroidery": "cat_anarkali.jpg",
+  "maxi-lehenga-embroidery": "cat_maxi.jpg",
+  "sherwani-embroidery": "cat_sherwani.jpg",
+  "shawl-embroidery": "cat_shawl.jpg",
+  "neckline-embroidery": "cat_neckline.jpg",
+  "gala-daman-embroidery": "cat_gala_daman.jpg",
+  "gala-daman-sequins-embroidery": "cat_gala_daman_sequins.jpg",
+  "all-over-embroidery": "cat_all_over.jpg",
+  "motif-embroidery": "cat_motif.jpg",
+  "velvet-embroidery": "cat_velvet.jpg",
+  "cotton-embroidery": "cat_cotton.jpg",
+  "shaneel-embroidery": "cat_shaneel.jpg",
+  "aari-embroidery": "cat_aari.jpg",
+  "dori-embroidery": "cat_dori.jpg",
+  "fancy-lace-embroidery": "cat_fancy_lace.jpg",
+  "sequins-embroidery": "cat_sequins.jpg",
+  "logo-embroidery": "cat_logo.jpg",
+  "4-head-embroidery": "cat_4_head.jpg",
+  "2-head-3-head-embroidery": "cat_2_head_3_head.jpg",
+  "4-border-shawl": "cat_4_border_shawl.jpg",
+  "islamic-embroidery": "cat_islamic.jpg",
+};
+
 function slugify(value: string): string {
   return (
     value
@@ -136,7 +165,16 @@ async function main(): Promise<void> {
         continue;
       }
 
-      const image = await importImage(row.image_src, `category:${slug}`);
+      let image = await importImage(row.image_src, `category:${slug}`);
+      if (image === null) {
+        const fallback = categoryImageFallbacks[slug];
+        if (fallback !== undefined) {
+          image = await importImage(
+            `/assets/images/${fallback}`,
+            `category:${slug}:fallback`,
+          );
+        }
+      }
       const created = await pool.query<{ id: string }>(
         `INSERT INTO categories (slug, name_en, image, sort_order, is_visible)
          VALUES ($1, $2, $3, $4, $5) RETURNING id`,
