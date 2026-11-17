@@ -175,6 +175,13 @@ export async function markMessageReadAction(id: string) {
   });
 }
 
+export async function deleteMessageAction(id: string) {
+  return run(async () => {
+    assert(UUID.test(id));
+    await adminApi(`/v1/admin/messages/${id}`, { method: "DELETE" });
+  });
+}
+
 // ---------- Payments ----------
 const METHODS = ["payfast", "jazzcash", "easypaisa", "bank", "cod"];
 

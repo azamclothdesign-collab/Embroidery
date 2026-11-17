@@ -175,5 +175,13 @@ export async function contentRoutes(app: FastifyInstance): Promise<void> {
     return reply.status(204).send();
   });
 
+  app.delete("/v1/admin/messages/:id", { preHandler: requireReadyAdmin }, async (request, reply) => {
+    const { id } = parse(z.object({ id: z.uuid() }), request.params);
+    const result = await pool.query(`DELETE FROM contact_messages WHERE id = $1`, [id]);
+    if ((result.rowCount ?? 0) === 0) throw notFound("Message");
+    await audit(getAdmin(request).id, "message.deleted", { id }, clientIp(request));
+    return reply.status(204).send();
+  });
+
   app.get("/v1/admin/audit", { preHandler: requireReadyAdmin }, async () => ({ items: await listAudit(100) }));
 }
