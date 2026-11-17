@@ -22,10 +22,20 @@ function upload<T>(kind: "image" | "package", file: File, onProgress: (percent: 
       } catch {
         body = null;
       }
-      if (xhr.status >= 200 && xhr.status < 300) resolve(body as T);
-      else reject(new Error((body as { title?: string } | null)?.title ?? `Upload failed (${xhr.status})`));
+      if (xhr.status >= 200 && xhr.status < 300) {
+        if (body === null || typeof body !== "object") {
+          reject(new Error(`Upload failed (${xhr.status})`));
+          return;
+        }
+        resolve(body as T);
+        return;
+      }
+      const problem = body as { title?: string; detail?: string; code?: string } | null;
+      reject(new Error(problem?.title ?? problem?.detail ?? `Upload failed (${xhr.status})`));
     };
     xhr.onerror = () => reject(new Error("Network error during upload"));
+    xhr.ontimeout = () => reject(new Error("Upload timed out — try a smaller file or check your connection"));
+    xhr.timeout = 10 * 60_000;
     const form = new FormData();
     form.append("file", file);
     xhr.send(form);
@@ -88,7 +98,7 @@ export function ImagesField({ value, onChange, max = 8, label = "Images" }: { va
         )}
       </ul>
       <input ref={input} type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden onChange={(e) => void add(e.target.files)} />
-      <p className="field-help">JPG, PNG or WebP, at least 300 × 300 px. Resized to fast WebP automatically. First image is the cover.</p>
+      <p className="field-help">JPG, PNG or WebP (not HEIC). Resized to fast WebP automatically. First image is the cover.</p>
     </div>
   );
 }

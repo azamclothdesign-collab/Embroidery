@@ -18,11 +18,19 @@ export async function mediaRoutes(app: FastifyInstance): Promise<void> {
     const upload = await receiveFile(request, MAX_IMAGE_BYTES);
     try {
       if (sniffImage(upload.head) === null) {
-        throw badRequest("invalid_image", "Upload a JPG, PNG, WebP, AVIF or GIF image");
+        throw badRequest(
+          "invalid_image",
+          "Upload a JPG, PNG, WebP, AVIF or GIF image (HEIC/iPhone photos are not supported — export as JPG first)",
+        );
       }
-      const result = await writeImageVariants(upload.tmpPath, randomUUID());
+      // Admin uploads may be small category thumbs; upscale so Save is not blocked.
+      const result = await writeImageVariants(upload.tmpPath, randomUUID(), { allowUpscale: true });
       return { path: result.base, width: result.width, height: result.height };
     } catch (error) {
+      const code = (error as NodeJS.ErrnoException | undefined)?.code;
+      if (code === "EACCES" || code === "EPERM" || code === "EROFS") {
+        throw badRequest("storage_unwritable", "Server cannot save images. Fix media folder permissions.");
+      }
       if (error instanceof Error && !("status" in error)) {
         throw badRequest("invalid_image", error.message);
       }

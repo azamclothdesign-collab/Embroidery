@@ -38,7 +38,8 @@ export async function buildApp(): Promise<FastifyInstance> {
       },
     },
     bodyLimit: 256 * 1024,
-    requestTimeout: 30_000,
+    // Admin ZIP/image uploads stream through Next → API; 30s was aborting large packages.
+    requestTimeout: 10 * 60_000,
     connectionTimeout: 60_000,
     keepAliveTimeout: 65_000,
     trustProxy: false,

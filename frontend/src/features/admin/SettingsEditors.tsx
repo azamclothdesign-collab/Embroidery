@@ -30,7 +30,7 @@ export function StoreEditor({ initial }: { initial: Storefront["store"] }) {
         <div className="grid gap-4 md:grid-cols-3">
           <TextField id="email" label="Support email" type="email" dir="ltr" value={v.email} onChange={(x) => setV((c) => ({ ...c, email: x }))} help="Contact form messages are sent here." />
           <TextField id="phone" label="Phone" dir="ltr" value={v.phone} onChange={(x) => setV((c) => ({ ...c, phone: x }))} />
-          <TextField id="whatsapp" label="WhatsApp number" dir="ltr" value={v.whatsapp} onChange={(x) => setV((c) => ({ ...c, whatsapp: x }))} help="Shows the floating chat button." />
+          <TextField id="whatsapp" label="WhatsApp number" dir="ltr" value={v.whatsapp} onChange={(x) => setV((c) => ({ ...c, whatsapp: x }))} help="Shows the green floating WhatsApp button on the storefront. Leave blank to hide it." />
         </div>
         <BilingualRow>
           <TextField id="addr-en" label="Address (English)" value={v.address.en} onChange={(x) => loc("address", "en", x)} />

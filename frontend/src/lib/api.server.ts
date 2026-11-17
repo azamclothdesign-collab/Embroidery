@@ -43,7 +43,7 @@ export async function requestIp(): Promise<string> {
  */
 export async function api<T>(path: string, options: Options = {}): Promise<T> {
   const method = options.method ?? "GET";
-  const timeoutMs = options.timeoutMs ?? (method === "GET" ? 5_000 : 10_000);
+  const timeoutMs = options.timeoutMs ?? (method === "GET" ? 5_000 : 30_000);
   const requestHeaders: Record<string, string> = {
     accept: "application/json",
     "x-internal-key": serverEnv.internalKey,
