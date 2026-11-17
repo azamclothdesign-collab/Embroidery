@@ -20,18 +20,28 @@ export function sniffImage(head: Buffer): SniffedImage | null {
 /**
  * Writes /media/{id}-{w}.webp variants (plus the original aspect ratio).
  * Returns the public base path stored in the DB: /media/{id}
+ *
+ * `allowUpscale` is for legacy imports that stored small thumbs; normal admin
+ * uploads still require 300×300.
  */
-export async function writeImageVariants(sourcePath: string, id: string): Promise<{ base: string; width: number; height: number }> {
+export async function writeImageVariants(
+  sourcePath: string,
+  id: string,
+  options?: { allowUpscale?: boolean },
+): Promise<{ base: string; width: number; height: number }> {
+  const allowUpscale = options?.allowUpscale === true;
   const image = sharp(sourcePath, { limitInputPixels: 40_000_000 }).rotate();
   const meta = await image.metadata();
   if (meta.width === undefined || meta.height === undefined) throw new Error("Unreadable image");
-  if (meta.width < 300 || meta.height < 300) throw new Error("Image must be at least 300 × 300 pixels");
+  if (!allowUpscale && (meta.width < 300 || meta.height < 300)) {
+    throw new Error("Image must be at least 300 × 300 pixels");
+  }
 
   await Promise.all(
     IMAGE_WIDTHS.map((width) =>
       image
         .clone()
-        .resize({ width, withoutEnlargement: true })
+        .resize({ width, withoutEnlargement: !allowUpscale })
         .webp({ quality: width >= 1600 ? 70 : 60, effort: 5, smartSubsample: true })
         .toFile(path.join(dirs.media, `${id}-${width}.webp`)),
     ),
