@@ -51,8 +51,8 @@ export function AddToCartButton({
   }
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row">
-      <button type="button" onClick={add} className={cn("btn flex-1", inCart ? "btn-outline" : "btn-primary")} aria-live="polite">
+    <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row">
+      <button type="button" onClick={add} className={cn("btn w-full min-w-0 flex-1", inCart ? "btn-outline" : "btn-primary")} aria-live="polite">
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={justAdded ? "added" : inCart ? "in" : "add"}
@@ -60,17 +60,17 @@ export function AddToCartButton({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18 }}
-            className="inline-flex items-center gap-2"
+            className="inline-flex max-w-full items-center justify-center gap-2"
           >
-            {justAdded || inCart ? <Check className="size-5" aria-hidden /> : <ShoppingBag className="size-5" aria-hidden />}
-            {justAdded ? labels.added : inCart ? labels.inCart : labels.add}
+            {justAdded || inCart ? <Check className="size-5 shrink-0" aria-hidden /> : <ShoppingBag className="size-5 shrink-0" aria-hidden />}
+            <span className="truncate">{justAdded ? labels.added : inCart ? labels.inCart : labels.add}</span>
           </motion.span>
         </AnimatePresence>
       </button>
       {labels.buyNow !== undefined && checkoutHref !== undefined && (
         <button
           type="button"
-          className="btn btn-dark flex-1"
+          className="btn btn-dark w-full min-w-0 flex-1"
           onClick={() => {
             if (!inCart) cart.add(item);
             router.push(checkoutHref);

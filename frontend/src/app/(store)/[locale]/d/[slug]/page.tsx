@@ -57,7 +57,7 @@ export default async function ProductPage({ params }: Props) {
   ];
 
   return (
-    <div className="container-page py-8 sm:py-12">
+    <div className="container-page w-full min-w-0 overflow-x-clip py-8 sm:py-12">
       <Breadcrumbs
         items={[
           { href: `/${locale}`, label: t.common.breadcrumbHome },
@@ -66,17 +66,19 @@ export default async function ProductPage({ params }: Props) {
         ]}
       />
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-14">
-        <Gallery images={product.images} alt={name} emptyLabel={t.product.noImage} />
+      <div className="mt-6 grid w-full min-w-0 gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="min-w-0">
+          <Gallery images={product.images} alt={name} emptyLabel={t.product.noImage} />
+        </div>
 
-        <div className="lg:sticky lg:top-28 lg:self-start">
+        <div className="min-w-0 lg:sticky lg:top-28 lg:self-start">
           <p className="eyebrow">{categoryName}</p>
-          <h1 className="mt-2 text-3xl sm:text-[2.6rem] sm:leading-tight">{name}</h1>
+          <h1 className="mt-2 break-words text-3xl sm:text-[2.6rem] sm:leading-tight">{name}</h1>
           <div className="mt-4">
             <Price priceMinor={product.priceMinor} salePriceMinor={product.salePriceMinor} locale={locale} size="lg" saveLabel={t.product.save} />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 w-full min-w-0">
             <AddToCartButton
               item={cartItem}
               variant="full"
@@ -85,29 +87,31 @@ export default async function ProductPage({ params }: Props) {
             />
           </div>
 
-          <dl className="mt-8 divide-y divide-line rounded-[var(--radius-card)] border border-line bg-paper">
+          <dl className="mt-8 w-full min-w-0 divide-y divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper">
             {specs.map(({ icon: Icon, label, value }) => (
-              <div key={label} className="flex items-start gap-3 px-4 py-3.5 sm:items-center sm:gap-4 sm:px-5">
+              <div key={label} className="flex min-w-0 items-start gap-3 px-3 py-3.5 sm:items-center sm:gap-4 sm:px-5">
                 <Icon className="mt-0.5 size-5 shrink-0 text-teal sm:mt-0" aria-hidden />
-                <dt className="w-20 shrink-0 text-sm text-muted sm:w-28">{label}</dt>
-                <dd className="min-w-0 flex-1 break-words font-semibold" dir="auto">{value}</dd>
+                <dt className="w-16 shrink-0 text-sm text-muted sm:w-28">{label}</dt>
+                <dd className="min-w-0 flex-1 break-words font-semibold [overflow-wrap:anywhere]" dir="auto">
+                  {value}
+                </dd>
               </div>
             ))}
           </dl>
 
-          <div className="mt-8">
+          <div className="mt-8 min-w-0">
             <h2 className="text-lg">{t.product.whatYouGet}</h2>
             <ul className="mt-3 space-y-2">
               {t.product.whatYouGetItems.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-ink-soft">
+                <li key={item} className="flex min-w-0 items-start gap-2.5 text-ink-soft">
                   <CheckCircle2 className="mt-1 size-4 shrink-0 text-success" aria-hidden />
-                  {item}
+                  <span className="min-w-0 break-words [overflow-wrap:anywhere]">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {description.length > 0 && <Markdown source={description} className="prose-cms mt-8" />}
+          {description.length > 0 && <Markdown source={description} className="prose-cms mt-8 min-w-0" />}
         </div>
       </div>
 
