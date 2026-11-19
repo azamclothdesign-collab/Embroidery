@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ImageOff } from "lucide-react";
 import { AddToCartButton } from "@/features/cart/AddToCartButton";
 import type { Dictionary } from "@/lib/i18n";
+import { mediaUrl } from "@/lib/mediaLoader";
 import { pick, type Locale, type Product } from "@/lib/types";
 import { Price } from "./Price";
 
@@ -15,19 +15,18 @@ export function ProductCard({ product, locale, t, priority = false }: { product:
   return (
     <article className="group relative flex flex-col">
       <Link href={href} className="relative block overflow-hidden rounded-[var(--radius-card)] bg-sand" aria-label={name}>
-        <div className="relative aspect-square p-2">
+        <div className="relative aspect-square">
           {image !== null ? (
-            <div className="relative h-full w-full">
-              <Image
-                src={image}
-                alt={name}
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className="object-contain object-center transition duration-500 group-hover:scale-[1.04]"
-                style={{ objectFit: "contain", objectPosition: "center" }}
-                {...(priority ? { preload: true } : { loading: "lazy" as const })}
-              />
-            </div>
+            // eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; avoid next/image clipping tall designs
+            <img
+              src={mediaUrl(image, 800)}
+              alt={name}
+              decoding="async"
+              {...(priority ? { fetchPriority: "high" as const } : { loading: "lazy" as const })}
+              className="absolute inset-0 h-full w-full object-contain object-center transition duration-500 group-hover:scale-[1.04]"
+              srcSet={`${mediaUrl(image, 400)} 400w, ${mediaUrl(image, 800)} 800w, ${mediaUrl(image, 1600)} 1600w`}
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+            />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-2 text-muted">
               <ImageOff className="size-7" aria-hidden />

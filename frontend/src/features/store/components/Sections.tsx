@@ -1,7 +1,7 @@
 import { ArrowRight, ChevronDown, CreditCard, Download, MousePointerClick } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import type { Dictionary } from "@/lib/i18n";
+import { mediaUrl } from "@/lib/mediaLoader";
 import { pick, type Category, type Locale, type Storefront } from "@/lib/types";
 
 export function SectionHeader({ title, text, href, linkLabel }: { title: string; text?: string; href?: string; linkLabel?: string }) {
@@ -30,19 +30,18 @@ export function CategoryGrid({ categories, locale, t }: { categories: Category[]
             href={`/${locale}/c/${category.slug}`}
             className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
           >
-            <div className="relative aspect-[4/3] bg-sand p-2">
+            <div className="relative aspect-[4/3] bg-sand">
               {category.image !== null ? (
-                <div className="relative h-full w-full">
-                  <Image
-                    src={category.image}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                    className="object-contain object-center transition duration-500 group-hover:scale-[1.04]"
-                    style={{ objectFit: "contain", objectPosition: "center" }}
-                    {...(index < 4 ? {} : { loading: "lazy" as const })}
-                  />
-                </div>
+                // eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; avoid next/image clipping
+                <img
+                  src={mediaUrl(category.image, 800)}
+                  alt=""
+                  decoding="async"
+                  {...(index < 4 ? {} : { loading: "lazy" as const })}
+                  className="absolute inset-0 h-full w-full object-contain object-center transition duration-500 group-hover:scale-[1.04]"
+                  srcSet={`${mediaUrl(category.image, 400)} 400w, ${mediaUrl(category.image, 800)} 800w, ${mediaUrl(category.image, 1600)} 1600w`}
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                />
               ) : (
                 <div aria-hidden className="flex h-full items-center justify-center text-5xl font-semibold text-line">
                   {pick(category.name, locale).charAt(0)}

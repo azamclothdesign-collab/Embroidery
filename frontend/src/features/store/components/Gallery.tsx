@@ -1,17 +1,21 @@
 "use client";
 
 import { ImageOff } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { mediaUrl } from "@/lib/mediaLoader";
 
+/**
+ * Product gallery. Uses plain <img> (not next/image) so tall embroidery
+ * previews are not forced into a wrong aspect box and clipped.
+ */
 export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: string; emptyLabel: string }) {
   const [active, setActive] = useState(0);
   const current = images[active] ?? null;
 
   if (current === null) {
     return (
-      <div className="flex aspect-square flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] bg-sand text-muted">
+      <div className="flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] bg-sand text-muted sm:aspect-square">
         <ImageOff className="size-8" aria-hidden />
         {emptyLabel}
       </div>
@@ -20,17 +24,17 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[var(--radius-card)] bg-sand p-3 sm:p-4">
-        <Image
+      <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius-card)] bg-sand sm:aspect-square">
+        {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP variants; avoid next/image aspect clipping */}
+        <img
           key={current}
-          src={current}
+          src={mediaUrl(current, 800)}
           alt={images.length > 1 ? `${alt} — ${active + 1}/${images.length}` : alt}
-          width={1600}
-          height={1600}
-          sizes="(min-width: 1024px) 50vw, calc(100vw - 2rem)"
-          className="h-auto max-h-full w-auto max-w-full object-contain object-center"
-          style={{ objectFit: "contain", objectPosition: "center" }}
-          {...(active === 0 ? { preload: true } : {})}
+          decoding="async"
+          fetchPriority={active === 0 ? "high" : "auto"}
+          className="absolute inset-0 h-full w-full object-contain object-center"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          srcSet={`${mediaUrl(current, 400)} 400w, ${mediaUrl(current, 800)} 800w, ${mediaUrl(current, 1600)} 1600w`}
         />
       </div>
       {images.length > 1 && (
@@ -43,19 +47,17 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
                 aria-label={`${alt} ${index + 1}`}
                 aria-pressed={index === active}
                 className={cn(
-                  "relative flex size-20 items-center justify-center overflow-hidden rounded-xl border-2 bg-sand p-1 transition",
+                  "relative size-20 overflow-hidden rounded-xl border-2 bg-sand transition",
                   index === active ? "border-ink" : "border-transparent opacity-75 hover:opacity-100",
                 )}
               >
-                <Image
-                  src={image}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={mediaUrl(image, 400)}
                   alt=""
-                  width={160}
-                  height={160}
-                  sizes="80px"
-                  className="h-auto max-h-full w-auto max-w-full object-contain object-center"
-                  style={{ objectFit: "contain", objectPosition: "center" }}
                   loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-contain object-center"
                 />
               </button>
             </li>
