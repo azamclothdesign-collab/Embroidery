@@ -69,7 +69,7 @@ export function ImagesField({ value, onChange, max = 8, label = "Images" }: { va
       <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {value.map((path, index) => (
           <li key={path} className="group relative aspect-square overflow-hidden rounded-xl border border-line bg-sand">
-            <Image src={path} alt="" fill sizes="160px" className="object-cover" />
+            <Image src={path} alt="" fill sizes="160px" className="object-contain" />
             {index === 0 && <span className="absolute start-1.5 top-1.5 rounded bg-ink px-1.5 py-0.5 text-[10px] font-semibold text-white">Cover</span>}
             <div className="absolute inset-x-0 bottom-0 flex justify-end gap-1 bg-gradient-to-t from-ink/60 p-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
               {index > 0 && (
@@ -98,7 +98,7 @@ export function ImagesField({ value, onChange, max = 8, label = "Images" }: { va
         )}
       </ul>
       <input ref={input} type="file" accept="image/jpeg,image/jpg,image/pjpeg,image/png,image/webp,image/avif,image/gif,.jpg,.jpeg,.jfif,.png,.webp,.avif,.gif" multiple hidden onChange={(e) => void add(e.target.files)} />
-      <p className="field-help">JPG/JFIF, PNG, WebP or GIF (not HEIC). Resized to fast WebP automatically. First image is the cover.</p>
+      <p className="field-help">JPG/JFIF, PNG, WebP or GIF (not HEIC). Any size or aspect ratio. Shown in full (not cropped). First image is the cover.</p>
     </div>
   );
 }
@@ -120,7 +120,7 @@ export function ZipField({ value, onChange, error }: { value: PackageInfo | null
       setProgress(0);
       const result = await upload<{ packageId: string; name: string; size: number; files: string[] }>("package", file, setProgress);
       onChange({ id: result.packageId, name: result.name, size: result.size, files: result.files });
-      toast.success("ZIP checked and uploaded");
+      toast.success("ZIP uploaded");
     } catch (uploadError) {
       toast.error((uploadError as Error).message);
     } finally {
@@ -171,7 +171,7 @@ export function ZipField({ value, onChange, error }: { value: PackageInfo | null
               <div className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-sand" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
                 <div className="h-full bg-teal transition-all" style={{ width: `${progress}%` }} />
               </div>
-              <p className="text-sm font-semibold">{progress < 100 ? `Uploading ${progress}%` : "Checking ZIP…"}</p>
+              <p className="text-sm font-semibold">{progress < 100 ? `Uploading ${progress}%` : "Saving ZIP…"}</p>
             </>
           ) : (
             <>
@@ -179,7 +179,7 @@ export function ZipField({ value, onChange, error }: { value: PackageInfo | null
               <button type="button" className="btn btn-outline" onClick={() => input.current?.click()}>
                 {value === null ? "Choose ZIP file" : "Replace ZIP"}
               </button>
-              <p className="text-xs text-muted">or drag and drop · .zip only · paths and contents are checked</p>
+              <p className="text-xs text-muted">or drag and drop · .zip only · no content check</p>
             </>
           )}
         </div>

@@ -30,7 +30,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       pick(category.intro, locale) ||
       (locale === "ur"
         ? `${name} — ${category.productCount} مشین ایمبرائیڈری ڈیزائن، فوری ZIP ڈاؤن لوڈ کے ساتھ۔`
-        : `${category.productCount} ${name.toLowerCase()} machine embroidery designs in DST, PES and JEF. Secure payment and instant ZIP download.`),
+        : `${category.productCount} ${name.toLowerCase()} machine embroidery designs in DST and EMB. Secure payment and instant ZIP download.`),
     image: category.image,
     storefront,
     noindex: filtered,

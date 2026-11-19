@@ -29,7 +29,7 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
               alt={images.length > 1 ? `${alt} — ${active + 1}/${images.length}` : alt}
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover"
+              className="object-contain"
               {...(active === 0 ? { preload: true } : {})}
             />
           </motion.div>
@@ -49,7 +49,7 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
                   index === active ? "border-ink" : "border-transparent opacity-75 hover:opacity-100",
                 )}
               >
-                <Image src={image} alt="" fill sizes="80px" className="object-cover" loading="lazy" />
+                <Image src={image} alt="" fill sizes="80px" className="object-contain" loading="lazy" />
               </button>
             </li>
           ))}

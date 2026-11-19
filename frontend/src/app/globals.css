@@ -49,6 +49,7 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
   /* Lenis smooth scroll takes over from native smooth scrolling. */
   html.lenis, html.lenis body { height: auto; }
@@ -61,6 +62,7 @@
     font-size: 1rem;
     line-height: 1.6;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
   }
   html[lang="ur"] body {
     font-family: var(--font-urdu);

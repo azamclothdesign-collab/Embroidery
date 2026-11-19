@@ -37,7 +37,7 @@ export function CategoryGrid({ categories, locale, t }: { categories: Category[]
                   alt=""
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                  className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                  className="object-contain transition duration-500 group-hover:scale-[1.04]"
                   {...(index < 4 ? {} : { loading: "lazy" as const })}
                 />
               ) : (
@@ -94,11 +94,7 @@ export function HowItWorks({ t }: { t: Dictionary }) {
 
 const MACHINES: Array<[string, string]> = [
   ["DST", "Tajima / Barudan / Ricoma"],
-  ["PES", "Brother / Babylock"],
-  ["JEF", "Janome"],
-  ["EXP", "Melco / Bernina"],
-  ["VP3", "Husqvarna / Pfaff"],
-  ["XXX", "Singer"],
+  ["EMB", "Wilcom / design software"],
 ];
 
 export function FormatsStrip({ t }: { t: Dictionary }) {
@@ -106,7 +102,7 @@ export function FormatsStrip({ t }: { t: Dictionary }) {
     <section className="section">
       <div className="container-page">
         <SectionHeader title={t.home.formatsTitle} text={t.home.formatsText} />
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="grid grid-cols-2 gap-3 sm:max-w-xl">
           {MACHINES.map(([format, brands]) => (
             <li key={format} data-reveal-item className="card p-4">
               <p className="text-2xl font-semibold text-saffron-strong" dir="ltr">.{format.toLowerCase()}</p>

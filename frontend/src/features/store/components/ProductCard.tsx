@@ -22,7 +22,7 @@ export function ProductCard({ product, locale, t, priority = false }: { product:
               alt={name}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="object-cover transition duration-500 group-hover:scale-[1.04]"
+              className="object-contain transition duration-500 group-hover:scale-[1.04]"
               {...(priority ? { preload: true } : { loading: "lazy" as const })}
             />
           ) : (

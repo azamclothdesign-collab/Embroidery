@@ -218,7 +218,7 @@ async function main(): Promise<void> {
         product.name,
         "Professionally digitized machine embroidery design. Instant ZIP download after payment.",
         product.priceMinor,
-        ["DST", "PES", "JEF", "EXP", "VP3"],
+        ["DST", "EMB"],
         '4 × 4"',
         0,
         images,

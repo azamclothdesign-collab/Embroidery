@@ -87,10 +87,10 @@ export default async function ProductPage({ params }: Props) {
 
           <dl className="mt-8 divide-y divide-line rounded-[var(--radius-card)] border border-line bg-paper">
             {specs.map(({ icon: Icon, label, value }) => (
-              <div key={label} className="flex items-center gap-4 px-5 py-3.5">
-                <Icon className="size-5 shrink-0 text-teal" aria-hidden />
-                <dt className="w-28 shrink-0 text-sm text-muted">{label}</dt>
-                <dd className="font-semibold" dir="auto">{value}</dd>
+              <div key={label} className="flex items-start gap-3 px-4 py-3.5 sm:items-center sm:gap-4 sm:px-5">
+                <Icon className="mt-0.5 size-5 shrink-0 text-teal sm:mt-0" aria-hidden />
+                <dt className="w-20 shrink-0 text-sm text-muted sm:w-28">{label}</dt>
+                <dd className="min-w-0 flex-1 break-words font-semibold" dir="auto">{value}</dd>
               </div>
             ))}
           </dl>

@@ -46,7 +46,7 @@ export function getProducts(query: ProductQuery): Promise<ProductPage> {
 }
 
 export const SORTS = ["new", "price_asc", "price_desc", "name"] as const;
-export const FORMATS = ["DST", "PES", "JEF", "EXP", "VP3", "XXX", "HUS", "VIP", "SEW", "EMB"] as const;
+export const FORMATS = ["DST", "EMB"] as const;
 
 /** Reads list filters from searchParams, ignoring anything invalid. */
 export function readListParams(params: Record<string, string | string[] | undefined>): ProductQuery {

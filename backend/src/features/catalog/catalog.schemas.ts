@@ -9,7 +9,7 @@ export const slugRule = z
 const text = (max: number) => z.string().trim().max(max);
 const mediaPath = z.string().regex(/^\/media\/[a-f0-9-]{36}$/, "Invalid image");
 
-export const FORMATS = ["DST", "PES", "JEF", "EXP", "VP3", "XXX", "HUS", "VIP", "SEW", "EMB"] as const;
+export const FORMATS = ["DST", "EMB"] as const;
 
 export const categoryInput = z.object({
   slug: slugRule,

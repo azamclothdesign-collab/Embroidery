@@ -36,7 +36,7 @@ INSERT INTO settings (key, value) VALUES
   "enabled": true,
   "items": [
     {"en": "Instant ZIP download after payment", "ur": "ادائیگی کے فوراً بعد ZIP ڈاؤن لوڈ"},
-    {"en": "DST · PES · JEF · EXP · VP3 formats", "ur": "DST · PES · JEF · EXP · VP3 فارمیٹس"},
+    {"en": "DST · EMB formats", "ur": "DST · EMB فارمیٹس"},
     {"en": "Pay with JazzCash, Easypaisa or bank", "ur": "جاز کیش، ایزی پیسہ یا بینک سے ادائیگی"}
   ]
 }'),
@@ -45,7 +45,7 @@ INSERT INTO settings (key, value) VALUES
     {"q": {"en": "How do I get my design after payment?", "ur": "ادائیگی کے بعد ڈیزائن کیسے ملے گا؟"},
      "a": {"en": "As soon as your payment is confirmed, the order page shows a Download button for each design, and we email you a link. Each file is a ZIP with all formats.", "ur": "ادائیگی کی تصدیق ہوتے ہی آرڈر صفحے پر ہر ڈیزائن کا ڈاؤن لوڈ بٹن آ جاتا ہے اور ہم آپ کو ای میل پر لنک بھیجتے ہیں۔ ہر فائل ZIP میں تمام فارمیٹس کے ساتھ ہوتی ہے۔"}},
     {"q": {"en": "Which embroidery machines are supported?", "ur": "کون سی ایمبرائیڈری مشینیں سپورٹ ہیں؟"},
-     "a": {"en": "Every ZIP includes common formats such as DST (Tajima), PES (Brother), JEF (Janome), EXP (Melco/Bernina) and VP3 (Husqvarna). Check the formats listed on each design.", "ur": "ہر ZIP میں عام فارمیٹس ہوتے ہیں جیسے DST (تاجیما)، PES (برادر)، JEF (جانومے)، EXP (میلکو/برنینا) اور VP3 (ہسکوارنا)۔ ہر ڈیزائن پر درج فارمیٹس دیکھیں۔"}},
+     "a": {"en": "Every ZIP includes DST (Tajima / commercial machines) and EMB (Wilcom / design software). Check the formats listed on each design.", "ur": "ہر ZIP میں DST (تاجیما / کمرشل مشینیں) اور EMB (ولکم / ڈیزائن سافٹ ویئر) شامل ہیں۔ ہر ڈیزائن پر درج فارمیٹس دیکھیں۔"}},
     {"q": {"en": "Do I need an account to buy?", "ur": "کیا خریدنے کے لیے اکاؤنٹ ضروری ہے؟"},
      "a": {"en": "No. You only enter your name, email and phone at checkout.", "ur": "نہیں۔ چیک آؤٹ پر صرف نام، ای میل اور فون نمبر درکار ہے۔"}},
     {"q": {"en": "I lost my download link. What now?", "ur": "میرا ڈاؤن لوڈ لنک گم ہو گیا، اب کیا کروں؟"},
@@ -56,7 +56,7 @@ INSERT INTO settings (key, value) VALUES
 }'),
 ('seo', '{
   "titleSuffix": "Chand Designer",
-  "description": {"en": "Buy professionally digitized machine embroidery designs in DST, PES, JEF and more. Secure payment in PKR and instant ZIP download.", "ur": "DST، PES، JEF اور مزید فارمیٹس میں پروفیشنل مشین ایمبرائیڈری ڈیزائن خریدیں۔ پاکستانی روپے میں محفوظ ادائیگی اور فوری ZIP ڈاؤن لوڈ۔"}
+  "description": {"en": "Buy professionally digitized machine embroidery designs in DST and EMB. Secure payment in PKR and instant ZIP download.", "ur": "DST اور EMB فارمیٹس میں پروفیشنل مشین ایمبرائیڈری ڈیزائن خریدیں۔ پاکستانی روپے میں محفوظ ادائیگی اور فوری ZIP ڈاؤن لوڈ۔"}
 }'),
 ('smtp', '{"host": "", "port": 587, "secure": false, "user": "", "from": "", "passEnc": ""}');
 

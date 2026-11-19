@@ -17,7 +17,7 @@ export async function GET() {
   const lines = [
     `# ${store.name.en}`,
     "",
-    `> ${store.tagline.en}. Digital machine-embroidery design files sold in Pakistani Rupees (PKR). After payment the customer downloads a ZIP containing the listed formats (for example DST, PES, JEF). No physical shipping. Site languages: English (/en) and Urdu (/ur).`,
+    `> ${store.tagline.en}. Digital machine-embroidery design files sold in Pakistani Rupees (PKR). After payment the customer downloads a ZIP containing the listed formats (DST and EMB). No physical shipping. Site languages: English (/en) and Urdu (/ur).`,
     "",
     "## Categories",
     ...categories.items.map((c) => `- [${c.name.en}](${absoluteUrl(`/en/c/${c.slug}`)}): ${c.productCount} designs${c.intro.en ? ` — ${c.intro.en}` : ""}`),

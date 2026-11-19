@@ -240,7 +240,7 @@ async function main(): Promise<void> {
           row.name,
           row.description,
           row.price_cents,
-          ["DST", "PES", "JEF"],
+          ["DST", "EMB"],
           row.hoop_size,
           row.stitch_count,
           images,

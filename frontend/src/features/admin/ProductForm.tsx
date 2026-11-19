@@ -10,7 +10,7 @@ import { BilingualRow, SeoPreview, TextArea, TextField, Toggle, fromMinor, slugi
 import { Panel } from "./ui";
 import { ImagesField, ZipField, type PackageInfo } from "./uploads";
 
-const FORMATS = ["DST", "PES", "JEF", "EXP", "VP3", "XXX", "HUS", "VIP", "SEW", "EMB"] as const;
+const FORMATS = ["DST", "EMB"] as const;
 
 export function ProductForm({ product, categories, siteUrl }: { product: Product | null; categories: Category[]; siteUrl: string }) {
   const router = useRouter();
@@ -24,7 +24,11 @@ export function ProductForm({ product, categories, siteUrl }: { product: Product
     categoryId: product?.category.id ?? categories[0]?.id ?? "",
     price: fromMinor(product?.priceMinor ?? null),
     salePrice: fromMinor(product?.salePriceMinor ?? null),
-    formats: product?.formats ?? ["DST", "PES", "JEF"],
+    formats: (() => {
+      const allowed = new Set<string>(FORMATS);
+      const fromProduct = (product?.formats ?? []).filter((f) => allowed.has(f));
+      return fromProduct.length > 0 ? fromProduct : ["DST", "EMB"];
+    })(),
     hoopSize: product?.hoopSize ?? "",
     stitchCount: product?.stitchCount ? String(product.stitchCount) : "",
     descriptionEn: product?.description.en ?? "",
