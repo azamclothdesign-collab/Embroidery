@@ -15,16 +15,19 @@ export function ProductCard({ product, locale, t, priority = false }: { product:
   return (
     <article className="group relative flex flex-col">
       <Link href={href} className="relative block overflow-hidden rounded-[var(--radius-card)] bg-sand" aria-label={name}>
-        <div className="aspect-square">
+        <div className="relative aspect-square p-2">
           {image !== null ? (
-            <Image
-              src={image}
-              alt={name}
-              fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="object-contain transition duration-500 group-hover:scale-[1.04]"
-              {...(priority ? { preload: true } : { loading: "lazy" as const })}
-            />
+            <div className="relative h-full w-full">
+              <Image
+                src={image}
+                alt={name}
+                fill
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                className="object-contain object-center transition duration-500 group-hover:scale-[1.04]"
+                style={{ objectFit: "contain", objectPosition: "center" }}
+                {...(priority ? { preload: true } : { loading: "lazy" as const })}
+              />
+            </div>
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-2 text-muted">
               <ImageOff className="size-7" aria-hidden />

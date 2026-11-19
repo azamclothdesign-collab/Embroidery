@@ -1,7 +1,6 @@
 "use client";
 
 import { ImageOff } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -21,35 +20,43 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative aspect-square overflow-hidden rounded-[var(--radius-card)] bg-sand">
-        <AnimatePresence initial={false} mode="popLayout">
-          <motion.div key={current} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
-            <Image
-              src={current}
-              alt={images.length > 1 ? `${alt} — ${active + 1}/${images.length}` : alt}
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-contain"
-              {...(active === 0 ? { preload: true } : {})}
-            />
-          </motion.div>
-        </AnimatePresence>
+      <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[var(--radius-card)] bg-sand p-3 sm:p-4">
+        <Image
+          key={current}
+          src={current}
+          alt={images.length > 1 ? `${alt} — ${active + 1}/${images.length}` : alt}
+          width={1600}
+          height={1600}
+          sizes="(min-width: 1024px) 50vw, calc(100vw - 2rem)"
+          className="h-auto max-h-full w-auto max-w-full object-contain object-center"
+          style={{ objectFit: "contain", objectPosition: "center" }}
+          {...(active === 0 ? { preload: true } : {})}
+        />
       </div>
       {images.length > 1 && (
         <ul className="flex gap-2 overflow-x-auto pb-1">
           {images.map((image, index) => (
-            <li key={image}>
+            <li key={image} className="shrink-0">
               <button
                 type="button"
                 onClick={() => setActive(index)}
                 aria-label={`${alt} ${index + 1}`}
                 aria-pressed={index === active}
                 className={cn(
-                  "relative size-20 overflow-hidden rounded-xl border-2 bg-sand transition",
+                  "relative flex size-20 items-center justify-center overflow-hidden rounded-xl border-2 bg-sand p-1 transition",
                   index === active ? "border-ink" : "border-transparent opacity-75 hover:opacity-100",
                 )}
               >
-                <Image src={image} alt="" fill sizes="80px" className="object-contain" loading="lazy" />
+                <Image
+                  src={image}
+                  alt=""
+                  width={160}
+                  height={160}
+                  sizes="80px"
+                  className="h-auto max-h-full w-auto max-w-full object-contain object-center"
+                  style={{ objectFit: "contain", objectPosition: "center" }}
+                  loading="lazy"
+                />
               </button>
             </li>
           ))}

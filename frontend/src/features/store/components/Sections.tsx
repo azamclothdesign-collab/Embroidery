@@ -30,16 +30,19 @@ export function CategoryGrid({ categories, locale, t }: { categories: Category[]
             href={`/${locale}/c/${category.slug}`}
             className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
           >
-            <div className="relative aspect-[4/3] bg-sand">
+            <div className="relative aspect-[4/3] bg-sand p-2">
               {category.image !== null ? (
-                <Image
-                  src={category.image}
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                  className="object-contain transition duration-500 group-hover:scale-[1.04]"
-                  {...(index < 4 ? {} : { loading: "lazy" as const })}
-                />
+                <div className="relative h-full w-full">
+                  <Image
+                    src={category.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    className="object-contain object-center transition duration-500 group-hover:scale-[1.04]"
+                    style={{ objectFit: "contain", objectPosition: "center" }}
+                    {...(index < 4 ? {} : { loading: "lazy" as const })}
+                  />
+                </div>
               ) : (
                 <div aria-hidden className="flex h-full items-center justify-center text-5xl font-semibold text-line">
                   {pick(category.name, locale).charAt(0)}
