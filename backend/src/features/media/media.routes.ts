@@ -8,6 +8,7 @@ import { dirs, moveInto, removeQuietly } from "../../platform/storage.ts";
 import { getAdmin, requireReadyAdmin } from "../admin/adminGuard.ts";
 import { sniffImage, writeImageVariants } from "./images.ts";
 import { receiveFile } from "./upload.ts";
+import { inspectZip } from "./zipInspect.ts";
 
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 
@@ -48,10 +49,17 @@ export async function mediaRoutes(app: FastifyInstance): Promise<void> {
         throw badRequest("invalid_zip", "Only .zip files are accepted");
       }
 
+      let report: Awaited<ReturnType<typeof inspectZip>>;
+      try {
+        report = await inspectZip(upload.tmpPath);
+      } catch (error) {
+        throw badRequest("invalid_zip", error instanceof Error ? error.message : "Invalid ZIP");
+      }
+
       const id = randomUUID();
       await moveInto(upload.tmpPath, dirs.packages, `${id}.zip`);
       moved = true;
-      const files: string[] = [];
+      const files = report.files;
       await pool.query(`INSERT INTO package_uploads (id, original_name, size_bytes, files) VALUES ($1, $2, $3, $4::jsonb)`, [
         id,
         upload.filename,

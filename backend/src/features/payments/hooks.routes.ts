@@ -102,18 +102,25 @@ export async function hookRoutes(app: FastifyInstance): Promise<void> {
       await markOrderFailed(order.id, "jazzcash", data);
       return backToOrder(reply, order, "failed");
     }
-    // Confirm with the inquiry API; fall back to the signed return if inquiry is unavailable.
+    // Fail closed: only mark paid when the inquiry API confirms payment.
+    // A signed browser return alone is not enough if inquiry is down or unclear.
     const inquiry = await jazzcash.inquire(order, method).catch(() => null);
-    const status = inquiry !== null && inquiry.status !== "unknown" ? inquiry.status : returned;
-    if (status === "paid") {
-      const amount = inquiry?.amountMinor ?? Number.parseInt(data.pp_Amount ?? "", 10);
+    if (inquiry?.status === "paid") {
       const result = await markOrderPaid({
-        orderId: order.id, provider: "jazzcash", txnId: inquiry?.txnId ?? data.pp_RetreivalReferenceNo ?? data.pp_TxnRefNo ?? null,
-        amountMinor: Number.isFinite(amount) ? amount : null, source: "gateway", payload: { ...data, pp_SecureHash: undefined },
+        orderId: order.id,
+        provider: "jazzcash",
+        txnId: inquiry.txnId,
+        amountMinor: inquiry.amountMinor,
+        source: "gateway",
+        payload: { ...data, inquiry: inquiry.raw, pp_SecureHash: undefined },
       });
       return backToOrder(reply, order, result.outcome === "amount_mismatch" ? "review" : "success");
     }
-    return backToOrder(reply, order, status === "pending" ? "pending" : "failed");
+    if (inquiry?.status === "failed") {
+      await markOrderFailed(order.id, "jazzcash", inquiry.raw ?? data);
+      return backToOrder(reply, order, "failed");
+    }
+    return backToOrder(reply, order, "pending");
   });
 
   // Easypaisa uses the same postBackURL twice: first with auth_token, then with the result.

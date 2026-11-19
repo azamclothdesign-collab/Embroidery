@@ -49,16 +49,19 @@ export default async function OrderPage({ params, searchParams }: Props) {
   }
 
   const paid = order.status === "paid";
+  const startFailed = payment === "start_failed";
   const note =
     payment === "review"
       ? t.order.reviewNote
-      : paid
-        ? t.order.paidNote
-        : order.status === "awaiting_verification"
-          ? t.order.awaitingNote
-          : order.status === "failed"
-            ? t.order.failedNote
-            : t.order.pendingNote;
+      : startFailed
+        ? t.order.startFailedNote
+        : paid
+          ? t.order.paidNote
+          : order.status === "awaiting_verification"
+            ? t.order.awaitingNote
+            : order.status === "failed"
+              ? t.order.failedNote
+              : t.order.pendingNote;
   const tone = paid ? "success" : order.status === "failed" || order.status === "cancelled" ? "danger" : "waiting";
   const Icon = tone === "success" ? CheckCircle2 : tone === "danger" ? XCircle : Clock;
   const proof = order.bankProof;
@@ -89,7 +92,11 @@ export default async function OrderPage({ params, searchParams }: Props) {
 
       {order.canPay && (
         <div className="mt-6">
-          <PayButton number={order.number} label={order.status === "failed" ? t.order.retry : t.order.payNow} redirecting={t.checkout.redirecting} />
+          <PayButton
+            number={order.number}
+            label={order.status === "failed" || startFailed ? t.order.retry : t.order.payNow}
+            redirecting={t.checkout.redirecting}
+          />
         </div>
       )}
 

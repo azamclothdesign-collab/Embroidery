@@ -125,6 +125,7 @@ export const en = {
     awaitingNote: "We will unlock your downloads as soon as payment is confirmed.",
     failedNote: "The payment did not go through. You can try again.",
     reviewNote: "We received your payment and are checking it. You will get an email shortly.",
+    startFailedNote: "Your order was created, but we could not open the payment page. Tap below to try again.",
     payNow: "Pay now",
     retry: "Try payment again",
     download: "Download ZIP",
