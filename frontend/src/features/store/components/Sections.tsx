@@ -30,15 +30,15 @@ export function CategoryGrid({ categories, locale, t }: { categories: Category[]
             href={`/${locale}/c/${category.slug}`}
             className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
           >
-            <div className="relative aspect-[4/3] bg-sand">
+            <div className="flex aspect-[4/3] items-center justify-center bg-sand p-2">
               {category.image !== null ? (
-                // eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; avoid next/image clipping
+                // eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; contain keeps full design
                 <img
                   src={mediaUrl(category.image, 800)}
                   alt=""
                   decoding="async"
                   {...(index < 4 ? {} : { loading: "lazy" as const })}
-                  className="absolute inset-0 h-full w-full object-contain object-center transition duration-500 group-hover:scale-[1.04]"
+                  className="max-h-full max-w-full object-contain object-center transition duration-500 group-hover:scale-[1.04]"
                   srcSet={`${mediaUrl(category.image, 400)} 400w, ${mediaUrl(category.image, 800)} 800w, ${mediaUrl(category.image, 1600)} 1600w`}
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                 />

@@ -15,15 +15,15 @@ export function ProductCard({ product, locale, t, priority = false }: { product:
   return (
     <article className="group relative flex flex-col">
       <Link href={href} className="relative block overflow-hidden rounded-[var(--radius-card)] bg-sand" aria-label={name}>
-        <div className="relative aspect-square">
+        <div className="flex aspect-square items-center justify-center p-2">
           {image !== null ? (
-            // eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; avoid next/image clipping tall designs
+            // eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; contain keeps full design
             <img
               src={mediaUrl(image, 800)}
               alt={name}
               decoding="async"
               {...(priority ? { fetchPriority: "high" as const } : { loading: "lazy" as const })}
-              className="absolute inset-0 h-full w-full object-contain object-center transition duration-500 group-hover:scale-[1.04]"
+              className="max-h-full max-w-full object-contain object-center transition duration-500 group-hover:scale-[1.04]"
               srcSet={`${mediaUrl(image, 400)} 400w, ${mediaUrl(image, 800)} 800w, ${mediaUrl(image, 1600)} 1600w`}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
             />

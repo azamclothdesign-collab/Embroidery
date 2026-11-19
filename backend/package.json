@@ -13,6 +13,7 @@
     "cleanup": "node --env-file=.env src/scripts/cleanup.ts",
     "import:legacy": "node --env-file=.env src/scripts/importLegacy.ts",
     "import:repo": "node --env-file=.env src/scripts/importFromLegacyRepo.ts",
+    "reframe:media": "node --env-file=.env src/scripts/reframeMedia.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.ts"
   },
