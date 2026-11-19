@@ -21,7 +21,7 @@ INSERT INTO settings (key, value) VALUES
 ('store', '{
   "name": {"en": "Chand Designer", "ur": "چاند ڈیزائنر"},
   "tagline": {"en": "Machine embroidery designs, ready to stitch", "ur": "مشین ایمبرائیڈری ڈیزائن، سلائی کے لیے تیار"},
-  "email": "", "phone": "", "whatsapp": "", "address": {"en": "Lahore, Pakistan", "ur": "لاہور، پاکستان"},
+  "email": "", "phone": "", "whatsapp": "", "address": {"en": "2381-F, Shop No. 12, Chuna Mandi, Lahore", "ur": "2381-F، دکان نمبر 12، چونا منڈی، لاہور"},
   "logo": "", "social": {"facebook": "", "instagram": "", "youtube": "", "tiktok": ""},
   "downloadLimit": 10, "accessDays": 30
 }'),
