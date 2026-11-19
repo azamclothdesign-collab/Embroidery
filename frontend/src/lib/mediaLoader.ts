@@ -1,9 +1,7 @@
-"use client";
-
 /**
- * next/image loader for backend media. Uploads are stored as
- * /media/{id}-{400|800|1600}.webp; pick the smallest variant ≥ requested width.
- * Anything else (static files in /public) is returned unchanged.
+ * next/image loader + URL helper for backend media.
+ * Uploads are stored as /media/{id}-{400|800|1600}.webp.
+ * Kept free of "use client" so Server Components (cards, sections) can import it.
  */
 const WIDTHS = [400, 800, 1600] as const;
 
