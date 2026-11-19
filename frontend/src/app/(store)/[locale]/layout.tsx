@@ -45,13 +45,13 @@ export default async function StoreLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} dir={dirFor(locale)} className={`${nourd.variable} ${locale === "ur" ? nastaliq.variable : ""}`}>
-      <body className="flex min-h-dvh flex-col">
+      <body className="flex min-h-dvh max-w-[100vw] flex-col overflow-x-clip">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-white">
           {t.nav.skip}
         </a>
         <CartProvider>
           <Header storefront={storefront} locale={locale} t={t} />
-          <main id="main" className="flex-1">
+          <main id="main" className="min-w-0 flex-1 overflow-x-clip">
             {children}
           </main>
           <Footer storefront={storefront} methods={methods} locale={locale} t={t} />

@@ -14,7 +14,7 @@ export function Logo({ storefront, locale }: { storefront: Storefront; locale: L
       ) : (
         <BrandMark className="size-9" />
       )}
-      <span className="text-lg font-semibold tracking-tight">{name}</span>
+      <span className="truncate text-base font-semibold tracking-tight sm:text-lg">{name}</span>
     </Link>
   );
 }
@@ -28,8 +28,8 @@ export function Header({ storefront, locale, t }: { storefront: Storefront; loca
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-line/70 bg-ivory/85 backdrop-blur-md">
-      <div className="container-page relative flex h-16 items-center justify-between gap-3 sm:h-[72px]">
-        <div className="flex items-center gap-1">
+      <div className="container-page relative flex h-16 min-w-0 max-w-full items-center justify-between gap-2 sm:h-[72px] sm:gap-3">
+        <div className="flex min-w-0 items-center gap-1">
           <MobileMenu links={links} labels={{ menu: t.nav.menu, close: t.nav.close }} />
           <Logo storefront={storefront} locale={locale} />
         </div>

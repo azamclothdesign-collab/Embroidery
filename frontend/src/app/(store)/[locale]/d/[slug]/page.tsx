@@ -57,7 +57,7 @@ export default async function ProductPage({ params }: Props) {
   ];
 
   return (
-    <div className="container-page w-full min-w-0 overflow-x-clip py-8 sm:py-12">
+    <div className="container-page w-full min-w-0 max-w-full overflow-x-clip py-6 sm:py-12">
       <Breadcrumbs
         items={[
           { href: `/${locale}`, label: t.common.breadcrumbHome },
@@ -66,19 +66,19 @@ export default async function ProductPage({ params }: Props) {
         ]}
       />
 
-      <div className="mt-6 grid w-full min-w-0 gap-8 lg:grid-cols-2 lg:gap-14">
-        <div className="min-w-0">
+      <div className="mt-5 grid w-full min-w-0 max-w-full grid-cols-1 gap-7 lg:mt-6 lg:grid-cols-2 lg:gap-14">
+        <div className="w-full min-w-0 max-w-full">
           <Gallery images={product.images} alt={name} emptyLabel={t.product.noImage} />
         </div>
 
-        <div className="min-w-0 lg:sticky lg:top-28 lg:self-start">
-          <p className="eyebrow">{categoryName}</p>
-          <h1 className="mt-2 break-words text-3xl sm:text-[2.6rem] sm:leading-tight">{name}</h1>
+        <div className="w-full min-w-0 max-w-full lg:sticky lg:top-28 lg:self-start">
+          <p className="eyebrow break-words">{categoryName}</p>
+          <h1 className="mt-2 break-words text-[1.75rem] leading-tight sm:text-[2.6rem]">{name}</h1>
           <div className="mt-4">
             <Price priceMinor={product.priceMinor} salePriceMinor={product.salePriceMinor} locale={locale} size="lg" saveLabel={t.product.save} />
           </div>
 
-          <div className="mt-6 w-full min-w-0">
+          <div className="mt-6 w-full min-w-0 max-w-full">
             <AddToCartButton
               item={cartItem}
               variant="full"
@@ -87,19 +87,19 @@ export default async function ProductPage({ params }: Props) {
             />
           </div>
 
-          <dl className="mt-8 w-full min-w-0 divide-y divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper">
+          <dl className="mt-8 w-full min-w-0 max-w-full divide-y divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-paper">
             {specs.map(({ icon: Icon, label, value }) => (
-              <div key={label} className="flex min-w-0 items-start gap-3 px-3 py-3.5 sm:items-center sm:gap-4 sm:px-5">
+              <div key={label} className="grid min-w-0 grid-cols-[1.25rem_5.5rem_minmax(0,1fr)] items-start gap-x-2.5 px-3 py-3.5 sm:flex sm:items-center sm:gap-4 sm:px-5">
                 <Icon className="mt-0.5 size-5 shrink-0 text-teal sm:mt-0" aria-hidden />
-                <dt className="w-16 shrink-0 text-sm text-muted sm:w-28">{label}</dt>
-                <dd className="min-w-0 flex-1 break-words font-semibold [overflow-wrap:anywhere]" dir="auto">
+                <dt className="text-sm text-muted sm:w-28 sm:shrink-0">{label}</dt>
+                <dd className="min-w-0 break-words font-semibold [overflow-wrap:anywhere]" dir="auto">
                   {value}
                 </dd>
               </div>
             ))}
           </dl>
 
-          <div className="mt-8 min-w-0">
+          <div className="mt-8 w-full min-w-0 max-w-full">
             <h2 className="text-lg">{t.product.whatYouGet}</h2>
             <ul className="mt-3 space-y-2">
               {t.product.whatYouGetItems.map((item) => (
@@ -111,12 +111,12 @@ export default async function ProductPage({ params }: Props) {
             </ul>
           </div>
 
-          {description.length > 0 && <Markdown source={description} className="prose-cms mt-8 min-w-0" />}
+          {description.length > 0 && <Markdown source={description} className="prose-cms mt-8 w-full min-w-0 max-w-full" />}
         </div>
       </div>
 
       {related.length > 0 && (
-        <section className="mt-20" aria-labelledby="related-title">
+        <section className="mt-16 w-full min-w-0 max-w-full sm:mt-20" aria-labelledby="related-title">
           <h2 id="related-title" data-reveal className="section-title mb-8">
             {t.product.related}
           </h2>

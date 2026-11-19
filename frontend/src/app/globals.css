@@ -64,6 +64,10 @@
     text-rendering: optimizeLegibility;
     overflow-x: clip;
   }
+  /* Prevent product/media images from forcing horizontal page scroll on phones. */
+  img, video, canvas {
+    max-width: 100%;
+  }
   html[lang="ur"] body {
     font-family: var(--font-urdu);
     line-height: 2;

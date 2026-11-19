@@ -137,17 +137,17 @@ export function FaqList({ items, locale }: { items: Storefront["faq"]["items"]; 
 
 export function Breadcrumbs({ items }: { items: Array<{ href?: string; label: string }> }) {
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-muted">
-      <ol className="flex flex-wrap items-center gap-1.5">
+    <nav aria-label="Breadcrumb" className="w-full min-w-0 max-w-full text-sm text-muted">
+      <ol className="flex min-w-0 flex-wrap items-center gap-1.5">
         {items.map((item, index) => (
-          <li key={`${item.label}-${index}`} className="flex items-center gap-1.5">
+          <li key={`${item.label}-${index}`} className="flex min-w-0 max-w-full items-center gap-1.5">
             {index > 0 && <span aria-hidden>/</span>}
             {item.href !== undefined ? (
-              <Link href={item.href} className="hover:text-ink">
+              <Link href={item.href} className="min-w-0 break-words hover:text-ink">
                 {item.label}
               </Link>
             ) : (
-              <span aria-current="page" className="text-ink">
+              <span aria-current="page" className="min-w-0 break-words text-ink">
                 {item.label}
               </span>
             )}

@@ -6,8 +6,8 @@ import { cn } from "@/lib/cn";
 import { mediaUrl } from "@/lib/mediaLoader";
 
 /**
- * Product gallery. Natural aspect ratio, but always capped to the column
- * width so tall/wide media cannot blow out the mobile viewport.
+ * Product gallery. Natural aspect, hard max-width so tall/wide embroidery
+ * files cannot expand the page past the phone viewport.
  */
 export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: string; emptyLabel: string }) {
   const [active, setActive] = useState(0);
@@ -15,7 +15,7 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
 
   if (current === null) {
     return (
-      <div className="flex min-h-64 w-full min-w-0 flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] bg-sand text-muted">
+      <div className="flex min-h-52 w-full max-w-full flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] bg-sand text-muted sm:min-h-64">
         <ImageOff className="size-8" aria-hidden />
         {emptyLabel}
       </div>
@@ -23,22 +23,22 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
   }
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-3">
-      <div className="w-full min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-sand">
-        {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; max-w prevents mobile overflow */}
+    <div className="flex w-full max-w-full min-w-0 flex-col gap-3">
+      <div className="w-full max-w-full min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-sand">
+        {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized WebP; natural aspect avoids clip */}
         <img
           key={current}
           src={mediaUrl(current, 800)}
           alt={images.length > 1 ? `${alt} — ${active + 1}/${images.length}` : alt}
           decoding="async"
           fetchPriority={active === 0 ? "high" : "auto"}
-          className="mx-auto block h-auto max-h-[min(85vh,920px)] w-full max-w-full object-contain object-center"
+          className="mx-auto block h-auto max-h-[min(70vh,720px)] w-full max-w-full object-contain object-center"
           sizes="(min-width: 1024px) 50vw, 100vw"
           srcSet={`${mediaUrl(current, 400)} 400w, ${mediaUrl(current, 800)} 800w, ${mediaUrl(current, 1600)} 1600w`}
         />
       </div>
       {images.length > 1 && (
-        <ul className="flex w-full min-w-0 gap-2 overflow-x-auto overscroll-x-contain pb-1 [-webkit-overflow-scrolling:touch]">
+        <ul className="-mx-1 flex max-w-full gap-2 overflow-x-auto px-1 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {images.map((image, index) => (
             <li key={image} className="shrink-0">
               <button
@@ -57,7 +57,7 @@ export function Gallery({ images, alt, emptyLabel }: { images: string[]; alt: st
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-contain object-center"
+                  className="absolute inset-0 h-full w-full max-w-full object-contain object-center"
                 />
               </button>
             </li>
